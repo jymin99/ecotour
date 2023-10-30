@@ -157,6 +157,9 @@ class _MapPageState extends State<MapPage> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
 
                   SizedBox(
                     height:400,
