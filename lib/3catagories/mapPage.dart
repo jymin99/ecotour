@@ -1,3 +1,20 @@
+
+// import 'package:flutter/material.dart';
+//
+// class MapPage extends StatefulWidget {
+//   const MapPage({super.key});
+//
+//   @override
+//   State<MapPage> createState() => _MapPageState();
+// }
+//
+// class _MapPageState extends State<MapPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Scaffold();
+//   }
+// }
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -6,12 +23,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
 
-class NaturalAttractions extends StatefulWidget {
+class MapPage extends StatefulWidget {
   @override
-  State<NaturalAttractions> createState() => NaturalAttractionsState();
+  State<MapPage> createState() => _MapPageState();
 }
 
-class NaturalAttractionsState extends State<NaturalAttractions> {
+class _MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
 
   double? lat;
@@ -86,12 +103,12 @@ class NaturalAttractionsState extends State<NaturalAttractions> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
-              mapType: MapType.hybrid,
-              initialCameraPosition: _kGooglePlex,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              /*
+        mapType: MapType.hybrid,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+        /*
               markers: markers.toSet(),
 
               //the clicked position will be centered and marked
@@ -100,7 +117,7 @@ class NaturalAttractionsState extends State<NaturalAttractions> {
                 addMarker(cordinate);
               },
               */
-        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToTheLake,
         label: Text('To the lake!'),
