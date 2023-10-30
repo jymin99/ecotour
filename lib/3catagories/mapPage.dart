@@ -101,29 +101,34 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        /*
-              markers: markers.toSet(),
+      return Center(
+        child: SizedBox(
+          height:400,
+          width: MediaQuery.of(context).size.width-50,
+          child: GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
 
-              //the clicked position will be centered and marked
-              onTap: (cordinate) {
-                _controller.animateCamera(CameraUpdate.newLatLng(cordinate));
-                addMarker(cordinate);
-              },
-              */
-      ),
+            /*
+                  markers: markers.toSet(),
+
+                  //the clicked position will be centered and marked
+                  onTap: (cordinate) {
+                    _controller.animateCamera(CameraUpdate.newLatLng(cordinate));
+                    addMarker(cordinate);
+                  },
+                  */
+          ),
+        ),
+      );
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToTheLake,
         label: Text('To the lake!'),
         icon: Icon(Icons.directions_boat),
-      ),
-    );
+      );
   }
 
   Future<void> _goToTheLake() async {
