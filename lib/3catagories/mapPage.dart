@@ -101,26 +101,85 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-      return Center(
-        child: SizedBox(
-          height:400,
-          width: MediaQuery.of(context).size.width-50,
-          child: GoogleMap(
-            mapType: MapType.hybrid,
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
 
-            /*
-                  markers: markers.toSet(),
+          child:
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                        ),
+                        onPressed: (){},
+                        child:
+                        Image(
+                          image:AssetImage('assets/accommodation.png'),
+                          width: 50.0,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                        ),
+                        onPressed: (){},
+                        child:
+                        Image(
+                          image:AssetImage('assets/food.png'),
+                          width: 50.0,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                        ),
+                        onPressed: (){},
+                        child:
+                        Image(
+                          image:AssetImage('assets/bike.png'),
+                          width: 50.0,
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                        ),
+                        onPressed: (){},
+                        child:
+                        Image(
+                          image:AssetImage('assets/electriccar.png'),
+                          width: 50.0,
+                        ),
+                      ),
+                    ],
+                  ),
 
-                  //the clicked position will be centered and marked
-                  onTap: (cordinate) {
-                    _controller.animateCamera(CameraUpdate.newLatLng(cordinate));
-                    addMarker(cordinate);
-                  },
-                  */
+                  SizedBox(
+                    height:400,
+                    width: MediaQuery.of(context).size.width-50,
+                    child: GoogleMap(
+                      mapType: MapType.hybrid,
+                      initialCameraPosition: _kGooglePlex,
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller.complete(controller);
+                      },
+
+                      /*
+                            markers: markers.toSet(),
+
+                            //the clicked position will be centered and marked
+                            onTap: (cordinate) {
+                              _controller.animateCamera(CameraUpdate.newLatLng(cordinate));
+                              addMarker(cordinate);
+                            },
+                            */
+                    ),
+                  ),
+            ],
           ),
         ),
       );
