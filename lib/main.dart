@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget{
   Widget build(BuildContext context){
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title:'에코투어',
+      title:'그린패스',
       theme: ThemeData(
         //primarySwatch: Color.green,
         fontFamily: 'Pretendard',
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget{
         '/':(context)=>Login(),
         //'/sign':(context) =>SignPage(),
     },*/
-      home:MainPage(),
+      home:Login(),
     );
   }
 }

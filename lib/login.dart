@@ -91,7 +91,7 @@ class _LoginState extends State<Login> {
             width: 170.0,
             height: 190.0,),
           Text(
-            '에코투어',
+            '그린패스',
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold,),
           ),
           SizedBox(height: 50,),

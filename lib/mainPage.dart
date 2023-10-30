@@ -43,7 +43,7 @@ class _MainPage extends State<MainPage> with SingleTickerProviderStateMixin{
         elevation: 0,
         backgroundColor: Colors.white,
         title: const Text(
-          '에코투어',
+          '그린패스',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.black,),
         ),
