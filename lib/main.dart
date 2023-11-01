@@ -7,12 +7,18 @@ import 'mainPage.dart';
 import 'package:get/get.dart';
 // import 'package:modu_tour/singPage.dart';
 import 'login.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: 'fd5d11f7f28cc940b19167e60572b61a');
   // MobileAds.instance.initialize();
+
+  await initializeDateFormatting();
+
+
   runApp(MyApp());
 }
 

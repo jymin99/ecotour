@@ -118,9 +118,16 @@ class _MainPage extends State<MainPage> {
           child: FloatingActionButton(
             backgroundColor: AppColor.lightGreen,
             onPressed: () {
-              setState(() {
-                _selectedIndex = 1;
-              });
+              if (_selectedIndex == 1) {
+                // 현재 페이지가 인덱스 1 (PlanPage)인 경우
+                // 정보 입력 및 페이지 업데이트 동작 수행
+                _showInputDialog(context); // 정보 입력 다이얼로그 표시
+
+              } else {
+                setState(() {
+                  _selectedIndex = 1; // 현재 페이지가 인덱스 1이 아닐 때는 PlanPage로 이동
+                });
+              }
             },
             child: Column(
                 children: [
@@ -147,3 +154,28 @@ class _MainPage extends State<MainPage> {
 
 
 
+
+void _showInputDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Enter Information'),
+        content: TextField(
+          onChanged: (String value) {
+            // 입력된 정보 처리
+            // 페이지 업데이트 등을 수행
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // 다이얼로그 닫기
+            },
+            child: Text('Close'),
+          ),
+        ],
+      );
+    },
+  );
+}
