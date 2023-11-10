@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'FeedFire.dart';
 
-class CertificationFeed extends StatefulWidget{
+
+
+class CertificationFeed extends StatefulWidget {
+  const CertificationFeed({super.key});
+
   @override
-  State<StatefulWidget> createState(){
-    return _CertificationFeed();
-  }
+  State<CertificationFeed> createState() => _CertificationFeedState();
 }
 
-class _CertificationFeed extends State<CertificationFeed>{
+class _CertificationFeedState extends State<CertificationFeed> {
   @override
-  Widget build(BuildContext context){
-    return Scaffold();
+  Widget build(BuildContext context) {
+    return const Scaffold(
+
+    );
   }
 }
