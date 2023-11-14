@@ -96,6 +96,8 @@ class _MapPageState extends State<MapPage> {
               // initialCameraPosition: _kInitialPosition))),
             ),
           ),
+          //카카오맵
+
         ],
       ),
     );
