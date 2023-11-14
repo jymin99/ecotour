@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/login_platform.dart';

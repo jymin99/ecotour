@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:capstone/firebase/FeedFire.dart';
-
-
 
 class CertificationFeed extends StatefulWidget {
   const CertificationFeed({super.key});
@@ -14,8 +11,6 @@ class CertificationFeed extends StatefulWidget {
 class _CertificationFeedState extends State<CertificationFeed> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-
-    );
+    return Scaffold();
   }
 }
