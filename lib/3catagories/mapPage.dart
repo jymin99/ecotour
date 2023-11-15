@@ -223,6 +223,7 @@ class _MapPageState extends State<MapPage> {
 //   }
 //
 //   static final CameraPosition _kGooglePlex = CameraPosition(
+//     // target: LatLng(lat, lng),
 //     target: LatLng(13.0827, 80.2707),
 //     //target: LatLng(37.42796133580664, -122.085749655962),
 //     zoom: 14.4746,

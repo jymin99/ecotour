@@ -15,9 +15,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
-  // AuthRepository.initialize(appKey: '8f37b8519ce307bd4d312e00c20fbe41');
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: 'fd5d11f7f28cc940b19167e60572b61a');
+  // AuthRepository.initialize(appKey: '8f37b8519ce307bd4d312e00c20fbe41');
 
   // MobileAds.instance.initialize();
 

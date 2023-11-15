@@ -27,8 +27,8 @@ class _MainPage extends State<MainPage> {
 
 
   final List<Widget> _pages = [
-    MapPage(),
-    PlanPage(),
+    const MapPage(),
+    const PlanPage(),
     NaturePage(),
   ];
 
@@ -48,7 +48,7 @@ class _MainPage extends State<MainPage> {
         return Center(
           child: AlertDialog(
             content: SingleChildScrollView(
-              child: Container( // 내용을 감싸는 컨테이너에 폭 설정
+              child: SizedBox( // 내용을 감싸는 컨테이너에 폭 설정
                 width: 800.0, // 원하는 폭 설정
                 height: 450.0,
                 child: Column(
@@ -59,7 +59,7 @@ class _MainPage extends State<MainPage> {
                       },
                       decoration: InputDecoration(
                         labelText: '제목',
-                        prefixIcon: Icon(Icons.search, color: Colors.black), // 돋보기 아이콘 추가 및 색상 설정
+                        prefixIcon: const Icon(Icons.search, color: Colors.black), // 돋보기 아이콘 추가 및 색상 설정
                         filled: true, // 배경색 적용
                         fillColor: Colors.grey[200], // 배경색 설정
                         border: OutlineInputBorder( // 텍스트 필드의 테두리 스타일 설정
@@ -77,9 +77,9 @@ class _MainPage extends State<MainPage> {
                     // ),
 
                     Container(
-                      margin: EdgeInsets.only(right: .0, left: 4.0, top:20.0),
+                      margin: const EdgeInsets.only(right: .0, left: 4.0, top:20.0),
 
-                      padding: EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.grey,
@@ -90,7 +90,7 @@ class _MainPage extends State<MainPage> {
                       child: Column(
                         children: [
                           TableCalendar(
-                            formatAnimationDuration: Duration(milliseconds: 220),
+                            formatAnimationDuration: const Duration(milliseconds: 220),
                             locale: 'ko_KR',
                             firstDay: DateTime.utc(2021, 1, 1),
                             lastDay: DateTime.utc(2030, 12, 31),
@@ -173,7 +173,7 @@ class _MainPage extends State<MainPage> {
                 onPressed: () {
                   Navigator.of(context).pop(); // 다이얼로그 닫기
                 },
-                child: Text('Close'),
+                child: const Text('Close'),
               ),
             ],
           ),
@@ -189,7 +189,7 @@ class _MainPage extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
+        preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
           elevation: 1,
           backgroundColor: Colors.white,
@@ -213,13 +213,13 @@ class _MainPage extends State<MainPage> {
 
       body: _pages[_selectedIndex],
       bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16.0),
           topRight: Radius.circular(16.0),
         ),
         child: BottomAppBar(
           color: Colors.white, // 네비게이션 바의 배경색
-          shape: CircularNotchedRectangle(), // 테두리를 둥글게 만듭니다.
+          shape: const CircularNotchedRectangle(), // 테두리를 둥글게 만듭니다.
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -273,7 +273,7 @@ class _MainPage extends State<MainPage> {
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // floatingActionButton: _selectedIndex ==1 ? Container()
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         height: 70.0,
         width: 70.0,
         child: FittedBox(
