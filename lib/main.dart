@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
-import 'mainPage.dart';
+// import 'mainPage.dart';
 import 'package:get/get.dart';
 // import 'package:modu_tour/singPage.dart';
 import 'login.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget{
       //   ),// 강조 색상 (예: 버튼 클릭 시 등)
       //   // 여기에 다른 테마 속성들을 추가할 수 있습니다.
       // ),
-      home:MainPage(),
+      home:LoginPage(),
     );
   }
 }
