@@ -50,7 +50,7 @@ class _MainPage extends State<MainPage> {
             content: SingleChildScrollView(
               child: Container( // 내용을 감싸는 컨테이너에 폭 설정
                 width: 800.0, // 원하는 폭 설정
-                height: 400.0,
+                height: 450.0,
                 child: Column(
                   children: [
                     TextField(

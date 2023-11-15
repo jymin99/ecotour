@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+// import 'package:location/location.dart';
+//import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key:key);
@@ -11,94 +12,171 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  late KakaoMapController mapController;
-  double longitude = 0.0;
-  double latitude = 0.0;
+  //Completer<KakaoMapController> _controller = Completer();
+  //late KakaoMapController mapController;
+  // Completer<GoogleMapController> _controller = Completer();
+  late GoogleMapController mapController;
+  double latitude = 37.553836;
+  double longitude = 126.969652;
 
-  Future<void> geoLocation() async{
-    Position position = await Geolocator.getCurrentPosition();
-    this.longitude = position.longitude;
-    this.latitude = position.latitude;
+  Set<Marker> markers = {};
+
+  @override
+  void initState() {
+    super.initState();
   }
+
+  Future<Position> getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return position;
+  }
+
+
+
+  // Future<void> geoLocation() async{
+  //   Position position = await Geolocator.getCurrentPosition();
+  //   this.longitude = position.longitude;
+  //   this.latitude = position.latitude;
+  // }
+
+  static final CameraPosition _kGooglePlex = CameraPosition(
+     target: LatLng(37.553836, 126.969652),
+     //target: LatLng(37.42796133580664, -122.085749655962),
+     zoom: 14.4746,
+   );
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.white),
-                        ),
-                        onPressed: (){},
-                        child:
-                        Image(
-                          image:AssetImage('assets/accommodation.png'),
-                          width: 50.0,
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.white),
-                        ),
-                        onPressed: (){},
-                        child:
-                        Image(
-                          image:AssetImage('assets/food.png'),
-                          width: 50.0,
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.white),
-                        ),
-                        onPressed: (){},
-                        child:
-                        Image(
-                          image:AssetImage('assets/bike.png'),
-                          width: 50.0,
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.white),
-                        ),
-                        onPressed: (){},
-                        child:
-                        Image(
-                          image:AssetImage('assets/electriccar.png'),
-                          width: 50.0,
-                        ),
-                      ),
-                    ],
+      child: Center(
+        child:
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    onPressed: (){},
+                    child:
+                    Image(
+                      image:AssetImage('assets/accommodation.png'),
+                      width: 50.0,
+                    ),
                   ),
-                  SizedBox(
-                    height: 20,
+                  ElevatedButton(
+                    style: ButtonStyle(
+                     backgroundColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    onPressed: (){},
+                    child:
+                    Image(
+                      image:AssetImage('assets/food.png'),
+                      width: 50.0,
+                    ),
                   ),
-          Center(
-            child: SizedBox(
-                height: 450.0,
-                child: KakaoMap(
-                    onMapTap: (latLng) {
-                      print(latLng);
-                    }
-                )
-              // onMapCreated: ((controller) async {
-              //    mapController = controller;
-              //    setState(() { });
-              //  }),
-              //  center: LatLng(37.3608681, 126.9306506),
-              // onMapCreated,
-              // initialCameraPosition: _kInitialPosition))),
-            ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    onPressed: (){},
+                    child:
+                    Image(
+                      image:AssetImage('assets/bike.png'),
+                      width: 50.0,
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    onPressed: (){},
+                    child:
+                    Image(
+                      image:AssetImage('assets/electriccar.png'),
+                      width: 50.0,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: SizedBox(
+                  height: 400.0,
+                     width: MediaQuery.of(context).size.width - 50,
+                     child: GoogleMap(
+                       // initialCameraPosition: _kGooglePlex,
+                       initialCameraPosition: CameraPosition(target:LatLng(
+                           currentPosition.latitue,
+                           currentPosition.longitude)),
+                       mapType: MapType.normal,
+                       myLocationEnabled: true,
+                       myLocationButtonEnabled: true,
+                       onMapCreated: ((controller) async {
+                         mapController = controller;
+                         setState(() {
+
+                         });
+                       })
+                       // onMapCreated: (GoogleMapController controller) {
+                       //   _controller.complete(controller);
+                       // },
+                     ),
+                   ),
+              //       child: KakaoMap(
+              //         onMapCreated: ((controller) async {
+              //       mapController = controller;
+              //       setState(() { });
+              //         }),
+              //           //   (KakaoMapController controller) {
+              //           // _controller.complete(controller);
+              //           // markers.add(Marker(
+              //           //     markerId: markers.length.toString(),
+              //           //     latLng: LatLng(33.450705, 126.570677),
+              //           //     infoWindowContent: '<div>카카오</div>'));
+              //           //
+              //           // markers.add(Marker(
+              //           //     markerId: markers.length.toString(),
+              //           //     latLng: LatLng(33.450936, 126.569477),
+              //           //     infoWindowContent: '<div>생태연못</div>'));
+              //           //
+              //           // markers.add(Marker(
+              //           //     markerId: markers.length.toString(),
+              //           //     latLng: LatLng(33.450879, 126.569940),
+              //           //     infoWindowContent: '<div>텃밭</div>'));
+              //           //
+              //           // markers.add(Marker(
+              //           //     markerId: markers.length.toString(),
+              //           //     latLng: LatLng(33.451393, 126.570738),
+              //           //     infoWindowContent: '<div>근린공원</div>'));
+              //           //},
+              //         center: LatLng(37.553836, 126.969652),
+              //       ),
+              //   ),
+              // ),
+              ),
+              FloatingActionButton(
+                onPressed: () async {
+                  var gps = await getCurrentLocation();
+                  mapController.animateCamera(
+                      CameraUpdate.newLatLng(LatLng(gps.latitude, gps.longitude)));
+                },
+                child: Icon(
+                  Icons.my_location,
+                  color: Colors.black,
+                ),
+                backgroundColor: Colors.white,
+               ),
+            ],
           ),
-        ],
-      ),
-    );
+        ),
+
+      );
   }
 }
 // Google Map
@@ -145,7 +223,6 @@ class _MapPageState extends State<MapPage> {
 //   }
 //
 //   static final CameraPosition _kGooglePlex = CameraPosition(
-//     // target: LatLng(lat, lng),
 //     target: LatLng(13.0827, 80.2707),
 //     //target: LatLng(37.42796133580664, -122.085749655962),
 //     zoom: 14.4746,
@@ -153,7 +230,6 @@ class _MapPageState extends State<MapPage> {
 //
 //   static final CameraPosition _kLake = CameraPosition(
 //       bearing: 192.8334901395799,
-//       //target: LatLng(lat, lng),
 //       target: LatLng(13.0827, 80.2707),
 //       //target: LatLng(37.43296265331129, -122.08832357078792),
 //       tilt: 59.440717697143555,
@@ -164,7 +240,6 @@ class _MapPageState extends State<MapPage> {
 //       return Padding(
 //         padding: const EdgeInsets.all(16.0),
 //         child: Center(
-//
 //           child:
 //               Column(
 //                 children: [

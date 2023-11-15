@@ -3,20 +3,21 @@ import 'package:capstone/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+// import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'mainPage.dart';
 import 'package:get/get.dart';
 // import 'package:modu_tour/singPage.dart';
 import 'login.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
+  // AuthRepository.initialize(appKey: '8f37b8519ce307bd4d312e00c20fbe41');
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: 'fd5d11f7f28cc940b19167e60572b61a');
-  AuthRepository.initialize(appKey: '8f37b8519ce307bd4d312e00c20fbe41');
 
   // MobileAds.instance.initialize();
 
