@@ -49,7 +49,7 @@ class CertificationFeed extends StatelessWidget {
             child: Obx(() {
               if (postController.posts.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: Text('인증 피드를 올려주세요!'),
                 );
               }
               return ListView.builder(

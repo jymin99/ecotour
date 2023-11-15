@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:capstone/fire_model.dart';
+import 'package:capstone/models/fire_model.dart';
 
 class FireService {
   static final FireService _fireService = FireService._internal();
