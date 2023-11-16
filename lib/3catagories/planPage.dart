@@ -91,6 +91,21 @@ class _PlanPageState extends State<PlanPage> {
                         ),
 
                         calendarStyle: CalendarStyle(
+                          // 오늘 날짜의 스타일 설정
+                          // todayTextStyle: TextStyle(fontSize: 15, color: Colors.white),
+
+                          // 기본 날짜 숫자의 폰트 크기
+                          defaultTextStyle: TextStyle(fontSize: 15.0),
+
+                          // 주말의 날짜 숫자 폰트 크기와 색상
+                          weekendTextStyle: TextStyle(fontSize: 15.0, color: Colors.red),
+
+
+                          todayDecoration : const BoxDecoration(
+                            color: AppColor.deepGreen,
+                            shape: BoxShape.circle,
+                          ),
+
                           // selectedDay 글자 조정
                           selectedTextStyle : const TextStyle(
                             color: Colors.black,
@@ -99,7 +114,7 @@ class _PlanPageState extends State<PlanPage> {
                           // selectedDay 모양 조정
                           selectedDecoration : const BoxDecoration(
                             color: AppColor.yellowGreen,
-                            shape: BoxShape.rectangle,
+                            shape: BoxShape.circle,
                           ),
 
                           // cell margin, padding 조절
@@ -114,6 +129,11 @@ class _PlanPageState extends State<PlanPage> {
                   ),
                 ),
               ),
+
+
+
+
+
             ],
           ),
         ),
