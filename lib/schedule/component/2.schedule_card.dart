@@ -18,11 +18,12 @@ class ScheduleCard extends StatelessWidget {
     return Container(
       width: 390,
       decoration: BoxDecoration(
-        border: Border.all(
-          width: 1.0,
-          color: AppColor.deepGreen,
-        ),
+        // border: Border.all(
+        //   width: 1.0,
+        //   color: AppColor.deepGreen,
+        // ),
         borderRadius: BorderRadius.circular(8.0),
+        color: AppColor.ashGreen,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

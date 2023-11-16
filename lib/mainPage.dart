@@ -140,29 +140,21 @@ class _MainPage extends State<MainPage> {
           child: FloatingActionButton(
             backgroundColor: AppColor.lightGreen,
             onPressed: () {
-              _floatingButtonIcon = _selectedIndex == 1 ? Icons.edit_calendar : Icons.add;
-              if (_selectedIndex == 1) {
-                // 현재 페이지가 인덱스 1 (PlanPage)인 경우
-                // 정보 입력 및 페이지 업데이트 동작 수행
-                // _showCustomDialog(context);
+              // _floatingButtonIcon = _selectedIndex == 1 ? Icons.edit_calendar : Icons.add;
+              // if (_selectedIndex == 1) {
 
-                // showDialog(
-                //     context: context,
-                //     builder: (_) => ScheduleBottomSheet(),
-                // );
-
-                // 정보 입력 다이얼로그 표시
-                showCupertinoModalPopup(  // ➋ BottomSheet 열기
-                  context: context,
-                  builder: (_) => ScheduleBottomSheet(),
-                );
-
-
-              } else {
+              //   // 정보 입력 다이얼로그 표시
+              //   showCupertinoModalPopup(  // ➋ BottomSheet 열기
+              //     context: context,
+              //     builder: (_) => ScheduleBottomSheet(),
+              //   );
+              //
+              //
+              // } else {
                 setState(() {
                    _selectedIndex = 1; // 현재 페이지가 인덱스 1이 아닐 때는 PlanPage로 이동
                 });
-              }
+              // }
             },
             child: Column(
                 children: [

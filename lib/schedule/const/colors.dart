@@ -11,4 +11,5 @@ class AppColor extends Color{
   static const lightYellowGreen = Color(0xFFF5FEE5);
   static const lightGreen = Color(0xFFB0FB52);
   static const deepGreen = Color(0xFF1F3825);
+  static const ashGreen = Color(0xFFA7B8AC);
 }
