@@ -14,7 +14,6 @@ import 'package:capstone/schedule/component/schedule_dialog_sheet.dart';
 import 'package:capstone/schedule/const/colors.dart';
 
 
-
 class MainPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MainPage();
@@ -135,7 +134,7 @@ void _showCustomDialog(BuildContext context) {
                             ),
                           ),
 
-                          calendarStyle: const CalendarStyle(
+                          calendarStyle: CalendarStyle(
                             // 이전 달 날짜의 스타일 설정
                             outsideTextStyle: TextStyle(fontSize: 12, color: Colors.grey),
                             // outsideDecoration: BoxDecoration(), // 이전 달 날짜의 배경 스타일
@@ -152,9 +151,12 @@ void _showCustomDialog(BuildContext context) {
                               fontSize: 12.0,
                             ),
                             // selectedDay 모양 조정
-                            selectedDecoration : BoxDecoration(
-                              color: AppColor.yellowGreen,
-                              shape: BoxShape.rectangle,
+                             selectedDecoration: BoxDecoration(  // ➍ 선택된 날짜 스타일
+                              borderRadius: BorderRadius.circular(6.0),
+                              border: Border.all(
+                                color: AppColor.yellowGreen,
+                                width: 1.0,
+                              ),
                             ),
                             cellMargin: EdgeInsets.all(0.0), // 셀 주위 여백 설정
                             cellPadding: EdgeInsets.all(0.0), // 셀 내부 여백 설정
@@ -190,8 +192,6 @@ void _showCustomDialog(BuildContext context) {
     },
   );
 }
-
-
 
 
   @override
