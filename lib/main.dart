@@ -44,10 +44,10 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
 //GetMaterialApp
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title:'그린패스',
-      home:MainPage(),
+      home:LoginPage(),
       // LoginPage(),
     );
   }
