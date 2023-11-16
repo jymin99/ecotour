@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 
 
 void main()async{
+  final String apiKey = "e5a748a8-d308-41d2-b844-a1608b770f39";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: 'fd5d11f7f28cc940b19167e60572b61a');

@@ -39,10 +39,14 @@ class _UploadFeedState extends State<UploadFeed> {
     return Scaffold(
       body: Column(
         children: [
-          TextField(
-            controller: _titleController,
-            decoration: InputDecoration(labelText: '게시물 제목'),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: TextField(
+              controller: _titleController,
+              decoration: InputDecoration(labelText: '게시물 제목',border: OutlineInputBorder(),),
+            ),
           ),
+
           ElevatedButton(
             onPressed: () {
               // 갤러리에서 이미지 선택

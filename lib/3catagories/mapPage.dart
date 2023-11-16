@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:capstone/firebase/map_list.dart';
 // import 'package:location/location.dart';
+import 'package:capstone/cycle/cycle.dart';
+import 'package:capstone/cycle/cycle_repository.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key:key);
@@ -22,31 +25,71 @@ class _MapPageState extends State<MapPage> {
   Set<Marker> markers = {};
 
   bool areMarkersVisible = false;
+  bool areBikeMarkersVisible = false; // 새로 추가된 부분
 
   @override
   void initState() {
     super.initState();
-    loadMarkersFromFirestore();
+    loadMarkers();
+    //loadMarkersFromFirestore();
+    loadCycleMarkers();
+
   }
 
-  Future<void> loadMarkersFromFirestore() async {
-    print("Loading markers from Firestore");
-    List<Map<String, dynamic>> cafes = await FireService().getFireModels();
+  Future<void> loadCycleMarkers() async {
+    try {
+      List<Cycle>? cycles = await CycleRepository().loadCycles();
+      if (cycles != null && cycles.isNotEmpty) {
+        Set<Marker> newMarkers = cycles.map((cycle) {
+          final BitmapDescriptor markerIcon = _getMarkerIconForCycle();
+          return Marker(
+            markerId: MarkerId(cycle.rentId),
+            position: LatLng(double.parse(cycle.staLat), double.parse(cycle.staLong)),
+            infoWindow: InfoWindow(title: cycle.rentNm),
+            icon: markerIcon,
+          );
+        }).toSet();
 
+        setState(() {
+          if (!areBikeMarkersVisible)
+            markers.clear();
+          markers.addAll(newMarkers);
+        });
+      }
+    } catch (e) {
+      print('Error loading bike stations: $e');
+      // 적절한 오류 처리 추가
+    }
+  }
+
+  BitmapDescriptor _getMarkerIconForCycle() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areBikeMarkersVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+    }
+    else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
+      //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    }
+  }
+
+  Future<void> loadMarkers() async {
+    // loadMarkersFromFirestore() 내용을 여기로 옮김
+    List<Map<String, dynamic>> cafes = await FireService().getFireModels();
     Set<Marker> newMarkers = cafes.map((cafe) => Marker(
       markerId: MarkerId(cafe['shop'].toString()),
       position: LatLng(cafe['latitude'] as double, cafe['longitude'] as double),
       infoWindow: InfoWindow(title: cafe['shop'].toString()),
-    ))
-        .toSet();
-    print("Number of new markers: ${newMarkers.length}");
+    )).toSet();
+
     setState(() {
-      markers.clear(); // Clear existing markers
+      markers.clear();
       if (areMarkersVisible) {
-        markers.addAll(newMarkers); // Add new markers if visibility is enabled
+        markers.addAll(newMarkers);
       }
     });
   }
+
 
 
   Future<Position> getCurrentLocation() async {
@@ -107,7 +150,8 @@ class _MapPageState extends State<MapPage> {
                       setState(() {
                         areMarkersVisible = !areMarkersVisible; // Toggle visibility state
                       });
-                      loadMarkersFromFirestore(); // Load markers based on the new visibility state
+                      loadMarkers();
+                      //loadMarkersFromFirestore(); // Load markers based on the new visibility state
                     },
                     child:
                     Image(
@@ -119,7 +163,12 @@ class _MapPageState extends State<MapPage> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.white),
                     ),
-                    onPressed: (){},
+                    onPressed: (){
+                      setState(() {
+                        areBikeMarkersVisible = !areBikeMarkersVisible; // Toggle visibility state
+                      });
+                      loadCycleMarkers();
+                    },
                     child:
                     Image(
                       image:AssetImage('assets/bike.png'),
