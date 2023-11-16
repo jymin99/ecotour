@@ -1,88 +1,167 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:capstone/feed/post_controller.dart';
-import 'package:capstone/models/post.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class CertificationFeed extends StatelessWidget {
-  final PostController postController=Get.put(PostController());
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Certification Feed',
+      home: UploadFeed(),
+    );
+  }
+}
+
+class UploadFeed extends StatefulWidget {
+  const UploadFeed({super.key});
+
+  @override
+  State<UploadFeed> createState() => _UploadFeedState();
+}
+
+class _UploadFeedState extends State<UploadFeed> {
+  final TextEditingController _titleController = TextEditingController();
+  final ImagePicker _imagePicker = ImagePicker();
+  List<XFile>? _selectedImages;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = '';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          // 피드 작성 폼
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: InputDecoration(labelText: '제목'),
-                ),
-                TextField(
-                  controller: contentController,
-                  decoration: InputDecoration(labelText: '내용'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // 피드 추가 버튼 클릭 시
-                    Post newPost = Post(
-                      title: titleController.text,
-                      content: contentController.text, id: '',
-                    );
-                    postController.addPost(newPost);
-                    // 입력 필드 초기화
-                    titleController.text = '';
-                    contentController.text = '';
-                  },
-                  child: Text('피드 추가'),
-                ),
-              ],
-            ),
+          TextField(
+            controller: _titleController,
+            decoration: InputDecoration(labelText: '게시물 제목'),
           ),
-          // 피드 목록
-          Expanded(
-            child: Obx(() {
-              if (postController.posts.isEmpty) {
-                return const Center(
-                  child: Text('인증 피드를 올려주세요!'),
-                );
-              }
-              return ListView.builder(
-                itemCount: postController.posts.length,
+          ElevatedButton(
+            onPressed: () {
+              // 갤러리에서 이미지 선택
+              pickImages();
+            },
+            child: Text('이미지 선택'),
+          ),
+          if (_selectedImages != null)
+            Container(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _selectedImages!.length,
                 itemBuilder: (context, index) {
-                  var post = postController.posts[index];
-                  return ListTile(
-                    title: Text(post.title ?? ""),
-                    subtitle: Text(post.content ?? ""),
-                    trailing: Row(
-                      mainAxisSize:MainAxisSize.min,
-                      children: [
-                        // IconButton(
-                        //   icon:Icon(Icons.edit),
-                        //   onPressed: (){
-                        //     postController.updatePost(updatedPost);
-                        //   },
-                        // ),
-                        IconButton(
-                            onPressed: (){
-                              postController.deletePost(post.id!);
-                            },
-                            icon: Icon(Icons.delete),
-                        ),
-                      ],
-                    ),
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.file(File(_selectedImages![index].path)),
                   );
                 },
-              );
-            }),
+              ),
+            ),
+          ElevatedButton(
+            onPressed: () {
+              // 게시물 업로드 함수 호출
+              uploadPost();
+            },
+            child: Text('게시물 올리기'),
           ),
+          Expanded(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+
+                var posts = snapshot.data?.docs;
+
+                return ListView.builder(
+                  itemCount: posts?.length,
+                  itemBuilder: (context, index) {
+                    var post = posts?[index];
+                    return ListTile(
+                      title: Text(post?['title']),
+                      trailing: IconButton(
+                        icon: Icon(Icons.thumb_up),
+                        onPressed: () {
+                          likePost(post!.id);
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          )
         ],
       ),
     );
+  }
+
+  Future<void> pickImages() async {
+    try {
+      final result = await _imagePicker.pickMultiImage(
+        imageQuality: 70,
+      );
+      setState(() {
+        _selectedImages = result;
+      });
+    } catch (e) {
+      print('Error picking images: $e');
+    }
+  }
+
+  void uploadPost() async {
+    String title = _titleController.text;
+
+    if (title.isNotEmpty && _selectedImages != null) {
+      for (var image in _selectedImages!) {
+        // 이미지 업로드
+        var imageUrl = await uploadImage(File(image.path));
+        // 게시물 업로드
+        if (imageUrl != null) {
+          FirebaseFirestore.instance.collection('posts').add({
+            'title': title,
+            'imageUrl': imageUrl,
+            'likes': 0,
+          });
+        }
+      }
+
+      // 업로드 후 입력 필드 및 선택 이미지 초기화
+      _titleController.clear();
+      setState(() {
+        _selectedImages = null;
+      });
+    }
+  }
+
+  Future<String?> uploadImage(File image) async {
+    try {
+      // TODO: 이미지를 Firebase Storage에 업로드하고 URL을 반환하는 코드 추가
+      final firebase_storage.Reference storageRef =
+      firebase_storage.FirebaseStorage.instance.ref().child('images/${DateTime.now().millisecondsSinceEpoch}.png');
+
+      await storageRef.putFile(image);
+
+      final String downloadURL = await storageRef.getDownloadURL();
+
+      return downloadURL;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
+  }
+
+  void likePost(String postId) {
+    FirebaseFirestore.instance.collection('posts').doc(postId).update({
+      'likes': FieldValue.increment(1),
+    });
   }
 }

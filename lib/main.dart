@@ -3,7 +3,8 @@ import 'package:capstone/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+// import 'package:kakao_map_plugin/kakao_map_plugin.dart';
+import 'mainPage.dart';
 // import 'home_screen.dart';
 import 'package:get/get.dart';
 // import 'package:modu_tour/singPage.dart';
@@ -13,15 +14,17 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:capstone/schedule/database/drift_database.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/services.dart';
 
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: 'fd5d11f7f28cc940b19167e60572b61a');
-  AuthRepository.initialize(appKey: '8f37b8519ce307bd4d312e00c20fbe41');
+  // AuthRepository.initialize(appKey: '8f37b8519ce307bd4d312e00c20fbe41');
 
   // MobileAds.instance.initialize();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);//이미지 불러오기 위해서
 
   await initializeDateFormatting();
 
@@ -40,12 +43,13 @@ class MyApp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-
-    return MaterialApp(
+//GetMaterialApp
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title:'그린패스',
-      home:MainPage(),
-      // LoginPage(),
+      home:
+      //MainPage(),
+      LoginPage(),
     );
   }
 }
