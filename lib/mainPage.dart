@@ -10,7 +10,7 @@ import 'package:capstone/schedule/component/main_calendar.dart';
 import 'package:capstone/schedule/component/2.schedule_card.dart';
 import 'package:capstone/schedule/component/3.today_banner.dart';
 // import 'package:capstone/schedule/component/schedule_bottom_sheet.dart';
-import 'package:capstone/schedule/component/1.schedule_dialog_sheet.dart';
+import 'package:capstone/schedule/component/schedule_dialog_sheet.dart';
 import 'package:capstone/schedule/const/colors.dart';
 
 

@@ -1,6 +1,7 @@
+// 여행, range dialog
 
 import 'package:flutter/material.dart';
-import 'package:capstone/schedule/component/custom_text_field.dart';
+import 'package:capstone/schedule/component/4.custom_text_field.dart';
 import 'package:capstone/schedule/const/colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -136,7 +137,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
 
 
                               todayDecoration : const BoxDecoration(
-                                color: AppColor.deepGreen,
+                                color: AppColor.yellowGreen,
                                 shape: BoxShape.circle,
                               ),
 
@@ -147,7 +148,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                               ),
                               // selectedDay 모양 조정
                               selectedDecoration : const BoxDecoration(
-                                color: AppColor.yellowGreen,
+                                color: AppColor.deepGreen,
                                 shape: BoxShape.circle,
                               ),
 

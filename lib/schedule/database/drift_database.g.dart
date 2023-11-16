@@ -9,34 +9,50 @@ part of 'drift_database.dart';
 // ignore_for_file: type=lint
 class Schedule extends DataClass implements Insertable<Schedule> {
   final int id;
-  final String content;
+  final String memo;
+  final String title;
+  final String place;
   final DateTime date;
-  final int startTime;
-  final int endTime;
+  final int startTimeH;
+  final int startTimeM;
+  final int endTimeH;
+  final int endTimeM;
   const Schedule(
       {required this.id,
-      required this.content,
+      required this.memo,
+      required this.title,
+      required this.place,
       required this.date,
-      required this.startTime,
-      required this.endTime});
+      required this.startTimeH,
+      required this.startTimeM,
+      required this.endTimeH,
+      required this.endTimeM});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['content'] = Variable<String>(content);
+    map['memo'] = Variable<String>(memo);
+    map['title'] = Variable<String>(title);
+    map['place'] = Variable<String>(place);
     map['date'] = Variable<DateTime>(date);
-    map['start_time'] = Variable<int>(startTime);
-    map['end_time'] = Variable<int>(endTime);
+    map['start_time_h'] = Variable<int>(startTimeH);
+    map['start_time_m'] = Variable<int>(startTimeM);
+    map['end_time_h'] = Variable<int>(endTimeH);
+    map['end_time_m'] = Variable<int>(endTimeM);
     return map;
   }
 
   SchedulesCompanion toCompanion(bool nullToAbsent) {
     return SchedulesCompanion(
       id: Value(id),
-      content: Value(content),
+      memo: Value(memo),
+      title: Value(title),
+      place: Value(place),
       date: Value(date),
-      startTime: Value(startTime),
-      endTime: Value(endTime),
+      startTimeH: Value(startTimeH),
+      startTimeM: Value(startTimeM),
+      endTimeH: Value(endTimeH),
+      endTimeM: Value(endTimeM),
     );
   }
 
@@ -45,10 +61,14 @@ class Schedule extends DataClass implements Insertable<Schedule> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Schedule(
       id: serializer.fromJson<int>(json['id']),
-      content: serializer.fromJson<String>(json['content']),
+      memo: serializer.fromJson<String>(json['memo']),
+      title: serializer.fromJson<String>(json['title']),
+      place: serializer.fromJson<String>(json['place']),
       date: serializer.fromJson<DateTime>(json['date']),
-      startTime: serializer.fromJson<int>(json['startTime']),
-      endTime: serializer.fromJson<int>(json['endTime']),
+      startTimeH: serializer.fromJson<int>(json['startTimeH']),
+      startTimeM: serializer.fromJson<int>(json['startTimeM']),
+      endTimeH: serializer.fromJson<int>(json['endTimeH']),
+      endTimeM: serializer.fromJson<int>(json['endTimeM']),
     );
   }
   @override
@@ -56,102 +76,155 @@ class Schedule extends DataClass implements Insertable<Schedule> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'content': serializer.toJson<String>(content),
+      'memo': serializer.toJson<String>(memo),
+      'title': serializer.toJson<String>(title),
+      'place': serializer.toJson<String>(place),
       'date': serializer.toJson<DateTime>(date),
-      'startTime': serializer.toJson<int>(startTime),
-      'endTime': serializer.toJson<int>(endTime),
+      'startTimeH': serializer.toJson<int>(startTimeH),
+      'startTimeM': serializer.toJson<int>(startTimeM),
+      'endTimeH': serializer.toJson<int>(endTimeH),
+      'endTimeM': serializer.toJson<int>(endTimeM),
     };
   }
 
   Schedule copyWith(
           {int? id,
-          String? content,
+          String? memo,
+          String? title,
+          String? place,
           DateTime? date,
-          int? startTime,
-          int? endTime}) =>
+          int? startTimeH,
+          int? startTimeM,
+          int? endTimeH,
+          int? endTimeM}) =>
       Schedule(
         id: id ?? this.id,
-        content: content ?? this.content,
+        memo: memo ?? this.memo,
+        title: title ?? this.title,
+        place: place ?? this.place,
         date: date ?? this.date,
-        startTime: startTime ?? this.startTime,
-        endTime: endTime ?? this.endTime,
+        startTimeH: startTimeH ?? this.startTimeH,
+        startTimeM: startTimeM ?? this.startTimeM,
+        endTimeH: endTimeH ?? this.endTimeH,
+        endTimeM: endTimeM ?? this.endTimeM,
       );
   @override
   String toString() {
     return (StringBuffer('Schedule(')
           ..write('id: $id, ')
-          ..write('content: $content, ')
+          ..write('memo: $memo, ')
+          ..write('title: $title, ')
+          ..write('place: $place, ')
           ..write('date: $date, ')
-          ..write('startTime: $startTime, ')
-          ..write('endTime: $endTime')
+          ..write('startTimeH: $startTimeH, ')
+          ..write('startTimeM: $startTimeM, ')
+          ..write('endTimeH: $endTimeH, ')
+          ..write('endTimeM: $endTimeM')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, content, date, startTime, endTime);
+  int get hashCode => Object.hash(
+      id, memo, title, place, date, startTimeH, startTimeM, endTimeH, endTimeM);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Schedule &&
           other.id == this.id &&
-          other.content == this.content &&
+          other.memo == this.memo &&
+          other.title == this.title &&
+          other.place == this.place &&
           other.date == this.date &&
-          other.startTime == this.startTime &&
-          other.endTime == this.endTime);
+          other.startTimeH == this.startTimeH &&
+          other.startTimeM == this.startTimeM &&
+          other.endTimeH == this.endTimeH &&
+          other.endTimeM == this.endTimeM);
 }
 
 class SchedulesCompanion extends UpdateCompanion<Schedule> {
   final Value<int> id;
-  final Value<String> content;
+  final Value<String> memo;
+  final Value<String> title;
+  final Value<String> place;
   final Value<DateTime> date;
-  final Value<int> startTime;
-  final Value<int> endTime;
+  final Value<int> startTimeH;
+  final Value<int> startTimeM;
+  final Value<int> endTimeH;
+  final Value<int> endTimeM;
   const SchedulesCompanion({
     this.id = const Value.absent(),
-    this.content = const Value.absent(),
+    this.memo = const Value.absent(),
+    this.title = const Value.absent(),
+    this.place = const Value.absent(),
     this.date = const Value.absent(),
-    this.startTime = const Value.absent(),
-    this.endTime = const Value.absent(),
+    this.startTimeH = const Value.absent(),
+    this.startTimeM = const Value.absent(),
+    this.endTimeH = const Value.absent(),
+    this.endTimeM = const Value.absent(),
   });
   SchedulesCompanion.insert({
     this.id = const Value.absent(),
-    required String content,
+    required String memo,
+    required String title,
+    required String place,
     required DateTime date,
-    required int startTime,
-    required int endTime,
-  })  : content = Value(content),
+    required int startTimeH,
+    required int startTimeM,
+    required int endTimeH,
+    required int endTimeM,
+  })  : memo = Value(memo),
+        title = Value(title),
+        place = Value(place),
         date = Value(date),
-        startTime = Value(startTime),
-        endTime = Value(endTime);
+        startTimeH = Value(startTimeH),
+        startTimeM = Value(startTimeM),
+        endTimeH = Value(endTimeH),
+        endTimeM = Value(endTimeM);
   static Insertable<Schedule> custom({
     Expression<int>? id,
-    Expression<String>? content,
+    Expression<String>? memo,
+    Expression<String>? title,
+    Expression<String>? place,
     Expression<DateTime>? date,
-    Expression<int>? startTime,
-    Expression<int>? endTime,
+    Expression<int>? startTimeH,
+    Expression<int>? startTimeM,
+    Expression<int>? endTimeH,
+    Expression<int>? endTimeM,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (content != null) 'content': content,
+      if (memo != null) 'memo': memo,
+      if (title != null) 'title': title,
+      if (place != null) 'place': place,
       if (date != null) 'date': date,
-      if (startTime != null) 'start_time': startTime,
-      if (endTime != null) 'end_time': endTime,
+      if (startTimeH != null) 'start_time_h': startTimeH,
+      if (startTimeM != null) 'start_time_m': startTimeM,
+      if (endTimeH != null) 'end_time_h': endTimeH,
+      if (endTimeM != null) 'end_time_m': endTimeM,
     });
   }
 
   SchedulesCompanion copyWith(
       {Value<int>? id,
-      Value<String>? content,
+      Value<String>? memo,
+      Value<String>? title,
+      Value<String>? place,
       Value<DateTime>? date,
-      Value<int>? startTime,
-      Value<int>? endTime}) {
+      Value<int>? startTimeH,
+      Value<int>? startTimeM,
+      Value<int>? endTimeH,
+      Value<int>? endTimeM}) {
     return SchedulesCompanion(
       id: id ?? this.id,
-      content: content ?? this.content,
+      memo: memo ?? this.memo,
+      title: title ?? this.title,
+      place: place ?? this.place,
       date: date ?? this.date,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
+      startTimeH: startTimeH ?? this.startTimeH,
+      startTimeM: startTimeM ?? this.startTimeM,
+      endTimeH: endTimeH ?? this.endTimeH,
+      endTimeM: endTimeM ?? this.endTimeM,
     );
   }
 
@@ -161,17 +234,29 @@ class SchedulesCompanion extends UpdateCompanion<Schedule> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (content.present) {
-      map['content'] = Variable<String>(content.value);
+    if (memo.present) {
+      map['memo'] = Variable<String>(memo.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (place.present) {
+      map['place'] = Variable<String>(place.value);
     }
     if (date.present) {
       map['date'] = Variable<DateTime>(date.value);
     }
-    if (startTime.present) {
-      map['start_time'] = Variable<int>(startTime.value);
+    if (startTimeH.present) {
+      map['start_time_h'] = Variable<int>(startTimeH.value);
     }
-    if (endTime.present) {
-      map['end_time'] = Variable<int>(endTime.value);
+    if (startTimeM.present) {
+      map['start_time_m'] = Variable<int>(startTimeM.value);
+    }
+    if (endTimeH.present) {
+      map['end_time_h'] = Variable<int>(endTimeH.value);
+    }
+    if (endTimeM.present) {
+      map['end_time_m'] = Variable<int>(endTimeM.value);
     }
     return map;
   }
@@ -180,10 +265,14 @@ class SchedulesCompanion extends UpdateCompanion<Schedule> {
   String toString() {
     return (StringBuffer('SchedulesCompanion(')
           ..write('id: $id, ')
-          ..write('content: $content, ')
+          ..write('memo: $memo, ')
+          ..write('title: $title, ')
+          ..write('place: $place, ')
           ..write('date: $date, ')
-          ..write('startTime: $startTime, ')
-          ..write('endTime: $endTime')
+          ..write('startTimeH: $startTimeH, ')
+          ..write('startTimeM: $startTimeM, ')
+          ..write('endTimeH: $endTimeH, ')
+          ..write('endTimeM: $endTimeM')
           ..write(')'))
         .toString();
   }
@@ -202,28 +291,58 @@ class $SchedulesTable extends Schedules
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _contentMeta = const VerificationMeta('content');
+  final VerificationMeta _memoMeta = const VerificationMeta('memo');
   @override
-  late final GeneratedColumn<String> content = GeneratedColumn<String>(
-      'content', aliasedName, false,
+  late final GeneratedColumn<String> memo = GeneratedColumn<String>(
+      'memo', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  final VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  final VerificationMeta _placeMeta = const VerificationMeta('place');
+  @override
+  late final GeneratedColumn<String> place = GeneratedColumn<String>(
+      'place', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
   late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
       'date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _startTimeMeta = const VerificationMeta('startTime');
+  final VerificationMeta _startTimeHMeta = const VerificationMeta('startTimeH');
   @override
-  late final GeneratedColumn<int> startTime = GeneratedColumn<int>(
-      'start_time', aliasedName, false,
+  late final GeneratedColumn<int> startTimeH = GeneratedColumn<int>(
+      'start_time_h', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _endTimeMeta = const VerificationMeta('endTime');
+  final VerificationMeta _startTimeMMeta = const VerificationMeta('startTimeM');
   @override
-  late final GeneratedColumn<int> endTime = GeneratedColumn<int>(
-      'end_time', aliasedName, false,
+  late final GeneratedColumn<int> startTimeM = GeneratedColumn<int>(
+      'start_time_m', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  final VerificationMeta _endTimeHMeta = const VerificationMeta('endTimeH');
+  @override
+  late final GeneratedColumn<int> endTimeH = GeneratedColumn<int>(
+      'end_time_h', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  final VerificationMeta _endTimeMMeta = const VerificationMeta('endTimeM');
+  @override
+  late final GeneratedColumn<int> endTimeM = GeneratedColumn<int>(
+      'end_time_m', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, content, date, startTime, endTime];
+  List<GeneratedColumn> get $columns => [
+        id,
+        memo,
+        title,
+        place,
+        date,
+        startTimeH,
+        startTimeM,
+        endTimeH,
+        endTimeM
+      ];
   @override
   String get aliasedName => _alias ?? 'schedules';
   @override
@@ -236,11 +355,23 @@ class $SchedulesTable extends Schedules
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('content')) {
-      context.handle(_contentMeta,
-          content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    if (data.containsKey('memo')) {
+      context.handle(
+          _memoMeta, memo.isAcceptableOrUnknown(data['memo']!, _memoMeta));
     } else if (isInserting) {
-      context.missing(_contentMeta);
+      context.missing(_memoMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('place')) {
+      context.handle(
+          _placeMeta, place.isAcceptableOrUnknown(data['place']!, _placeMeta));
+    } else if (isInserting) {
+      context.missing(_placeMeta);
     }
     if (data.containsKey('date')) {
       context.handle(
@@ -248,17 +379,33 @@ class $SchedulesTable extends Schedules
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
-    if (data.containsKey('start_time')) {
-      context.handle(_startTimeMeta,
-          startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta));
+    if (data.containsKey('start_time_h')) {
+      context.handle(
+          _startTimeHMeta,
+          startTimeH.isAcceptableOrUnknown(
+              data['start_time_h']!, _startTimeHMeta));
     } else if (isInserting) {
-      context.missing(_startTimeMeta);
+      context.missing(_startTimeHMeta);
     }
-    if (data.containsKey('end_time')) {
-      context.handle(_endTimeMeta,
-          endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta));
+    if (data.containsKey('start_time_m')) {
+      context.handle(
+          _startTimeMMeta,
+          startTimeM.isAcceptableOrUnknown(
+              data['start_time_m']!, _startTimeMMeta));
     } else if (isInserting) {
-      context.missing(_endTimeMeta);
+      context.missing(_startTimeMMeta);
+    }
+    if (data.containsKey('end_time_h')) {
+      context.handle(_endTimeHMeta,
+          endTimeH.isAcceptableOrUnknown(data['end_time_h']!, _endTimeHMeta));
+    } else if (isInserting) {
+      context.missing(_endTimeHMeta);
+    }
+    if (data.containsKey('end_time_m')) {
+      context.handle(_endTimeMMeta,
+          endTimeM.isAcceptableOrUnknown(data['end_time_m']!, _endTimeMMeta));
+    } else if (isInserting) {
+      context.missing(_endTimeMMeta);
     }
     return context;
   }
@@ -271,14 +418,22 @@ class $SchedulesTable extends Schedules
     return Schedule(
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      content: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      memo: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}memo'])!,
+      title: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      place: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}place'])!,
       date: attachedDatabase.options.types
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
-      startTime: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}start_time'])!,
-      endTime: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}end_time'])!,
+      startTimeH: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}start_time_h'])!,
+      startTimeM: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}start_time_m'])!,
+      endTimeH: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}end_time_h'])!,
+      endTimeM: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}end_time_m'])!,
     );
   }
 
