@@ -17,7 +17,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
   DateTime focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime selectedDay = DateTime(
+  DateTime selectedDate = DateTime(
     DateTime.now().year,
     DateTime.now().month,
     DateTime.now().day,
@@ -105,13 +105,13 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                             onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
                               // 선택된 날짜의 상태를 갱신합니다.
                               setState((){
-                                this.selectedDay = selectedDay;
+                                this.selectedDate = selectedDay;
                                 this.focusedDay = selectedDay;
                               });
                             },
                             selectedDayPredicate: (DateTime day) {
                               // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
-                              return isSameDay(selectedDay, day);
+                              return isSameDay(selectedDate, day);
                             },
                             headerStyle: HeaderStyle(
                               headerPadding:
@@ -124,6 +124,21 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                             ),
 
                             calendarStyle: CalendarStyle(
+                              // 오늘 날짜의 스타일 설정
+                              // todayTextStyle: TextStyle(fontSize: 15, color: Colors.white),
+
+                              // 기본 날짜 숫자의 폰트 크기
+                              defaultTextStyle: TextStyle(fontSize: 15.0),
+
+                              // 주말의 날짜 숫자 폰트 크기와 색상
+                              weekendTextStyle: TextStyle(fontSize: 15.0, color: Colors.red),
+
+
+                              todayDecoration : const BoxDecoration(
+                                color: AppColor.deepGreen,
+                                shape: BoxShape.circle,
+                              ),
+
                               // selectedDay 글자 조정
                               selectedTextStyle : const TextStyle(
                                 color: Colors.black,
@@ -132,11 +147,11 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                               // selectedDay 모양 조정
                               selectedDecoration : const BoxDecoration(
                                 color: AppColor.yellowGreen,
-                                shape: BoxShape.rectangle,
+                                shape: BoxShape.circle,
                               ),
 
                               // cell margin, padding 조절
-                              cellMargin : const EdgeInsets.all(2.0),
+                              cellMargin : const EdgeInsets.all(1.0),
                               cellPadding : const EdgeInsets.all(0.0),
 
                             ),
@@ -147,120 +162,17 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                       ),
                     ),
 
-                    // Expanded(
-                    //   child: Container(
-                    //     // margin: EdgeInsets.symmetric(vertical: 8.0),
-                    //     // padding: EdgeInsets.only(bottom: 350.0),
-                    //     child: CustomTextField(
-                    //       // 내용 입력 필드
-                    //       label: '제목',
-                    //       isTime: false,
-                    //       onSaved: (String? val){
-                    //         //저장이 되면 startTime 변수에 텍스트 필드값 저장.
-                    //         content = val;
-                    //       },
-                    //       validator: contentValidator,
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // SizedBox(height: 5.0),
-
-
-
-
-
-                    // Container(
-                    //   margin: const EdgeInsets.only(right: .0, left: 4.0, top:20.0),
-                    //
-                    //   padding: const EdgeInsets.all(5.0),
-                    //   decoration: BoxDecoration(
-                    //     border: Border.all(
-                    //       color: Colors.grey,
-                    //       width: 2.0,
-                    //     ),
-                    //     borderRadius: BorderRadius.circular(10.0),
-                    //   ),
-                    //   child: Column(
-                    //     children: [
-                    //       TableCalendar(
-                    //         formatAnimationDuration: const Duration(milliseconds: 220),
-                    //         locale: 'ko_KR',
-                    //         firstDay: DateTime.utc(2021, 1, 1),
-                    //         lastDay: DateTime.utc(2030, 12, 31),
-                    //         focusedDay: focusedDay,
-                    //         calendarFormat: _calendarFormat,
-                    //         availableCalendarFormats: const {
-                    //           CalendarFormat.month: 'month',
-                    //           CalendarFormat.twoWeeks: 'week',
-                    //         },
-                    //         onFormatChanged: (format) {
-                    //           setState(() {
-                    //             _calendarFormat = format;
-                    //           });
-                    //         },
-                    //         onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                    //           // 선택된 날짜의 상태를 갱신합니다.
-                    //           setState((){
-                    //             this.selectedDay = selectedDay;
-                    //             this.focusedDay = selectedDay;
-                    //           });
-                    //         },
-                    //         selectedDayPredicate: (DateTime day) {
-                    //           // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
-                    //           return isSameDay(selectedDay, day);
-                    //         },
-                    //         headerStyle: const HeaderStyle(
-                    //           headerPadding:
-                    //           EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-                    //           titleCentered: true,
-                    //           titleTextStyle: TextStyle(
-                    //             fontSize: 13.0,
-                    //             color: Colors.black,
-                    //           ),
-                    //         ),
-                    //
-                    //         calendarStyle: CalendarStyle(
-                    //           // 이전 달 날짜의 스타일 설정
-                    //           outsideTextStyle: TextStyle(fontSize: 12, color: Colors.grey),
-                    //           // outsideDecoration: BoxDecoration(), // 이전 달 날짜의 배경 스타일
-                    //
-                    //           // 오늘 날짜의 스타일 설정
-                    //           todayTextStyle: TextStyle(fontSize: 12, color: Colors.white),
-                    //           // todayDecoration: BoxDecoration(shape: BoxShape.circle, color: Colors.yellow), // 오늘 날짜의 배경 스타일
-                    //
-                    //           defaultTextStyle: TextStyle(fontSize: 12.0), // 기본 날짜 숫자의 폰트 크기
-                    //           weekendTextStyle: TextStyle(fontSize: 12.0, color: Colors.red), // 주말의 날짜 숫자 폰트 크기와 색상
-                    //           // selectedDay 글자 조정
-                    //           selectedTextStyle : TextStyle(
-                    //             color: Colors.black,
-                    //             fontSize: 12.0,
-                    //           ),
-                    //           // selectedDay 모양 조정
-                    //           selectedDecoration: BoxDecoration(  // ➍ 선택된 날짜 스타일
-                    //             borderRadius: BorderRadius.circular(6.0),
-                    //             border: Border.all(
-                    //               color: AppColor.yellowGreen,
-                    //               width: 1.0,
-                    //             ),
-                    //           ),
-                    //           cellMargin: EdgeInsets.all(0.0), // 셀 주위 여백 설정
-                    //           cellPadding: EdgeInsets.all(0.0), // 셀 내부 여백 설정
-                    //         ),
-                    //
-                    //         daysOfWeekStyle: const DaysOfWeekStyle(
-                    //           // 요일 텍스트 스타일
-                    //           weekdayStyle: TextStyle(fontSize: 13.0), // 평일 요일의 스타일
-                    //           weekendStyle: TextStyle(fontSize: 13.0), // 주말 요일의 스타일
-                    //         ),
-                    //
-                    //       ),
-                    //       // 여기에 다른 위젯을 추가할 수 있음
-                    //     ],
-                    //   ),
-                    // ),
-
-                    SizedBox(height: 35.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: onSavePressed,
+                        style: ElevatedButton.styleFrom(
+                          primary: AppColor.deepGreen,
+                        ),
+                        child: Text('저장'),
+                      ),
+                    ),
+                    SizedBox(height:10,),
 
 
 
@@ -274,15 +186,29 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
       ),
     );
   }
-}
 
-String? contentValidator(String? val){ //
-  if (val==null||val.isEmpty==true){
-    return '값을 입력해주세요';
+  void onSavePressed() {
+    if(formkey.currentState!.validate()){ //폼 검증
+      formkey.currentState!.save(); //폼 저장
+
+      // print(startTime);
+      // print(endTime);
+      // print(content);
+
+    }
   }
 
-  return null;
+  String? contentValidator(String? val){ //
+    if (val==null||val.isEmpty==true){
+      return '값을 입력해주세요';
+    }
+
+    return null;
+  }
+
 }
+
+
 
 
 //

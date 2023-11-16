@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:get/get.dart';
-import 'package:capstone/schedule/screen/home_screen.dart';
+import 'package:capstone/mainPage.dart';
 // import 'path_to_auth_service/auth_service.dart'; // Adjust the path accordingly
 
 
