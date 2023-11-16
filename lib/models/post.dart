@@ -1,20 +1,15 @@
-class Post {
-  String? id;
-  String? title;
-  String? imageUrl;
-  int likes;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Post(
-      {required this.id,
-        required this.title,
-        required this.imageUrl,
-        required this.likes});
+class Feed{
+  final String id;//게시물의 id 나중에 firebase 연동
+  final String title;
+  final String link;
+  final int likeCount;
 
-  Map<String, dynamic> toJson(){
-    return{
-      'title':title,
-      'image':imageUrl,
-      'like':likes,
-    };
-  }
+  Feed({
+    required this.id,
+    required this.title,
+    required this.link,
+    required this.likeCount,
+});
 }

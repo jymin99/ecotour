@@ -4,168 +4,235 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:capstone/models/post.dart';
 
 
-class CertificationFeed extends StatelessWidget {
+final List<Feed> feeds=[
+  Feed(
+    id: "0",
+    title:"test",
+    link:"assets/images/",
+    likeCount:0,
+  ),
+  Feed(
+    id: "1",
+    title:"test",
+    link:"assets/images/",
+    likeCount:0,
+  )
+];
+
+class CertificationFeed extends StatefulWidget {
+  const CertificationFeed({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Certification Feed',
-      home: UploadFeed(),
-    );
-  }
+  State<CertificationFeed> createState() => _CertificationFeedState();
 }
 
-class UploadFeed extends StatefulWidget {
-  const UploadFeed({super.key});
-
-  @override
-  State<UploadFeed> createState() => _UploadFeedState();
-}
-
-class _UploadFeedState extends State<UploadFeed> {
-  final TextEditingController _titleController = TextEditingController();
-  final ImagePicker _imagePicker = ImagePicker();
-  List<XFile>? _selectedImages;
-
-  @override
-  void initState() {
-    super.initState();
-    _titleController.text = '';
-  }
-
+class _CertificationFeedState extends State<CertificationFeed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: TextField(
-              controller: _titleController,
-              decoration: InputDecoration(labelText: '게시물 제목',border: OutlineInputBorder(),),
-            ),
-          ),
-
-          ElevatedButton(
-            onPressed: () {
-              // 갤러리에서 이미지 선택
-              pickImages();
-            },
-            child: Text('이미지 선택'),
-          ),
-          if (_selectedImages != null)
-            Container(
-              height: 100,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _selectedImages!.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.file(File(_selectedImages![index].path)),
-                  );
-                },
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: (){
+          showDialog(
+              context: context,
+              builder: (_)=>const ImageUpload(),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
+      body: GridView.builder(
+        padding: const EdgeInsets.only(
+          top:10.0,
+          left: 10.0,
+          right: 10.0,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:3,
+          mainAxisSpacing:10,
+          crossAxisSpacing:10,
+          childAspectRatio:1,
+        ),
+        itemCount: feeds.length,
+        itemBuilder: (_,int index)=>GestureDetector(
+          //상세화면으로 이동
+        onTap:(){
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context)=>FeedDetail(
+                feed:feeds[index],
               ),
             ),
-          ElevatedButton(
-            onPressed: () {
-              // 게시물 업로드 함수 호출
-              uploadPost();
-            },
-            child: Text('게시물 올리기'),
+          );
+        },
+      child: Image.asset(
+        feeds[index].link,
+        fit:BoxFit.cover,
+      ),
+      ),
+      ),
+
+    );
+  }
+}
+
+class FeedDetail extends StatefulWidget {
+  const FeedDetail({super.key,required this.feed,});
+  final Feed feed;
+
+  @override
+  State<FeedDetail> createState() => _FeedDetailState();
+}
+
+class _FeedDetailState extends State<FeedDetail> {
+  bool isLiked=false;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.only(
+            top: 10.0,
+            left: 10.0,
+            right: 10.0,
           ),
-          Expanded(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('posts').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return CircularProgressIndicator();
-                }
-
-                var posts = snapshot.data?.docs;
-
-                return ListView.builder(
-                  itemCount: posts?.length,
-                  itemBuilder: (context, index) {
-                    var post = posts?[index];
-                    return ListTile(
-                      title: Text(post?['title']),
-                      trailing: IconButton(
-                        icon: Icon(Icons.thumb_up),
-                        onPressed: () {
-                          likePost(post!.id);
-                        },
-                      ),
-                    );
-                  },
-                );
-              },
+          physics: const ClampingScrollPhysics(),
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Image.asset(
+                widget.feed.link,
+                fit: BoxFit.cover,
+              ),
             ),
-          )
-        ],
+            Row(
+              children: [
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    isLiked?Icons.thumb_up:Icons.thumb_up_outlined,
+                  ),
+                  onPressed: (){
+                    setState(() {
+                      isLiked=!isLiked;
+                    });
+                  },
+                ),
+                Text(
+                  widget.feed.likeCount.toString(),
+                ),
+              ],
+            ),
+
+          ],
+        ),
       ),
     );
   }
+}
 
-  Future<void> pickImages() async {
-    try {
-      final result = await _imagePicker.pickMultiImage(
-        imageQuality: 70,
-      );
-      setState(() {
-        _selectedImages = result;
-      });
-    } catch (e) {
-      print('Error picking images: $e');
-    }
+
+
+class ImageUpload extends StatefulWidget {
+  const ImageUpload({super.key});
+
+  @override
+  State<ImageUpload> createState() => _ImageUploadState();
+}
+
+class _ImageUploadState extends State<ImageUpload> {
+  String? imagePath;
+
+  Future<String?>selectImage() async{
+    final picker=ImagePicker();
+    XFile? pickImage=await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if(pickImage==null) return null;
+    return pickImage.path;
   }
 
-  void uploadPost() async {
-    String title = _titleController.text;
-
-    if (title.isNotEmpty && _selectedImages != null) {
-      for (var image in _selectedImages!) {
-        // 이미지 업로드
-        var imageUrl = await uploadImage(File(image.path));
-        // 게시물 업로드
-        if (imageUrl != null) {
-          FirebaseFirestore.instance.collection('posts').add({
-            'title': title,
-            'imageUrl': imageUrl,
-            'likes': 0,
-          });
-        }
-      }
-
-      // 업로드 후 입력 필드 및 선택 이미지 초기화
-      _titleController.clear();
-      setState(() {
-        _selectedImages = null;
-      });
-    }
-  }
-
-  Future<String?> uploadImage(File image) async {
-    try {
-      // TODO: 이미지를 Firebase Storage에 업로드하고 URL을 반환하는 코드 추가
-      final firebase_storage.Reference storageRef =
-      firebase_storage.FirebaseStorage.instance.ref().child('images/${DateTime.now().millisecondsSinceEpoch}.png');
-
-      await storageRef.putFile(image);
-
-      final String downloadURL = await storageRef.getDownloadURL();
-
-      return downloadURL;
-    } catch (e) {
-      print('Error uploading image: $e');
-      return null;
-    }
-  }
-
-  void likePost(String postId) {
-    FirebaseFirestore.instance.collection('posts').doc(postId).update({
-      'likes': FieldValue.increment(1),
-    });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      padding: const EdgeInsets.only(
+        top:100
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('인증피드 업로드'),
+            leading: IconButton(
+              icon: const Text('취소'),
+              padding: EdgeInsets.zero,
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: const Text('저장'),
+                padding: EdgeInsets.zero,
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+          body:Container(
+            color: Colors.white,
+            child: Center(
+              child: SingleChildScrollView(
+                child: GestureDetector(
+                  onTap:(){
+                    selectImage().then((String? path){
+                      if(path==null) return;
+                      setState(() {
+                        imagePath=path;
+                      });
+                });
+                },
+                  behavior: HitTestBehavior.translucent,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 300,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(
+                            width: 0.5,
+                            color: const Color(0xFFAAAAAA),
+                          ),
+                        ),
+                        child: imagePath!=null
+                          ? Image.file(File(imagePath!),
+                        width: 200,height: 200)
+                            :Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.upload,
+                              size: 50,
+                            ),
+                            Text('인증피드 업로드')
+                          ],
+                        )
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
+
