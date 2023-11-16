@@ -188,9 +188,6 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                             ),
                           ),
                         ),
-
-
-
                       ],
                     ),
 
