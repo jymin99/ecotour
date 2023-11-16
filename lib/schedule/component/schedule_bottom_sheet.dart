@@ -1,5 +1,8 @@
+//schedule_bottom_sheet.dart
+//여행 제목 및 range dialog
+
 import 'package:flutter/material.dart';
-import 'package:capstone/schedule/component/custom_text_field.dart';
+import 'package:capstone/schedule/component/4.custom_text_field.dart';
 import 'package:capstone/schedule/const/colors.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {

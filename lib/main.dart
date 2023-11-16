@@ -49,8 +49,8 @@ class MyApp extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       title:'그린패스',
       home:
-      //MainPage(),
-      LoginPage(),
+      MainPage(),
+      // LoginPage(),
     );
   }
 }
