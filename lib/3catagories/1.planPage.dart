@@ -1,3 +1,9 @@
+// home_screen.dart
+
+
+import 'package:get_it/get_it.dart';
+import 'package:capstone/schedule/database/drift_database.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -7,14 +13,12 @@ import 'package:capstone/schedule/component/3.today_banner.dart';
 import 'package:capstone/schedule/component/main_calendar.dart';
 import 'package:capstone/schedule/component/2.schedule_card.dart';
 import 'package:capstone/schedule/const/colors.dart';
-import 'package:get_it/get_it.dart';
-import 'package:capstone/schedule/database/drift_database.dart';
 
-import 'package:capstone/schedule/component/1_2.dayPlan_dialog_sheet.dart';
+import 'package:capstone/schedule/component/1.dayPlan_dialog_sheet.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';//일정 DB에 저장된 데이터 가져오기
 
-// import 'package:capstone/schedule/component/2_2.add_schedule_card.dart';
+// import 'package:capstone/schedule/component/add_schedule_card.dart';
 
 
 class PlanPage extends StatefulWidget {
@@ -155,6 +159,43 @@ class _PlanPageState extends State<PlanPage> {
               ),
               SizedBox(height: 8.0),
 
+              Container(
+                width: 390,
+                child: StreamBuilder<List<Schedule>>(
+                  stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate),
+                  builder: (context, snapshot){
+                    if(!snapshot.hasData){
+                      return Container();
+                    }
+                    return  ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index){
+                        final schedule = snapshot.data![index];
+                        return Dismissible(
+                          key: ObjectKey(schedule.id), //유니크한 키 값
+                          direction: DismissDirection.startToEnd,
+                          onDismissed: (DismissDirection direction){
+                            GetIt.I<LocalDatabase>().removeSchedule(schedule.id);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
+                            child: ScheduleCard(
+                              startTimeH: schedule.startTimeH,
+                              startTimeM: schedule.startTimeM,
+                              endTimeH: schedule.endTimeH,
+                              endTimeM: schedule.endTimeM,
+                              title: schedule.title,
+                              place: schedule.place,
+                              memo: schedule.memo,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                )
+              ),
+
 
 
               // //일정데이터 읽기
@@ -186,9 +227,13 @@ class _PlanPageState extends State<PlanPage> {
               // ),
 
               ScheduleCard(  // ➊ 구현해둔 일정 카드
-                startTime: 12,
-                endTime: 14,
-                content: '프로그래밍 공부',
+                startTimeH: 12,
+                startTimeM: 30,
+                endTimeH: 14,
+                endTimeM: 30,
+                title: '세부행 비행기',
+                place:'인천공항',
+                memo: '세부로 출발~',
               ),
 
               SizedBox(height: 8.0),

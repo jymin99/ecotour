@@ -1,5 +1,7 @@
+//여행 제목, range dialog
+
 import 'package:flutter/material.dart';
-import 'package:capstone/schedule/component/custom_text_field.dart';
+import 'package:capstone/schedule/component/4.custom_text_field.dart';
 import 'package:capstone/schedule/const/colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 

@@ -1,14 +1,16 @@
+//schedule_bottom_sheet.dart
+
 import 'package:capstone/schedule/const/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import the intl package
 
 
 import 'package:flutter/material.dart';
-import 'package:capstone/schedule/component/custom_text_field.dart';
+import 'package:capstone/schedule/component/4.custom_text_field.dart';
 import 'package:capstone/schedule/const/colors.dart';
 
-import 'package:drift/drift.dart' hide Column;
 //material.dart 패키지의 column 클래스와 중복되니 드리프트에서는 숨기기
+import 'package:drift/drift.dart' hide Column;
 import 'package:get_it/get_it.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
 
@@ -16,6 +18,7 @@ import 'package:capstone/schedule/database/drift_database.dart';
 class dayPlanSheet extends StatefulWidget {
   final DateTime selectedDate;
 
+  //homescree으로부터 selecetedDate 변수를 입력 받음.
   const dayPlanSheet({
     required this.selectedDate,
     Key? key
@@ -33,7 +36,7 @@ class FormData {
 }
 
 class _dayPlanSheetState extends State<dayPlanSheet> {
-  final GlobalKey<FormState> _formkey = GlobalKey();
+  final GlobalKey<FormState> formkey = GlobalKey();
   final FormData formData = FormData(); // Create an instance of the FormData class
 
 
@@ -71,7 +74,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Form( //텍스트 필드를 한 번에 관리 가능.
-        key: _formkey, // form을 조작할 키 값.
+        key: formkey, // form을 조작할 키 값.
         child: SafeArea(
           child: Container(
             padding: EdgeInsets.only(left: 20, right: 20),
@@ -343,16 +346,18 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
   }
 
   void onSavePressed() async {
-    if(_formkey.currentState!.validate()){ //폼 검증
-      _formkey.currentState!.save(); //폼 저장
+    if(formkey.currentState!.validate()){ //폼 검증
+      formkey.currentState!.save(); //폼 저장
 
-      print('title : $formData.title' );
-      print('place : $formData.place' );
-      print('startTime : $formData.startTime' );
-      print('endTime : $formData.endTime' );
-      print('memo : $formData.memo' );
+      print('title : ${formData.title}' );
+      print('place : ${formData.place}' );
+      print('startTimeH : ${formData.startTime.hour}' );
+      print('startTimeM : ${formData.startTime.minute}' );
+      print('endTimeH : ${formData.endTime.hour}' );
+      print('endTimeM : ${formData.endTime.minute}' );
+      print('memo : ${formData.memo}' );
 
-      await GetIt.I<LocalDatabase>().createSchedule(
+      await GetIt.I<LocalDatabase>().createSchedule( //일정 생성하기
         SchedulesCompanion(
           date: Value(widget.selectedDate),
           title: Value(formData.title!),
