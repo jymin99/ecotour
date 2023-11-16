@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:get/get.dart';
 import 'package:capstone/mainPage.dart';
+// import 'path_to_auth_service/auth_service.dart'; // Adjust the path accordingly
+
 
 class AuthService extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -70,7 +72,7 @@ class AuthService extends GetxController {
 }
 
 class LoginPage extends StatelessWidget {
-  final AuthService authController = Get.find();
+  final AuthService authController = Get.put(AuthService());
 
   @override
   Widget build(BuildContext context) {
