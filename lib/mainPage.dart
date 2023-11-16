@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 // import 'package:capstone/style.dart';
 import 'package:capstone/3catagories/naturePage.dart';
 import 'package:capstone/3catagories/mapPage.dart';
-import 'package:capstone/3catagories/planPage.dart';
+import 'package:capstone/3catagories/1.planPage.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:capstone/schedule/component/main_calendar.dart';
-import 'package:capstone/schedule/component/schedule_card.dart';
-import 'package:capstone/schedule/component/today_banner.dart';
+import 'package:capstone/schedule/component/2.schedule_card.dart';
+import 'package:capstone/schedule/component/3.today_banner.dart';
 // import 'package:capstone/schedule/component/schedule_bottom_sheet.dart';
-import 'package:capstone/schedule/component/schedule_dialog_sheet.dart';
+import 'package:capstone/schedule/component/1.schedule_dialog_sheet.dart';
 import 'package:capstone/schedule/const/colors.dart';
 
 

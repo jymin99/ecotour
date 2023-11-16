@@ -11,6 +11,10 @@ import 'login.dart';
 import 'package:intl/date_symbol_data_local.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:capstone/schedule/database/drift_database.dart';
+import 'package:get_it/get_it.dart';
+
+
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -20,6 +24,12 @@ void main()async{
   // MobileAds.instance.initialize();
 
   await initializeDateFormatting();
+
+  final database = LocalDatabase();
+  //localdatabase 클래스를 인스턴스화
+  GetIt.I.registerSingleton<LocalDatabase>(database);
+  //getit에 데이터베이스 변수 주입하기(의존성 주입)
+  //같은 database 변수를 getitI를 통해서 프로젝트 어디서든 사용할 수 있음.
 
 
   runApp(MyApp());
@@ -31,16 +41,9 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
 
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title:'그린패스',
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSwatch(
-      //     primarySwatch: Colors.blue, // 주요 색상 설정
-      //     accentColor: Colors.green, // 강조 색상 설정
-      //   ),// 강조 색상 (예: 버튼 클릭 시 등)
-      //   // 여기에 다른 테마 속성들을 추가할 수 있습니다.
-      // ),
       home:MainPage(),
       // LoginPage(),
     );

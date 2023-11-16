@@ -16,6 +16,7 @@ class ScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 390,
       decoration: BoxDecoration(
         border: Border.all(
           width: 1.0,
