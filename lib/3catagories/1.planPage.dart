@@ -144,7 +144,7 @@ class _PlanPageState extends State<PlanPage> {
               ),
 
 
-              SizedBox(height: 8.0),
+              // SizedBox(height: 8.0),
               Container(
                 width: 390,
                 // 둥글게
@@ -219,10 +219,7 @@ class _PlanPageState extends State<PlanPage> {
                 ),
               ),
 
-
-
-
-
+              SizedBox(height: 50.0),
 
             ],
           ),

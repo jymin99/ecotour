@@ -77,7 +77,7 @@ class _Time extends StatelessWidget {
         Text(
           '${endTime.toString().padLeft(2, '0')}:00', // 숫자가 두 자리수가 안 되면 0으로 채워주기
           style: textStyle.copyWith(
-            fontSize: 10.0,
+            fontSize: 12.0,
           ),
         ),
       ],
