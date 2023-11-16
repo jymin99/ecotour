@@ -14,6 +14,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:capstone/schedule/database/drift_database.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/services.dart';
 
 
 void main()async{
@@ -23,6 +24,7 @@ void main()async{
   // AuthRepository.initialize(appKey: '8f37b8519ce307bd4d312e00c20fbe41');
 
   // MobileAds.instance.initialize();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);//이미지 불러오기 위해서
 
   await initializeDateFormatting();
 

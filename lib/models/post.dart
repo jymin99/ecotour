@@ -1,17 +1,20 @@
 class Post {
   String? id;
   String? title;
-  String? content;
+  String? imageUrl;
+  int likes;
 
   Post(
       {required this.id,
         required this.title,
-        required this.content,});
+        required this.imageUrl,
+        required this.likes});
 
   Map<String, dynamic> toJson(){
     return{
       'title':title,
-      'content':content,
+      'image':imageUrl,
+      'like':likes,
     };
   }
 }

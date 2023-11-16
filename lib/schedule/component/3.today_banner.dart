@@ -15,13 +15,13 @@ class TodayBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = TextStyle(  // 기본으로 사용할 글꼴
       fontWeight: FontWeight.w600,
-      color: Colors.white,
+      color: Colors.black,
     );
 
     return Container(
-      color: AppColor.deepGreen,
+      // color: AppColor.deepGreen,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 10.0), //, vertical: 8.0
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -29,6 +29,10 @@ class TodayBanner extends StatelessWidget {
               '${selectedDate.year}년 ${selectedDate.month}월 ${selectedDate.day}일',  // “년 월 일” 형태로 표시
               style: textStyle,
             ),
+
+            //(여행 제목)
+
+
             Text(
               '$count개',  // 일정 개수 표시
               style: textStyle,

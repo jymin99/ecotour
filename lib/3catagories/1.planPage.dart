@@ -10,10 +10,11 @@ import 'package:capstone/schedule/const/colors.dart';
 import 'package:get_it/get_it.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
 
+import 'package:capstone/schedule/component/1_2.dayPlan_dialog_sheet.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';//일정 DB에 저장된 데이터 가져오기
 
-import 'package:capstone/schedule/component/2_2.add_schedule_card.dart';
+// import 'package:capstone/schedule/component/2_2.add_schedule_card.dart';
 
 
 class PlanPage extends StatefulWidget {
@@ -128,7 +129,7 @@ class _PlanPageState extends State<PlanPage> {
                           ),
 
                           // cell margin, padding 조절
-                          cellMargin : const EdgeInsets.all(2.0),
+                          cellMargin : const EdgeInsets.all(5.5),
                           cellPadding : const EdgeInsets.all(0.0),
 
                         ),
@@ -143,7 +144,7 @@ class _PlanPageState extends State<PlanPage> {
               ),
 
 
-              SizedBox(height: 8.0),
+              // SizedBox(height: 8.0),
               Container(
                 width: 390,
                 // 둥글게
@@ -194,28 +195,31 @@ class _PlanPageState extends State<PlanPage> {
 
               SizedBox(
                 width: 390,
-                height: 40,
+                height: 35,
                 // width: double.infinity,
                 child: ElevatedButton(
                   onPressed: (){
-
-
-                    showCupertinoModalPopup(  // ➋ BottomSheet 열기
+                     showCupertinoModalPopup(  // ➋ BottomSheet 열기
                       context: context,
-                      builder: (_) => AddScheduledCard(),
+                      builder: (_) => dayPlanSheet(
+                        selectedDate: selectedDate,
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: AppColor.deepGreen,
+                    primary: AppColor.ashGreen,
                   ),
-                  child: Text('+'),
+                  child: Text(
+                    '+',
+                    style: TextStyle(
+                      color: AppColor.deepGreen,  // 텍스트 색상을 검정색으로 변경
+                      fontSize: 20.0,       // 텍스트 크기를 조절
+                    ),
+                  ),
                 ),
               ),
 
-
-
-
-
+              SizedBox(height: 50.0),
 
             ],
           ),

@@ -18,11 +18,12 @@ class ScheduleCard extends StatelessWidget {
     return Container(
       width: 390,
       decoration: BoxDecoration(
-        border: Border.all(
-          width: 1.0,
-          color: AppColor.deepGreen,
-        ),
+        // border: Border.all(
+        //   width: 1.0,
+        //   color: AppColor.deepGreen,
+        // ),
         borderRadius: BorderRadius.circular(8.0),
+        color: AppColor.ashGreen,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -76,7 +77,7 @@ class _Time extends StatelessWidget {
         Text(
           '${endTime.toString().padLeft(2, '0')}:00', // 숫자가 두 자리수가 안 되면 0으로 채워주기
           style: textStyle.copyWith(
-            fontSize: 10.0,
+            fontSize: 12.0,
           ),
         ),
       ],
