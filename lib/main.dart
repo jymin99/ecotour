@@ -1,10 +1,10 @@
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:capstone/mainPage.dart';
+import 'package:capstone/schedule/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:kakao_map_plugin/kakao_map_plugin.dart';
-// import 'mainPage.dart';
+// import 'home_screen.dart';
 import 'package:get/get.dart';
 // import 'package:modu_tour/singPage.dart';
 import 'login.dart';
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title:'그린패스',
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget{
       //   ),// 강조 색상 (예: 버튼 클릭 시 등)
       //   // 여기에 다른 테마 속성들을 추가할 수 있습니다.
       // ),
-      home:LoginPage(),
+      home:MainPage(),
+      // LoginPage(),
     );
   }
 }
