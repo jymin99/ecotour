@@ -147,7 +147,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                       children: [
                         Container(
                           height: 45,
-                          width: 137,
+                          width: 128,
                           child: TextField(
                             onChanged: (String? val) {
                               startTime2 = int.parse(val!);
@@ -170,7 +170,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
 
                         Container(
                           height: 45,
-                          width: 137,
+                          width: 128,
                           child: TextField(
                             onChanged: (String? val) {
                               endTime2 = int.parse(val!);
