@@ -11,7 +11,7 @@ class FireService {
   // Create
   Future createNewMotto(Map<String, dynamic> json) async {
     DocumentReference<Map<String, dynamic>> documentReference =
-    FirebaseFirestore.instance.collection("cafe_db").doc();
+    FirebaseFirestore.instance.collection("cafe").doc();
     final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
     await documentReference.get();
 
@@ -20,30 +20,48 @@ class FireService {
     }
   }
 
-  // READ 각각의 데이터를 콕 집어서 가져올때
-  Future<FireModel> getFireModel(String userkey) async {
-    DocumentReference<Map<String, dynamic>> documentReference =
-    FirebaseFirestore.instance.collection("cafe_db").doc(userkey);
-    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-    await documentReference.get();
-    FireModel fireModel = FireModel.fromSnapShot(documentSnapshot);
-    return fireModel;
-  }
+  // // READ 각각의 데이터를 콕 집어서 가져올때
+  // Future<FireModel> getFireModel(String userkey) async {
+  //   DocumentReference<Map<String, dynamic>> documentReference =
+  //   FirebaseFirestore.instance.collection("cafe").doc(userkey);
+  //   final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+  //   await documentReference.get();
+  //   FireModel fireModel = FireModel.fromSnapShot(documentSnapshot);
+  //   return fireModel;
+  // }
+
 
   //READ 컬렉션 내 모든 데이터를 가져올때
-  Future<List<FireModel>> getFireModels() async {
-    CollectionReference<Map<String, dynamic>> collectionReference =
-    FirebaseFirestore.instance.collection("cafe_db");
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await collectionReference.orderBy("date").get();
+  // Future<List<FireModel>> getFireModels() async {
+  //   CollectionReference<Map<String, dynamic>> collectionReference =
+  //   FirebaseFirestore.instance.collection("cafe");
+  //   QuerySnapshot<Map<String, dynamic>> querySnapshot =
+  //   await collectionReference.orderBy("date").get();
+  //
+  //   List<FireModel> cafe = [];
+  //   for (var doc in querySnapshot.docs) {
+  //     FireModel fireModel = FireModel.fromQuerySnapshot(doc);
+  //     cafe.add(fireModel);
+  //   }
+  //   return cafe;
+  // }
 
-    List<FireModel> cafe = [];
+  Future<List<Map<String, dynamic>>> getFireModels() async {
+    CollectionReference<Map<String, dynamic>> collectionReference =
+    FirebaseFirestore.instance.collection("cafe");
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await collectionReference.orderBy("shop").get();
+
+    List<Map<String, dynamic>> cafe = [];
     for (var doc in querySnapshot.docs) {
-      FireModel fireModel = FireModel.fromQuerySnapshot(doc);
-      cafe.add(fireModel);
+      // FireModel fireModel = FireModel.fromQuerySnapshot(doc);
+      // cafe.add(fireModel);
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      cafe.add(data);
     }
     return cafe;
   }
+
 //Delete
   Future<void> delFireModel(DocumentReference reference) async {
     await reference.delete();

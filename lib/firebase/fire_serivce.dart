@@ -9,6 +9,6 @@ class FireService {
   //Create
   Future createCafeList(Map<String, dynamic> json) async {
     // 초기화
-    await FirebaseFirestore.instance.collection("cafe_list").add(json);
+    await FirebaseFirestore.instance.collection("cafe").add(json);
   }
 }
