@@ -37,8 +37,6 @@ class LocalDatabase extends _$LocalDatabase{
   int get schemaVersion => 1;
   //1부터 시작. 테이블 변화가 있을 시 1씩 올려줘서 구조 변경사항 인지시킴.
 
-
-
 }
 
 LazyDatabase _openConnection(){

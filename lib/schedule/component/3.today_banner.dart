@@ -33,10 +33,10 @@ class TodayBanner extends StatelessWidget {
             //(여행 제목)
 
 
-            Text(
-              '$count개',  // 일정 개수 표시
-              style: textStyle,
-            ),
+            // Text(
+            //   '$count개',  // 일정 개수 표시
+            //   style: textStyle,
+            // ),
           ],
         ),
       ),
