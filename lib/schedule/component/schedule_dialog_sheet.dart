@@ -25,7 +25,6 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
   String? content; // 제목을 저장할 변수
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
