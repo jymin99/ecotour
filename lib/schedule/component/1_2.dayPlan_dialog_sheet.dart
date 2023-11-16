@@ -1,5 +1,6 @@
 import 'package:capstone/schedule/const/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 
 
 import 'package:flutter/material.dart';
@@ -23,17 +24,44 @@ class dayPlanSheet extends StatefulWidget {
   @override
   State<dayPlanSheet> createState() => _dayPlanSheetState();
 }
+class FormData {
+  String? title;
+  String? place;
+  TimeOfDay startTime = TimeOfDay.now();
+  TimeOfDay endTime = TimeOfDay.now();
+  String? memo;
+}
 
 class _dayPlanSheetState extends State<dayPlanSheet> {
   final GlobalKey<FormState> _formkey = GlobalKey();
+  final FormData formData = FormData(); // Create an instance of the FormData class
 
-  int? startTime;
-  int? startTime2;
-  int? endTime;
-  int? endTime2;
-  String? title;
-  String? place;
-  String? memo;
+
+  Future<void> _selectStartTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: formData.startTime,
+    );
+
+    if (picked != null) {
+      setState(() {
+        formData.startTime = picked;
+      });
+    }
+  }
+
+  Future<void> _selectEndTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: formData.endTime,
+    );
+
+    if (picked != null) {
+      setState(() {
+        formData.endTime = picked;
+      });
+    }
+  }
 
 
   @override
@@ -57,7 +85,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                       width: 300,
                       child: TextField(
                         onChanged: (String value) {
-                          title = value; // 입력된 제목을 변수에 저장
+                          formData.title = value; // 입력된 제목을 변수에 저장
                         },
                         // validator: (value) {
                         //   if (value == null || value.isEmpty) {
@@ -87,7 +115,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                       width: 300,
                       child: TextField(
                         onChanged: (String value) {
-                          place = value; // 입력된 제목을 변수에 저장
+                          formData.place = value; // 입력된 제목을 변수에 저장
                         },
                         decoration: InputDecoration(
                           labelText: '장소',
@@ -106,6 +134,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
 
                     SizedBox(height:10,),
 
+                    //calendar 참고
                     // Container(
                     //   width: 300,
                     //   child: Row(
@@ -143,53 +172,117 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                     // ),
                     // SizedBox(height: 11.0),
 
+
                     Row(
                       children: [
-                        Container(
-                          height: 45,
-                          width: 137,
-                          child: TextField(
-                            onChanged: (String? val) {
-                              startTime2 = int.parse(val!);
-                            },
-                            decoration: InputDecoration(
-                              labelText: '시작 시간',
-                              labelStyle: TextStyle(fontSize: 14),
-                              floatingLabelBehavior: FloatingLabelBehavior.never, // Disable floating label
-                              filled: true, // 배경색 적용
-                              fillColor: Colors.grey[200], // 배경색 설정
-                              border: OutlineInputBorder( // 텍스트 필드의 테두리 스타일 설정
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide.none, // 테두리 없음
+                        Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              '시작 시간',
+                              // 'Selected Time: ${selectedTime.format(context)}',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+
+                            ),
+                            SizedBox(height: 5),
+                            InkWell(
+                              onTap: () => _selectStartTime(context),
+                              child: Container(
+                                height: 45,
+                                width: 137,
+                                child: TextField(
+                                  enabled: false,
+                                  textAlign: TextAlign.center,
+                                  controller: TextEditingController(
+                                    text: formData.startTime.format(context),
+                                  ),
+                                  decoration: InputDecoration(
+                                    labelText: '시작 시간',
+                                    labelStyle: TextStyle(fontSize: 14),
+                                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
+                                    contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
+
 
                         SizedBox(width: 15,),
 
-                        Container(
-                          height: 45,
-                          width: 137,
-                          child: TextField(
-                            onChanged: (String? val) {
-                              endTime2 = int.parse(val!);
-                            },
-                            decoration: InputDecoration(
-                              labelText: '종료 시간',
-                              labelStyle: TextStyle(fontSize: 14),
-                              floatingLabelBehavior: FloatingLabelBehavior.never, // Disable floating label
-                              filled: true, // 배경색 적용
-                              fillColor: Colors.grey[200], // 배경색 설정
-                              border: OutlineInputBorder( // 텍스트 필드의 테두리 스타일 설정
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide.none, // 테두리 없음
+                        Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              '종료 시간',
+                              // 'Selected Time: ${selectedTime.format(context)}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
+                            SizedBox(height: 5),
+                            InkWell(
+                              onTap: () => _selectEndTime(context),
+                              child: Container(
+                                height: 45,
+                                width: 137,
+                                child: TextField(
+                                  enabled: false,
+                                  textAlign: TextAlign.center,
+                                  controller: TextEditingController(
+                                    text: formData.endTime.format(context),
+                                  ),
+                                  decoration: InputDecoration(
+                                    labelText: '종료 시간',
+                                    labelStyle: TextStyle(fontSize: 14),
+                                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
+                                    contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     Checkbox(
+                    //       value: false, // 선택 여부, 필요에 따라 변경
+                    //       onChanged: (bool? value) {
+                    //         setState(() {
+                    //           selectedTime = TimeOfDay.now();
+                    //         });
+                    //       },
+                    //     ),
+                    //     Text(
+                    //       '시간 생략',
+                    //       style: TextStyle(
+                    //         fontSize: 10,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
 
                     SizedBox(height: 10.0),
 
@@ -198,7 +291,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                       width: 300,
                       child: TextField(
                         onChanged: (String? value) {
-                          memo = value;
+                          formData.memo = value;
                         },
                         maxLines: 8, // 메모를 작성할 수 있는 큰 필드로 설정 (원하는 줄 수로 조절)
                         decoration: InputDecoration(
@@ -253,16 +346,22 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
     if(_formkey.currentState!.validate()){ //폼 검증
       _formkey.currentState!.save(); //폼 저장
 
-      // print(startTime);
-      // print(endTime);
-      // print(content);
+      print('title : $formData.title' );
+      print('place : $formData.place' );
+      print('startTime : $formData.startTime' );
+      print('endTime : $formData.endTime' );
+      print('memo : $formData.memo' );
 
       await GetIt.I<LocalDatabase>().createSchedule(
         SchedulesCompanion(
-          startTime: Value(startTime!),
-          endTime: Value(endTime!),
-          content: Value(memo!),
           date: Value(widget.selectedDate),
+          title: Value(formData.title!),
+          place: Value(formData.place!),
+          startTimeH: Value(formData.startTime.hour!),
+          startTimeM: Value(formData.startTime.minute!),
+          endTimeH: Value(formData.endTime.hour!),
+          endTimeM: Value(formData.endTime.minute!),
+          memo: Value(formData.memo!),
         ),
       );
 
