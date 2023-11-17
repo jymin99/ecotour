@@ -41,7 +41,7 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
               Tab(
                 icon: Icon(Icons.collections),
                 child: Text(
-                  "인증피드",
+                  "인증",
                   style: TextStyle(
                     fontSize: 11.0, // 글씨 크기
                     fontFamily: 'YourFontFamily', // 원하는 글꼴 지정
@@ -51,21 +51,15 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
               ),
 
               Tab(
-                icon: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.compost),
-                    SizedBox(width: 8), // 아이콘과 텍스트 사이의 원하는 여백 크기를 여기에 지정
-                    Text(
-                      "친환경품",
+                icon: Icon(Icons.compost), // 아이콘과 텍스트 사이의 원하는 여백 크기를 여기에 지정
+                    child: Text(
+                      "환경 할인",
                       style: TextStyle(
                         fontSize: 11.0, // 글씨 크기
                         fontFamily: 'YourFontFamily', // 원하는 글꼴 지정
                         fontWeight: FontWeight.bold, // 글꼴 두껍게 설정 (선택 사항)
                       ),
                     ),
-                  ],
-                ),
               ),
 
               Tab(
