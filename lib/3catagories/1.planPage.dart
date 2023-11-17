@@ -75,7 +75,7 @@ class _PlanPageState extends State<PlanPage> {
   @override
   Widget build(BuildContext context) {
 
-    DateTime specificDate1 = DateTime(2023, 11, 17);
+    DateTime specificDate1 = DateTime(2023, 12, 17);
     bool isToday1 = isSameDay(selectedDate, specificDate1);
     Widget scheduleCard = isToday1
         ? ScheduleCard(
@@ -88,7 +88,7 @@ class _PlanPageState extends State<PlanPage> {
       memo: '세부로 출발~',
     ): Container(); // Empty container if not today
 
-    DateTime specificDate2 = DateTime(2023, 11, 18);
+    DateTime specificDate2 = DateTime(2023, 12, 18);
     bool isToday2 = isSameDay(selectedDate, specificDate2);
     Widget scheduleCard2 = isToday2
         ? Column(
@@ -125,7 +125,7 @@ class _PlanPageState extends State<PlanPage> {
           ],
         ): Container(); // Empty container if not today
 
-    DateTime specificDate3 = DateTime(2023, 11, 19);
+    DateTime specificDate3 = DateTime(2023, 12, 19);
     bool isToday3 = isSameDay(selectedDate, specificDate3);
     Widget scheduleCard3 = isToday3
         ? ScheduleCard(
