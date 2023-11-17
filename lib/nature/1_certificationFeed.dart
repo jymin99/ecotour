@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:capstone/models/post.dart';
+import 'package:capstone/style.dart';
 
 
 final List<Feed> feeds=[
@@ -41,6 +42,7 @@ class _CertificationFeedState extends State<CertificationFeed> {
               builder: (_)=>const ImageUpload(),
           );
         },
+        backgroundColor: AppColor.deepGreen,
         child: Icon(Icons.add),
       ),
       body: GridView.builder(

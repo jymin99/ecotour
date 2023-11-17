@@ -13,14 +13,14 @@ class _PointUsageHistory extends State<PointUsageHistory> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 10,
-          ),
+          // SizedBox(
+          //   height: 10,
+          // ),
           Container(
             child: Image.network(
-              'https://i.ibb.co/GVp0CQd/1.png', // Replace with your image URL
+              'https://i.ibb.co/VSK4F6J/5.png', // Replace with your image URL
               width: 410, // Set the width of the image
-              height: 500, // Set the height of the image
+              height: 480, // Set the height of the image
               fit: BoxFit.cover, // Adjust the BoxFit property as needed
             ),
           ),
