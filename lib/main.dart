@@ -29,8 +29,7 @@ void main()async{
 
   await initializeDateFormatting();
 
-  final database = LocalDatabase();
-  //localdatabase 클래스를 인스턴스화
+  final database = LocalDatabase(); //localdatabase 클래스를 인스턴스화
   GetIt.I.registerSingleton<LocalDatabase>(database);
   //getit에 데이터베이스 변수 주입하기(의존성 주입)
   //같은 database 변수를 getitI를 통해서 프로젝트 어디서든 사용할 수 있음.
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget{
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title:'그린패스',
-      home:LoginPage(),
+      home:MainPage(),
       // LoginPage(),
     );
   }

@@ -7,14 +7,13 @@ import 'package:capstone/schedule/database/drift_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:table_calendar/table_calendar.dart';
-// import 'package:capstone/style.dart';
-import 'package:capstone/schedule/component/3.today_banner.dart';
-
-import 'package:capstone/schedule/component/main_calendar.dart';
-import 'package:capstone/schedule/component/2.schedule_card.dart';
-import 'package:capstone/schedule/const/colors.dart';
 
 import 'package:capstone/schedule/component/1.dayPlan_dialog_sheet.dart';
+import 'package:capstone/schedule/component/2.schedule_card.dart';
+import 'package:capstone/schedule/component/3.today_banner.dart';
+import 'package:capstone/schedule/const/colors.dart';
+
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';//일정 DB에 저장된 데이터 가져오기
 
@@ -41,8 +40,108 @@ class _PlanPageState extends State<PlanPage> {
 
   DateTime focusedDay = DateTime.now();
 
+  List<Form> _schedules = [];
+
+  FormData formData1 = FormData(
+    title: 'Meeting',
+    place: 'Conference Room',
+    startTime: TimeOfDay(hour: 9, minute: 0),
+    endTime: TimeOfDay(hour: 10, minute: 30),
+    memo: 'Discuss project plans',
+  );
+
+  FormData formData2 = FormData(
+    title: 'Meeting',
+    place: 'Conference Room',
+    startTime: TimeOfDay(hour: 9, minute: 0),
+    endTime: TimeOfDay(hour: 10, minute: 30),
+    memo: 'Discuss project plans',
+  );
+
+  FormData formData3 = FormData(
+    title: 'Meeting',
+    place: 'Conference Room',
+    startTime: TimeOfDay(hour: 9, minute: 0),
+    endTime: TimeOfDay(hour: 10, minute: 30),
+    memo: 'Discuss project plans',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    DateTime specificDate1 = DateTime(2023, 11, 17);
+    bool isToday1 = isSameDay(selectedDate, specificDate1);
+    Widget scheduleCard = isToday1
+        ? ScheduleCard(
+      startTimeH: 12,
+      startTimeM: 30,
+      endTimeH: 14,
+      endTimeM: 30,
+      title: '제주도행 비행기',
+      place: '김포공항',
+      memo: '세부로 출발~',
+    ): Container(); // Empty container if not today
+
+    DateTime specificDate2 = DateTime(2023, 11, 18);
+    bool isToday2 = isSameDay(selectedDate, specificDate2);
+    Widget scheduleCard2 = isToday2
+        ? Column(
+          children: [
+            ScheduleCard(
+              startTimeH: 00,
+              startTimeM: 00,
+              endTimeH: 00,
+              endTimeM: 00,
+              title: '세부행 비행기',
+              place: '인천공항',
+              memo: '세부로 출발~',
+            ),
+            SizedBox(height:7,),
+            ScheduleCard(
+              startTimeH: 00,
+              startTimeM: 00,
+              endTimeH: 00,
+              endTimeM: 00,
+              title: '세부행 비행기',
+              place: '인천공항',
+              memo: '세부로 출발~',
+            ),
+            SizedBox(height:7,),
+            ScheduleCard(
+              startTimeH: 00,
+              startTimeM: 00,
+              endTimeH: 00,
+              endTimeM: 00,
+              title: '세부행 비행기',
+              place: '인천공항',
+              memo: '세부로 출발~',
+            ),
+          ],
+        ): Container(); // Empty container if not today
+
+    DateTime specificDate3 = DateTime(2023, 11, 19);
+    bool isToday3 = isSameDay(selectedDate, specificDate3);
+    Widget scheduleCard3 = isToday3
+        ? ScheduleCard(
+      startTimeH: 00,
+      startTimeM: 00,
+      endTimeH: 00,
+      endTimeM: 00,
+      title: '세부행 비행기',
+      place: '인천공항',
+      memo: '세부로 출발~',
+    ): Container(); // Empty container if not today
+
+
+
+
+
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
@@ -69,6 +168,51 @@ class _PlanPageState extends State<PlanPage> {
                   child: Column(
                     children: [
                       TableCalendar(
+                        calendarBuilders: CalendarBuilders(
+                          markerBuilder: (context, date, events) {
+                            if (date.isAtSameMomentAs(specificDate1)){
+                              // 특정 날짜에 마커를 표시
+                              return Container(
+                                margin: EdgeInsets.all(3),
+                                width: 9,
+                                height: 9,
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              );
+                            }
+                            if (date.isAtSameMomentAs(specificDate2)){
+                              // 특정 날짜에 마커를 표시
+                              return Container(
+                                margin: EdgeInsets.all(3),
+                                width: 9,
+                                height: 9,
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              );
+                            }
+                            if (date.isAtSameMomentAs(specificDate3)){
+                              // 특정 날짜에 마커를 표시
+                              return Container(
+                                margin: EdgeInsets.all(3),
+                                width: 9,
+                                height: 9,
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                              );
+                            }
+
+
+                            // else {
+                            //   return Container(); // 특정 날짜가 아닌 경우 빈 컨테이너 반환
+                            // }
+                          },
+                        ),
                         formatAnimationDuration: Duration(milliseconds: 220),
                         locale: 'ko_KR',
                         firstDay: DateTime.utc(2021, 1, 1),
@@ -159,6 +303,23 @@ class _PlanPageState extends State<PlanPage> {
               ),
               SizedBox(height: 8.0),
 
+              // ScheduleCard(  // ➊ 구현해둔 일정 카드
+              //   startTimeH: 12,
+              //   startTimeM: 30,
+              //   endTimeH: 14,
+              //   endTimeM: 30,
+              //   title: '세부행 비행기',
+              //   place:'인천공항',
+              //   memo: '세부로 출발~',
+              // ),
+              scheduleCard,
+
+              scheduleCard2,
+
+              scheduleCard3,
+
+              SizedBox(height: 8.0),
+
               Container(
                 width: 390,
                 child: StreamBuilder<List<Schedule>>(
@@ -176,6 +337,7 @@ class _PlanPageState extends State<PlanPage> {
                           direction: DismissDirection.startToEnd,
                           onDismissed: (DismissDirection direction){
                             GetIt.I<LocalDatabase>().removeSchedule(schedule.id);
+                            // 화면 갱신
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
@@ -195,48 +357,6 @@ class _PlanPageState extends State<PlanPage> {
                   },
                 )
               ),
-
-
-
-              // //일정데이터 읽기
-              // Expanded(
-              //     child: StreamBuilder<List<Schedule>>(
-              //       stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDate),
-              //       builder: (context, snapshot){
-              //         if(!snapshot.hasData){
-              //           return Container();
-              //         }
-              //
-              //         return ListView.builder(
-              //           itemCount: snapshot.data!.length,
-              //           itemBuilder: (context,index){
-              //             final schedule = snapshot.data![index];
-              //             return Padding(
-              //               padding: const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
-              //               child: ScheduleCard(
-              //                 startTime: schedule.startTime,
-              //                 endTime: schedule.endTime,
-              //                 content:schedule.content,
-              //               ),
-              //             );
-              //           },
-              //         );
-              //       },
-              //
-              //     )
-              // ),
-
-              ScheduleCard(  // ➊ 구현해둔 일정 카드
-                startTimeH: 12,
-                startTimeM: 30,
-                endTimeH: 14,
-                endTimeM: 30,
-                title: '세부행 비행기',
-                place:'인천공항',
-                memo: '세부로 출발~',
-              ),
-
-              SizedBox(height: 8.0),
 
               SizedBox(
                 width: 390,
@@ -272,4 +392,8 @@ class _PlanPageState extends State<PlanPage> {
       ),
     );
   }
+
+
 }
+
+

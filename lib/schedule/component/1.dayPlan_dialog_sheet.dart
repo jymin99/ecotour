@@ -13,6 +13,7 @@ import 'package:capstone/schedule/const/colors.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:get_it/get_it.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
+import 'package:capstone/3catagories/1.planPage.dart';
 
 
 class dayPlanSheet extends StatefulWidget {
@@ -21,7 +22,7 @@ class dayPlanSheet extends StatefulWidget {
   //homescree으로부터 selecetedDate 변수를 입력 받음.
   const dayPlanSheet({
     required this.selectedDate,
-    Key? key
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -33,11 +34,13 @@ class FormData {
   TimeOfDay startTime = TimeOfDay.now();
   TimeOfDay endTime = TimeOfDay.now();
   String? memo;
+
+  FormData({this.title, this.place, required this.startTime, required this.endTime, this.memo});
 }
 
 class _dayPlanSheetState extends State<dayPlanSheet> {
   final GlobalKey<FormState> formkey = GlobalKey();
-  final FormData formData = FormData(); // Create an instance of the FormData class
+  final FormData formData = FormData(startTime: TimeOfDay.now(),endTime:TimeOfDay.now()); // Create an instance of the FormData class
 
 
   Future<void> _selectStartTime(BuildContext context) async {
@@ -65,7 +68,6 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -317,8 +319,6 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        // [저장] 버튼
-                        // ➌ [저장] 버튼
                         onPressed: onSavePressed,
                         style: ElevatedButton.styleFrom(
                           primary: AppColor.yellowGreen,
@@ -349,14 +349,15 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
     if(formkey.currentState!.validate()){ //폼 검증
       formkey.currentState!.save(); //폼 저장
 
-      print('title : ${formData.title}' );
-      print('place : ${formData.place}' );
-      print('startTimeH : ${formData.startTime.hour}' );
-      print('startTimeM : ${formData.startTime.minute}' );
-      print('endTimeH : ${formData.endTime.hour}' );
-      print('endTimeM : ${formData.endTime.minute}' );
-      print('memo : ${formData.memo}' );
+      // print('title : ${formData.title}' );
+      // print('place : ${formData.place}' );
+      // print('startTimeH : ${formData.startTime.hour}' );
+      // print('startTimeM : ${formData.startTime.minute}' );
+      // print('endTimeH : ${formData.endTime.hour}' );
+      // print('endTimeM : ${formData.endTime.minute}' );
+      // print('memo : ${formData.memo}' );
 
+      //데이터베이스에 저장.
       await GetIt.I<LocalDatabase>().createSchedule( //일정 생성하기
         SchedulesCompanion(
           date: Value(widget.selectedDate),
