@@ -95,7 +95,7 @@ class _Time extends StatelessWidget {
           style: textStyle,
         ),
         Text(
-          '~${endTimeH.toString().padLeft(2, '0')}:${endTimeM.toString().padLeft(2, '0')}', // 숫자가 두 자리수가 안 되면 0으로 채워주기
+          '- ${endTimeH.toString().padLeft(2, '0')}:${endTimeM.toString().padLeft(2, '0')}', // 숫자가 두 자리수가 안 되면 0으로 채워주기
           style: textStyle.copyWith(
             fontSize: 12.0,
           ),
