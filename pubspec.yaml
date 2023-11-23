@@ -114,6 +114,11 @@ flutter:
     - family: Lotte
       fonts:
         - asset: assets/fonts/chab.ttf
+        - asset: assets/fonts/Montserrat-Black.ttf
+
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Black.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

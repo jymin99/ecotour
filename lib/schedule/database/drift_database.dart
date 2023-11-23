@@ -34,7 +34,7 @@ class LocalDatabase extends _$LocalDatabase{
 
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
   //1부터 시작. 테이블 변화가 있을 시 1씩 올려줘서 구조 변경사항 인지시킴.
 
 }
