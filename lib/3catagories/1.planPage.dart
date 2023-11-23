@@ -12,7 +12,7 @@ import 'package:capstone/schedule/component/3.today_banner.dart';
 import 'package:capstone/schedule/const/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';//일정 DB에 저장된 데이터 가져오기
 
-import 'package:capstone/schedule/model/main_calendar.dart';
+import 'package:capstone/schedule/component/main_calendar.dart';
 
 class PlanPage extends StatefulWidget {  // ➊ StatelessWidget에서 StatefulWidget으로 전환
   const PlanPage({Key? key}) : super(key: key);
@@ -22,15 +22,17 @@ class PlanPage extends StatefulWidget {  // ➊ StatelessWidget에서 StatefulWi
 }
 
 class _PlanPageState extends State<PlanPage> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-
-  String input = "";
-
   DateTime selectedDate = DateTime.utc(
     DateTime.now().year,
     DateTime.now().month,
     DateTime.now().day,
   );
+
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+
+  String input = "";
+
+
 
   DateTime focusedDay = DateTime.now();
 
@@ -58,9 +60,7 @@ class _PlanPageState extends State<PlanPage> {
           children: [
             MainCalendar(
               selectedDate: selectedDate,  // 선택된 날짜 전달하기
-
-              // 날짜가 선택됐을 때 실행할 함수
-              onDaySelected: onDaySelected,
+              onDaySelected: onDaySelected, // 날짜가 선택됐을 때 실행할 함수
             ),
             SizedBox(height: 8.0),
             TodayBanner(  // ➊ 배너 추가하기
