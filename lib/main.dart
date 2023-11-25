@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 
 
 void main()async{
+  final String apiKey = "e5a748a8-d308-41d2-b844-a1608b770f39";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   KakaoSdk.init(nativeAppKey: 'fd5d11f7f28cc940b19167e60572b61a');
@@ -46,8 +47,9 @@ class MyApp extends StatelessWidget{
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title:'그린패스',
-      home:MainPage(),
-      // LoginPage(),
+      home:
+      //MainPage(),
+       LoginPage(),
     );
   }
 }

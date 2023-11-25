@@ -146,7 +146,7 @@ class ImageUpload extends StatefulWidget {
 
 class _ImageUploadState extends State<ImageUpload> {
   String? imagePath;
-  
+
   Future<String?>selectImage() async{
     final picker=ImagePicker();
     XFile? pickImage=await picker.pickImage(
