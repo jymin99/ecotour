@@ -65,11 +65,6 @@ class _PointUsageHistory extends State<PointUsageHistory> {
               '친환경품 할인권',
             ),
 
-
-
-
-
-
             // Other widgets can be added here
           ],
         ),
