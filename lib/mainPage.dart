@@ -1,3 +1,4 @@
+import 'package:capstone/setting.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -61,7 +62,14 @@ class _MainPage extends State<MainPage> {
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Setting(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.account_circle, color: Colors.black),
             ),
           ],

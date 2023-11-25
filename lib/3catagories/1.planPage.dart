@@ -36,8 +36,20 @@ class _PlanPageState extends State<PlanPage> {
 
   DateTime focusedDay = DateTime.now();
 
+  // 여기에서 markedDates를 초기화합니다.
+  Set<DateTime> markedDates = Set<DateTime>();
+
+  List<DateTime> dates = [];
+
   @override
   Widget build(BuildContext context) {
+
+    // GetIt.I<LocalDatabase>().getAllScheduleDates().listen((dates) {
+    //   // dates는 모든 일정의 날짜 목록입니다.중복 제거
+    //   dates = dates.toSet().toList();
+    //   print('All schedule dates: $dates');
+    // });
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(  // ➊ 새 일정 버튼
         backgroundColor: AppColor.yellowGreen,
@@ -61,6 +73,9 @@ class _PlanPageState extends State<PlanPage> {
             MainCalendar(
               selectedDate: selectedDate,  // 선택된 날짜 전달하기
               onDaySelected: onDaySelected, // 날짜가 선택됐을 때 실행할 함수
+              // markedDates: markedDates,
+              // dates: dates,
+              dates: dates,
             ),
             SizedBox(height: 8.0),
             TodayBanner(  // ➊ 배너 추가하기
@@ -78,6 +93,20 @@ class _PlanPageState extends State<PlanPage> {
                     if(!snapshot.hasData){
                       return Container();
                     }
+                    // // 이벤트가 있는 날짜를 markedDates에 추가
+                    // // markedDates.clear();
+                    // markedDates.addAll(snapshot.data!.map((schedule) =>
+                    //     DateTime(schedule.date.year, schedule.date.month, schedule.date.day)));
+                    // print('list: $markedDates');
+
+
+                    // GetIt.I<LocalDatabase>().getAllScheduleDates().listen((dates) {
+                    //   // dates는 모든 일정의 날짜 목록입니다.중복 제거
+                    //   dates = dates.toSet().toList();
+                    //   print('All schedule dates: $dates');
+                    // });
+
+
                     return  ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index){
@@ -145,6 +174,9 @@ class _PlanPageState extends State<PlanPage> {
   void onDaySelected(DateTime selectedDate, DateTime focusedDate){  // ➌ 날짜 선택될 때마다 실행할 함수
     setState(() {
       this.selectedDate = selectedDate;
+      this.focusedDay = focusedDate;
     });
   }
+
+
 }

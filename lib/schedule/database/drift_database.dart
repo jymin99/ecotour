@@ -26,6 +26,14 @@ class LocalDatabase extends _$LocalDatabase{
       //데이터 조회 및 변화 감지
       (select(schedules)..where((tbl)=>tbl.date.equals(date))).watch();
 
+  // 추가: schedule 리스트의 모든 날짜를 가져오는 메서드
+  Stream<List<DateTime>> getAllScheduleDates() =>
+      (select(schedules)).watch().map((schedules) {
+        // schedules에서 날짜만 추출하여 리스트로 반환
+        return schedules.map((schedule) => DateTime(
+            schedule.date.year, schedule.date.month, schedule.date.day)).toList();
+      });
+
   Future<int> createSchedule(SchedulesCompanion data) =>
       into(schedules).insert(data);
 

@@ -139,45 +139,6 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
 
                     SizedBox(height:10,),
 
-                    //calendar 참고
-                    // Container(
-                    //   width: 300,
-                    //   child: Row(
-                    //     // ➊ 시작 시간 종료 시간 가로로 배치
-                    //     children: [
-                    //       Expanded(
-                    //         child: CustomTextField(
-                    //           // 시작시간 입력 필드
-                    //           label: '시작 시간',
-                    //           isTime: true,
-                    //           onSaved: (String? val){
-                    //             //저장이 되면 startTime 변수에 텍스트 필드값 저장.
-                    //             startTime = int.parse(val!);
-                    //           },
-                    //           validator: timeValidator,
-                    //         ),
-                    //       ),
-                    //       const SizedBox(width: 16.0),
-                    //       Expanded(
-                    //         child: CustomTextField(
-                    //           // 종료시간 입력 필드
-                    //           label: '종료 시간',
-                    //           isTime: true,
-                    //           onSaved: (String? val){
-                    //             //저장이 되면 startTime 변수에 텍스트 필드값 저장.
-                    //             endTime = int.parse(val!);
-                    //           },
-                    //           validator: timeValidator,
-                    //
-                    //
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // SizedBox(height: 11.0),
-
-
                     Row(
                       children: [
                         Column(
