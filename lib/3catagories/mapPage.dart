@@ -11,6 +11,10 @@ import 'package:capstone/firebase/map_list.dart';
 import 'package:location/location.dart';
 import 'package:capstone/cycle/cycle.dart';
 import 'package:capstone/cycle/cycle_repository.dart';
+//import 'package:capstone/evcar/ev.dart';
+//import 'package:capstone/evcar/ev_repository.dart';
+import 'package:capstone/accommodation/accommodation.dart';
+import 'package:capstone/accommodation/accommodation_repository.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -29,6 +33,8 @@ class _MapPageState extends State<MapPage> {
 
   bool areMarkersVisible = false;
   bool areBikeMarkersVisible = false; // 새로 추가된 부분
+  // bool areEvMarkerVisible = false;
+  bool areAccMarkersVisible = false;
 
   @override
   void initState() {
@@ -40,9 +46,61 @@ class _MapPageState extends State<MapPage> {
     //   });
     // });
     loadMarkers();
+    //loadEvMarkers();
     //loadMarkersFromFirestore();
     loadCycleMarkers();
+    loadAccMarkers();
   }
+
+  Future<void> loadAccMarkers() async {
+    try {
+      List<Accommodation>? accs = await AccommodationRepository().loadAccs();
+      if (accs != null && accs.isNotEmpty) {
+        Set<Marker> newMarkers = accs.map((acc) {
+          final BitmapDescriptor markerIcon = _getMarkerIconForAcc();
+          return Marker(
+            markerId: MarkerId('acc${acc.contentid}'),
+            position:
+            LatLng(double.parse(acc.mapy), double.parse(acc.mapx)),
+            infoWindow: InfoWindow(title: acc.title),
+            icon: markerIcon,
+          );
+        }).toSet();
+
+        setState(() {
+          if(!areAccMarkersVisible) markers.clear();
+          markers.addAll(newMarkers);
+        });
+      }
+    } catch(e) {
+      print('Error loading accommodation list: $e');
+    }
+  }
+
+  // Future<void> loadEvMarkers() async {
+  //   try {
+  //     List<Ev>? evs = await EvRepository().loadEvs();
+  //     if (evs != null && evs.isNotEmpty) {
+  //       Set<Marker> newMarkers = evs.map((ev) {
+  //         final BitmapDescriptor markerIcon = _getMarkerIconForEv();
+  //         return Marker(
+  //           markerId: MarkerId('ev${ev.addr}'),
+  //           position:
+  //             LatLng(double.parse(ev.lat), double.parse(ev.longi)),
+  //           infoWindow: InfoWindow(title: ev.csNm),
+  //           icon: markerIcon,
+  //         );
+  //       }).toSet();
+  //
+  //       setState(() {
+  //        if(!areEvMarkerVisible) markers.clear();
+  //        markers.addAll(newMarkers);
+  //       });
+  //     }
+  //   } catch(e) {
+  //     print('Error loading ev list: $e');
+  //   }
+  // }
 
   Future<void> loadCycleMarkers() async {
     try {
@@ -51,7 +109,7 @@ class _MapPageState extends State<MapPage> {
         Set<Marker> newMarkers = cycles.map((cycle) {
           final BitmapDescriptor markerIcon = _getMarkerIconForCycle();
           return Marker(
-            markerId: MarkerId(cycle.rentId),
+            markerId: MarkerId('bike${cycle.rentId}'),
             position:
                 LatLng(double.parse(cycle.staLat), double.parse(cycle.staLong)),
             infoWindow: InfoWindow(title: cycle.rentNm),
@@ -70,35 +128,113 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  BitmapDescriptor _getMarkerIconForCycle() {
+  Future<void> loadMarkers() async {
+    // loadMarkersFromFirestore() 내용을 여기로 옮김
+    List<Map<String, dynamic>> cafes = await FireService().getFireModels();
+    Set<Marker> newMarkers = cafes.map((cafe) {
+      final BitmapDescriptor markerIcon = _getMarkerIcon();
+      return Marker(
+        markerId: MarkerId('cafe${cafe['shop'].toString()}'),
+        position: LatLng(
+            cafe['latitude'] as double, cafe['longitude'] as double),
+        infoWindow: InfoWindow(title: cafe['shop'].toString()),
+        icon: markerIcon,
+      );
+    }).toSet();
+
+    setState(() {
+      if (!areMarkersVisible) markers.clear();
+      markers.addAll(newMarkers);
+    });
+  }
+
+  BitmapDescriptor _getMarkerIcon() {
     // 적절한 조건에 따라 다른 색상의 아이콘을 반환
-    if (areBikeMarkersVisible) {
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+    if (areMarkersVisible) {
+      return BitmapDescriptor.defaultMarker;
+      //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
     } else {
       return BitmapDescriptor.fromBytes(Uint8List(0));
+      //return BitmapDescriptor.defaultMarker; // 수정 후 코드
       //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
     }
   }
 
-  Future<void> loadMarkers() async {
-    // loadMarkersFromFirestore() 내용을 여기로 옮김
-    List<Map<String, dynamic>> cafes = await FireService().getFireModels();
-    Set<Marker> newMarkers = cafes
-        .map((cafe) => Marker(
-              markerId: MarkerId(cafe['shop'].toString()),
-              position: LatLng(
-                  cafe['latitude'] as double, cafe['longitude'] as double),
-              infoWindow: InfoWindow(title: cafe['shop'].toString()),
-            ))
-        .toSet();
+  BitmapDescriptor _getMarkerIconForAcc() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areAccMarkersVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+    } else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
 
+      //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    }
+  }
+  //
+  // BitmapDescriptor _getMarkerIconForEv() {
+  //   // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+  //   if (areEvMarkerVisible) {
+  //     return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+  //   } else {
+  //     return BitmapDescriptor.fromBytes(Uint8List(0));
+  //   }
+  // }
+
+  BitmapDescriptor _getMarkerIconForCycle() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areBikeMarkersVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+    } else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
+      //return BitmapDescriptor.defaultMarker; // 수정 후 코드
+      //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    }
+  }
+
+  Future<void> _toggleMarkers() async {
     setState(() {
-      markers.clear();
-      if (areMarkersVisible) {
-        markers.addAll(newMarkers);
+      areMarkersVisible = !areMarkersVisible;
+      if (areMarkersVisible == false) {
+        markers.removeWhere((marker) => marker.markerId.value.startsWith("cafe"));
+      } else {
+        loadMarkers();
       }
     });
   }
+
+  Future<void> _toggleBikeMarkers() async {
+    setState(() {
+      areBikeMarkersVisible = !areBikeMarkersVisible;
+      if (!areBikeMarkersVisible) {
+        markers.removeWhere((marker) => marker.markerId.value.startsWith("bike"));
+      } else {
+        loadCycleMarkers();
+      }
+    });
+  }
+
+  Future<void> _toggleAccMarkers() async {
+    setState(() {
+      areAccMarkersVisible = !areAccMarkersVisible;
+      if (!areAccMarkersVisible) {
+        markers.removeWhere((marker) => marker.markerId.value.startsWith("acc"));
+      } else {
+        loadAccMarkers();
+      }
+    });
+  }
+
+  // Future<void> _toggleEvMarkers() async {
+  //   setState(() {
+  //     areEvMarkerVisible = !areEvMarkerVisible;
+  //     if (!areEvMarkerVisible) {
+  //       markers.removeWhere((marker) => marker.markerId.value.startsWith("ev"));
+  //     } else {
+  //       loadEvMarkers();
+  //     }
+  //   });
+  // }
+
 
   Future<Position> getCurrentLocation() async {
     bool serviceEnabled;
@@ -172,7 +308,11 @@ class _MapPageState extends State<MapPage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        print("Button Pressed");
+
+                        _toggleAccMarkers();
+                      },
                       child: Image(
                         image: AssetImage('assets/accommodation.png'),
                         width: 40.0,
@@ -186,11 +326,12 @@ class _MapPageState extends State<MapPage> {
                       onPressed: () {
                         print("Button Pressed");
 
-                        setState(() {
-                          areMarkersVisible =
-                              !areMarkersVisible; // Toggle visibility state
-                        });
-                        loadMarkers();
+                        _toggleMarkers();
+                        // setState(() {
+                        //   areMarkersVisible =
+                        //       !areMarkersVisible; // Toggle visibility state
+                        // });
+                        // loadMarkers();
                         //loadMarkersFromFirestore(); // Load markers based on the new visibility state
                       },
                       child: Image(
@@ -204,11 +345,9 @@ class _MapPageState extends State<MapPage> {
                             MaterialStateProperty.all(Colors.white),
                       ),
                       onPressed: () {
-                        setState(() {
-                          areBikeMarkersVisible =
-                              !areBikeMarkersVisible; // Toggle visibility state
-                        });
-                        loadCycleMarkers();
+                        print("Button Pressed");
+
+                        _toggleBikeMarkers();
                       },
                       child: Image(
                         image: AssetImage('assets/bike.png'),
@@ -220,7 +359,13 @@ class _MapPageState extends State<MapPage> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        // _toggleEvMarkers();
+                        // setState(() {
+                        //   areEvMarkerVisible = !areEvMarkerVisible;
+                        // });
+                        // loadEvMarkers();
+                      },
                       child: Image(
                         image: AssetImage('assets/electriccar.png'),
                         width: 40.0,
@@ -256,31 +401,31 @@ class _MapPageState extends State<MapPage> {
               ],
             ),
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            FloatingActionButton.small(
-              onPressed: () async {
-                var gps = await getCurrentLocation();
-
-                mapController.moveCamera(CameraUpdate.newLatLng(
-                    LatLng(gps.latitude, gps.longitude)));
-
-                // print("FloatingActionButton pressed");
-                print("Current Location: $gps");
-                // mapController.moveCamera(
-                //     CameraUpdate.newLatLng(LatLng(currentLocation.latitude, currentLocation.longitude)));
-              },
-              child: Icon(
-                Icons.my_location,
-                color: Colors.black,
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-              backgroundColor: Colors.white,
-            ),
-            SizedBox(
-              width: 15,
-            )
-          ])
+          // Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+          //   FloatingActionButton.small(
+          //     onPressed: () async {
+          //       var gps = await getCurrentLocation();
+          //
+          //       mapController.moveCamera(CameraUpdate.newLatLng(
+          //           LatLng(gps.latitude, gps.longitude)));
+          //
+          //       // print("FloatingActionButton pressed");
+          //       print("Current Location: $gps");
+          //       // mapController.moveCamera(
+          //       //     CameraUpdate.newLatLng(LatLng(currentLocation.latitude, currentLocation.longitude)));
+          //     },
+          //     child: Icon(
+          //       Icons.my_location,
+          //       color: Colors.black,
+          //     ),
+          //     shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(30)),
+          //     backgroundColor: Colors.white,
+          //   ),
+          //   SizedBox(
+          //     width: 15,
+          //   )
+          // ])
         ],
       ),
     );
