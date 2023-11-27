@@ -6,6 +6,8 @@ import 'package:capstone/nature/4_story.dart';
 
 import 'package:capstone/style.dart';
 
+import '../nature/5_route.dart';
+
 class NaturePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState(){
@@ -40,10 +42,11 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
           flexibleSpace: TabBar(
             controller: controller,
             tabs: const <Tab>[
+
               Tab(
-                icon: Icon(Icons.collections),
+                icon: Icon(Icons.compost),
                 child: Text(
-                  "인증",
+                  "친환경 여행",
                   style: TextStyle(
                     fontSize: 11.0, // 글씨 크기
                     fontFamily: 'YourFontFamily', // 원하는 글꼴 지정
@@ -52,22 +55,11 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
                 ),
               ),
 
-              Tab(
-                icon: Icon(Icons.compost), // 아이콘과 텍스트 사이의 원하는 여백 크기를 여기에 지정
-                    child: Text(
-                      "환경 할인",
-                      style: TextStyle(
-                        fontSize: 11.0, // 글씨 크기
-                        fontFamily: 'YourFontFamily', // 원하는 글꼴 지정
-                        fontWeight: FontWeight.bold, // 글꼴 두껍게 설정 (선택 사항)
-                      ),
-                    ),
-              ),
 
               Tab(
-                icon: Icon(Icons.history),
+                icon: Icon(Icons.map),
                 child: Text(
-                  "포인트내역",
+                  "친환경 루트",
                   style: TextStyle(
                     fontSize: 11.0, // 글씨 크기
                     //fontFamily: 'Lotte', // 원하는 글꼴 지정
@@ -76,10 +68,12 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
                 ),
               ),
 
+
+
               Tab(
-                icon: Icon(Icons.compost),
+                icon: Icon(Icons.history), //collections
                 child: Text(
-                  "환경이야기",
+                  "나의 활동",
                   style: TextStyle(
                     fontSize: 11.0, // 글씨 크기
                     fontFamily: 'YourFontFamily', // 원하는 글꼴 지정
@@ -101,11 +95,15 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
           controller: controller,
           // physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            CertificationFeed(),
-            EcoFriendlyItems(),
-            // AppItems(),
-            PointUsageHistory(),
+
             Story(),
+
+            Story2(),
+            // EcoFriendlyItems(),
+            // AppItems(),
+            // PointUsageHistory(),
+
+            CertificationFeed(),
           ],
         ),
       ),

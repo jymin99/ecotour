@@ -120,7 +120,7 @@ class _MainPage extends State<MainPage> {
                       });
                     },
                     child: Text(
-                      '환경스토어',
+                      '환경스토리',
                       style: TextStyle(
                         fontFamily: "Lotte",
                         fontSize: 15,

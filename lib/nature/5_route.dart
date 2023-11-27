@@ -3,14 +3,14 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:capstone/style.dart';
 
-class Story extends StatefulWidget{
+class Story2 extends StatefulWidget{
   @override
   State<StatefulWidget> createState(){
-    return _Story();
+    return _Story2();
   }
 }
 
-class _Story extends State<Story> {
+class _Story2 extends State<Story2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +24,7 @@ class _Story extends State<Story> {
               buildStoryContainer(
                 context,
                 'https://i.ibb.co/59yWycP/hotel.jpg',
-                '서울의 친환경 숙소 TOP 10',
+                '송파 여행 루트(1박2일)',
                 '내용',
                 1,
               ),
@@ -34,17 +34,7 @@ class _Story extends State<Story> {
               buildStoryContainer(
                 context,
                 'https://i.ibb.co/59yWycP/hotel.jpg',
-                '1박 2일 국내 여행 시 배출되는 탄소량은?',
-                '내용',
-                1,
-              ),
-
-              SizedBox(height:10,),
-
-              buildStoryContainer(
-                context,
-                'https://i.ibb.co/59yWycP/hotel.jpg',
-                '제목',
+                '종로 여행 루트(1박 2일)',
                 '내용',
                 1,
               ),
@@ -55,7 +45,17 @@ class _Story extends State<Story> {
                 context,
                 'https://i.ibb.co/59yWycP/hotel.jpg',
                 '제목',
-                '내용',
+                '부제목',
+                1,
+              ),
+
+              SizedBox(height:10,),
+
+              buildStoryContainer(
+                context,
+                'https://i.ibb.co/59yWycP/hotel.jpg',
+                '제목',
+                '부제목',
                 1,
               ),
 
@@ -131,7 +131,7 @@ Widget buildStoryContainer(BuildContext context, imageUrl, String title, String 
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 13,
                   fontWeight: FontWeight.bold,
                 ),
               ),
