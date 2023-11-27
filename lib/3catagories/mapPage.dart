@@ -11,8 +11,8 @@ import 'package:capstone/firebase/map_list.dart';
 import 'package:location/location.dart';
 import 'package:capstone/cycle/cycle.dart';
 import 'package:capstone/cycle/cycle_repository.dart';
-//import 'package:capstone/evcar/ev.dart';
-//import 'package:capstone/evcar/ev_repository.dart';
+import 'package:capstone/evcar/ev.dart';
+import 'package:capstone/evcar/ev_repository.dart';
 import 'package:capstone/accommodation/accommodation.dart';
 import 'package:capstone/accommodation/accommodation_repository.dart';
 
@@ -33,7 +33,7 @@ class _MapPageState extends State<MapPage> {
 
   bool areMarkersVisible = false;
   bool areBikeMarkersVisible = false; // 새로 추가된 부분
-  // bool areEvMarkerVisible = false;
+  bool areEvMarkerVisible = false;
   bool areAccMarkersVisible = false;
 
   @override
@@ -46,7 +46,7 @@ class _MapPageState extends State<MapPage> {
     //   });
     // });
     loadMarkers();
-    //loadEvMarkers();
+    loadEvMarkers();
     //loadMarkersFromFirestore();
     loadCycleMarkers();
     loadAccMarkers();
@@ -76,31 +76,6 @@ class _MapPageState extends State<MapPage> {
       print('Error loading accommodation list: $e');
     }
   }
-
-  // Future<void> loadEvMarkers() async {
-  //   try {
-  //     List<Ev>? evs = await EvRepository().loadEvs();
-  //     if (evs != null && evs.isNotEmpty) {
-  //       Set<Marker> newMarkers = evs.map((ev) {
-  //         final BitmapDescriptor markerIcon = _getMarkerIconForEv();
-  //         return Marker(
-  //           markerId: MarkerId('ev${ev.addr}'),
-  //           position:
-  //             LatLng(double.parse(ev.lat), double.parse(ev.longi)),
-  //           infoWindow: InfoWindow(title: ev.csNm),
-  //           icon: markerIcon,
-  //         );
-  //       }).toSet();
-  //
-  //       setState(() {
-  //        if(!areEvMarkerVisible) markers.clear();
-  //        markers.addAll(newMarkers);
-  //       });
-  //     }
-  //   } catch(e) {
-  //     print('Error loading ev list: $e');
-  //   }
-  // }
 
   Future<void> loadCycleMarkers() async {
     try {
@@ -170,15 +145,6 @@ class _MapPageState extends State<MapPage> {
       //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
     }
   }
-  //
-  // BitmapDescriptor _getMarkerIconForEv() {
-  //   // 적절한 조건에 따라 다른 색상의 아이콘을 반환
-  //   if (areEvMarkerVisible) {
-  //     return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-  //   } else {
-  //     return BitmapDescriptor.fromBytes(Uint8List(0));
-  //   }
-  // }
 
   BitmapDescriptor _getMarkerIconForCycle() {
     // 적절한 조건에 따라 다른 색상의 아이콘을 반환
@@ -213,6 +179,40 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
+  Future<void> loadEvMarkers() async {
+    try {
+      List<Ev>? evs = await EvRepository().loadEvs();
+      if (evs != null && evs.isNotEmpty) {
+        Set<Marker> newMarkers = evs.map((ev) {
+          final BitmapDescriptor markerIcon = _getMarkerIconForEv();
+          return Marker(
+            markerId: MarkerId('ev${ev.addr}'),
+            position:
+              LatLng(double.parse(ev.lat), double.parse(ev.longi)),
+            infoWindow: InfoWindow(title: ev.csNm),
+            icon: markerIcon,
+          );
+        }).toSet();
+
+        setState(() {
+         if(!areEvMarkerVisible) markers.clear();
+         markers.addAll(newMarkers);
+        });
+      }
+    } catch(e) {
+      print('Error loading ev list: $e');
+    }
+  }
+
+  BitmapDescriptor _getMarkerIconForEv() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areEvMarkerVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+    } else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
+    }
+  }
+
   Future<void> _toggleAccMarkers() async {
     setState(() {
       areAccMarkersVisible = !areAccMarkersVisible;
@@ -224,16 +224,16 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  // Future<void> _toggleEvMarkers() async {
-  //   setState(() {
-  //     areEvMarkerVisible = !areEvMarkerVisible;
-  //     if (!areEvMarkerVisible) {
-  //       markers.removeWhere((marker) => marker.markerId.value.startsWith("ev"));
-  //     } else {
-  //       loadEvMarkers();
-  //     }
-  //   });
-  // }
+  Future<void> _toggleEvMarkers() async {
+    setState(() {
+      areEvMarkerVisible = !areEvMarkerVisible;
+      if (!areEvMarkerVisible) {
+        markers.removeWhere((marker) => marker.markerId.value.startsWith("ev"));
+      } else {
+        loadEvMarkers();
+      }
+    });
+  }
 
 
   Future<Position> getCurrentLocation() async {
@@ -360,7 +360,7 @@ class _MapPageState extends State<MapPage> {
                             MaterialStateProperty.all(Colors.white),
                       ),
                       onPressed: () {
-                        // _toggleEvMarkers();
+                         _toggleEvMarkers();
                         // setState(() {
                         //   areEvMarkerVisible = !areEvMarkerVisible;
                         // });

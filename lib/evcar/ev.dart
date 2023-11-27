@@ -64,7 +64,6 @@ class Ev {
     }
 
     return Ev(
-      //addr: json["addr"] as String ?? "",
       addr: json["addr"] != null ? json["addr"] as String : "",
       chargeTp: json["chargeTp"] as String ?? "",
       cpNm: json["cpNm"] as String ?? "",
