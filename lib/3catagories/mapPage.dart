@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:capstone/firebase/map_list.dart';
-
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 import 'package:capstone/cycle/cycle.dart';
 import 'package:capstone/cycle/cycle_repository.dart';
 import 'package:capstone/evcar/ev.dart';
@@ -26,6 +26,9 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   // Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController mapController;
+  TextEditingController _controller = TextEditingController();
+  // TextField에 입력된 값을 가져오거나 TextField에 입력된 값이 변경될 때 사용
+
   double latitude = 37.553836;
   double longitude = 126.969652;
 
@@ -52,6 +55,8 @@ class _MapPageState extends State<MapPage> {
     loadAccMarkers();
   }
 
+
+
   Future<void> loadAccMarkers() async {
     try {
       List<Accommodation>? accs = await AccommodationRepository().loadAccs();
@@ -64,6 +69,9 @@ class _MapPageState extends State<MapPage> {
             LatLng(double.parse(acc.mapy), double.parse(acc.mapx)),
             infoWindow: InfoWindow(title: acc.title),
             icon: markerIcon,
+            onTap: () {
+              _onMarkerTapped(MarkerId('acc${acc.contentid}'));
+            },
           );
         }).toSet();
 
@@ -289,10 +297,134 @@ class _MapPageState extends State<MapPage> {
     zoom: 15,
   );
 
+  Future<void> _onMarkerTapped(MarkerId markerId) async {
+    if (markerId.value.startsWith('acc')) {
+      String contentid = markerId.value.substring(3);
+      Accommodation? tappedAccommodation;
+      List<Accommodation?> accommodations = await AccommodationRepository().getAccommodationDetails(contentid);
+      if (accommodations.isNotEmpty) {
+        tappedAccommodation = accommodations.first;
+      }
+      if (tappedAccommodation != null) {
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 300,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      tappedAccommodation!.title!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text('Address: ${tappedAccommodation.add1} ${tappedAccommodation.add2}'),
+                    SizedBox(height: 4.0),
+                    Text('Tel: ${tappedAccommodation.tel}'),
+                    SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Your favorite icon button action
+                        Navigator.pop(context);
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.favorite),
+                          SizedBox(width: 8.0),
+                          Text('Add to Favorites'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+
+        // showCupertinoModalPopup(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return CupertinoActionSheet(
+        //       title: Column(
+        //         children: [
+        //           Text(tappedAccommodation!.title!,
+        //             style: TextStyle(
+        //               fontSize: 20.0,
+        //               color: Colors.black,
+        //             )
+        //           ),
+        //           SizedBox(
+        //             height: 5,
+        //           )
+        //         ],
+        //       ),
+        //       message: Column(
+        //         children: [
+        //           Text('Address: ${tappedAccommodation.add1} ${tappedAccommodation.add2}',
+        //               style: TextStyle(
+        //                 fontSize: 15.0,
+        //                 color: Colors.black,
+        //               )),
+        //           SizedBox(
+        //             height: 20,
+        //           ),
+        //           Text('Tel: ${tappedAccommodation.tel}',
+        //               style: TextStyle(
+        //                 fontSize: 15.0,
+        //                 color: Colors.black,
+        //               )),
+        //         ],
+        //       ),
+        //       actions: [
+        //         CupertinoActionSheetAction(
+        //           onPressed: () {
+        //             // 즐겨찾기 기능 추가
+        //           },
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             children: [
+        //               //Icon(Icons.star),
+        //               //SizedBox(width: 8),
+        //               Text('Add to Favorites'),
+        //             ],
+        //           ),
+        //         ),
+        //         // CupertinoActionSheetAction(
+        //         //   onPressed: () {
+        //         //     Navigator.pop(context); // 팝업 닫기
+        //         //   },
+        //         //   child: Text('Close'),
+        //         // ),
+        //         // CupertinoActionSheetAction(
+        //         //   onPressed: () {
+        //         //     Navigator.pop(context);
+        //         //   },
+        //         //   child: Text('Close'),
+        //         // ),
+        //       ],
+        //     );
+        //   },
+        // );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.only(top:16),
       // child: Center(
       child: Column(
         //crossAxisAlignment: CrossAxisAlignment.end,
@@ -300,6 +432,19 @@ class _MapPageState extends State<MapPage> {
           Center(
             child: Column(
               children: [
+                // TextField(
+                //   controller: _controller,
+                //   decoration: InputDecoration(
+                //     hintText: 'Search...',
+                //     suffixIcon: IconButton(
+                //       icon: Icon(Icons.search),
+                //       onPressed: () {
+                //         // Perform search based on _controller.text
+                //         // You can call a search function here
+                //       },
+                //     ),
+                //   ),
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -12,9 +12,6 @@ class Cycle {
   int startIndex;
   int endIndex;
   String rnum;
-  //String? stationId; // 주소
-  //double? stationLatitude; // 위도
-  //double? stationLongitude; // 경도
 
   Cycle({
     required this.staLoc,
@@ -30,9 +27,6 @@ class Cycle {
     required this.startIndex,
     required this.endIndex,
     required this.rnum,
-   // this.stationId,
-    //this.stationLatitude,
-    //this.stationLongitude,
   });
 
 
@@ -51,9 +45,6 @@ class Cycle {
       startIndex: json['START_INDEX'] ?? 0,
       endIndex: json['END_INDEX'] ?? 0,
       rnum: json['RNUM'] ?? '',
-      //stationId: json["stationId"] as String,
-      //stationLatitude: json["stationLatitude"] as double,
-      //stationLongitude: json["stationLongitude"] as double,
     );
   }
 }

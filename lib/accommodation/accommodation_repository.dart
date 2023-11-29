@@ -54,4 +54,57 @@ class AccommodationRepository {
       throw Exception('Failed to load accommodation list.: $e');
     }
   }
+
+  List<Accommodation> findAccommodationsWithContentId(List<dynamic> accommodations, String contentid) {
+    return filterListByContentId(accommodations, contentid)
+        .map<Accommodation>((item) => Accommodation.fromJson(item))
+        .toList();
+  }
+
+  List<dynamic> filterListByContentId(List<dynamic> list, String contentid) {
+    return list.where((item) => item['contentid'] == contentid).toList();
+  }
+
+  Future<List<Accommodation?>> getAccommodationDetails(String contentid) async {
+    try {
+      String baseUrl =
+          "https://apis.data.go.kr/B551011/KorService1/searchStay1?numOfRows=339&pageNo=1&MobileOS=AND&MobileApp=capstone&areaCode=1&serviceKey=E0cJ%2FE6%2FCk29xinL%2B61P0rG02Zd%2FldYsWCvs97sRPQJVGGsTxDLjo%2B1iw5C3dLwVgzmDWqm76VHhPiFS9hXWkg%3D%3D";
+      final response = await http.get(Uri.parse(baseUrl));
+
+      // 요청이 성공했는지 확인
+      if (response.statusCode == 200) {
+        // 응답 본문을 파싱
+        final body = convert.utf8.decode(response.bodyBytes);
+        final xml = Xml2Json()..parse(body);
+        final json = xml.toParker();
+
+        // 필요한 데이터 추출
+        Map<String, dynamic> jsonResult = convert.json.decode(json);
+        if (jsonResult.containsKey('response')) {
+          final jsonBody = jsonResult['response']['body'];
+          if (jsonBody != null && jsonBody.containsKey('items')) {
+            final jsonAcc = jsonBody['items']['item'];
+
+            // 필요한 데이터가 있는지 확인
+            if (jsonAcc != null) {
+              List<dynamic> list = jsonAcc is List ? jsonAcc : [jsonAcc];
+
+              // Filter accommodations based on contentid
+              List<Accommodation> filteredAccommodations = findAccommodationsWithContentId(list, contentid);
+
+              return filteredAccommodations;
+            }
+          }
+        }
+
+        throw Exception('잘못된 API 응답 형식');
+      } else {
+        throw Exception(
+            '숙박 시설 세부 정보를 불러오지 못했습니다. 상태 코드: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('API 요청 중 예외 발생: $e');
+      throw Exception('숙박 시설 세부 정보를 불러오지 못했습니다.: $e');
+    }
+  }
 }
