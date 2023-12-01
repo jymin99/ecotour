@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/nature/1_certificationFeed.dart';
-import 'package:capstone/nature/2_ecoFriendlyItems.dart';
-import 'package:capstone/nature/3_pointUsageHistory.dart';
-import 'package:capstone/nature/4_story.dart';
+import 'package:capstone/nature/story.dart';
+import 'package:capstone/nature/donationPage.dart';
 
 import 'package:capstone/style.dart';
 
-import '../nature/5_route.dart';
+import '../nature/route.dart';
 
 class NaturePage extends StatefulWidget{
   @override
@@ -46,7 +44,7 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
               Tab(
                 icon: Icon(Icons.compost),
                 child: Text(
-                  "친환경 여행",
+                  "친환경 정보",
                   style: TextStyle(
                     fontSize: 11.0, // 글씨 크기
                     fontFamily: 'YourFontFamily', // 원하는 글꼴 지정
@@ -71,9 +69,9 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
 
 
               Tab(
-                icon: Icon(Icons.history), //collections
+                icon: Icon(Icons.volunteer_activism), //collections
                 child: Text(
-                  "나의 활동",
+                  "환경 기부",
                   style: TextStyle(
                     fontSize: 11.0, // 글씨 크기
                     fontFamily: 'YourFontFamily', // 원하는 글꼴 지정
@@ -103,7 +101,7 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
             // AppItems(),
             // PointUsageHistory(),
 
-            CertificationFeed(),
+            DonationList(),
           ],
         ),
       ),

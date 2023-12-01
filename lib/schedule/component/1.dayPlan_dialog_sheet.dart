@@ -13,7 +13,7 @@ import 'package:capstone/schedule/const/colors.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:get_it/get_it.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
-import 'package:capstone/3catagories/1.planPage.dart';
+import 'package:capstone/3catagories/planPage.dart';
 
 
 class dayPlanSheet extends StatefulWidget {

@@ -8,6 +8,43 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:capstone/models/post.dart';
 import 'package:capstone/style.dart';
 
+class FeedPage extends StatelessWidget {
+  const FeedPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: AppColor.deepGreen,
+            ),
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          ),
+          elevation: 1,
+          backgroundColor: Colors.white,
+          title: Text(
+            '인증 피드',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: "Lotte", fontSize: 25,
+              color: AppColor.deepGreen,
+          ),
+        ),
+      centerTitle: true,
+        ),
+      ),
+      body: CertificationFeed(),
+    );
+  }
+}
+
+
 
 final List<Feed> feeds=[
   Feed(
@@ -168,7 +205,8 @@ class _ImageUploadState extends State<ImageUpload> {
         bottom: false,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('인증피드 업로드'),
+            title: const Text('인증피드 업로드', textAlign: TextAlign.center,),
+            backgroundColor: AppColor.deepGreen,
             leading: IconButton(
               icon: const Text('취소'),
               padding: EdgeInsets.zero,
