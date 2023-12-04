@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:typed_data';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -97,6 +98,9 @@ class _MapPageState extends State<MapPage> {
                 LatLng(double.parse(cycle.staLat), double.parse(cycle.staLong)),
             infoWindow: InfoWindow(title: cycle.rentNm),
             icon: markerIcon,
+            onTap: () {
+              _onCycleMarkerTapped(MarkerId('bike${cycle.rentId}'));
+            },
           );
         }).toSet();
 
@@ -190,15 +194,20 @@ class _MapPageState extends State<MapPage> {
   Future<void> loadEvMarkers() async {
     try {
       List<Ev>? evs = await EvRepository().loadEvs();
+      // print('Ev details: $evs');
+
       if (evs != null && evs.isNotEmpty) {
         Set<Marker> newMarkers = evs.map((ev) {
           final BitmapDescriptor markerIcon = _getMarkerIconForEv();
           return Marker(
-            markerId: MarkerId('ev${ev.addr}'),
+            markerId: MarkerId('ev${ev.cpId}'),
             position:
               LatLng(double.parse(ev.lat), double.parse(ev.longi)),
             infoWindow: InfoWindow(title: ev.csNm),
             icon: markerIcon,
+            onTap: () {
+              _onEvMarkerTapped(MarkerId('ev${ev.cpId}'));
+            },
           );
         }).toSet();
 
@@ -310,41 +319,64 @@ class _MapPageState extends State<MapPage> {
           context: context,
           builder: (BuildContext context) {
             return Container(
-              height: 300,
+              height: 250,
+              width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       tappedAccommodation!.title!,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
+                        fontSize: 20.0,
                       ),
+                        textAlign: TextAlign.center
                     ),
-                    SizedBox(height: 8.0),
+                    SizedBox(height: 10.0),
                     Text('Address: ${tappedAccommodation.add1} ${tappedAccommodation.add2}'),
-                    SizedBox(height: 4.0),
+                    SizedBox(height: 8.0),
                     Text('Tel: ${tappedAccommodation.tel}'),
-                    SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Your favorite icon button action
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.favorite),
-                          SizedBox(width: 8.0),
-                          Text('Add to Favorites'),
-                        ],
-                      ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Your favorite icon button action
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                                'Add to Favorites',
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Your favorite icon button action
+                              Navigator.pop(context);
+                            },
+                            child:
+                                Text('Close'),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -421,10 +453,197 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+  Future<void> _onEvMarkerTapped(MarkerId markerId) async {
+    // print('Current BuildContext hashCode: ${context.hashCode}');
+
+    if (markerId.value.startsWith('ev')) {
+      String cpId = markerId.value.substring(2);
+      // print('Trying to get details for csId: $cpId');
+      Ev? tappedEv;
+      List<Ev?> evs = await EvRepository().getEvDetails(cpId);
+      // print('Ev details: $evs');
+
+      if (evs.isNotEmpty) {
+        tappedEv = evs.first;
+      }
+      if (tappedEv != null) {
+        // EvRepository evRepository = EvRepository();
+        // String chargeStatusText = evRepository.getChargeStatusText(tappedEv.cpStat);
+        // String chargeTypeText = evRepository.getChargeTypeText(tappedEv.cpTp);
+
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            // print('Modal Bottom Sheet BuildContext hashCode: ${context.hashCode}');
+            return Container(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        tappedEv!.csNm,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                        textAlign: TextAlign.center
+                    ),
+                    SizedBox(height: 10.0),
+                    Text('Address: ${tappedEv.addr}'),
+                    SizedBox(height: 8.0),
+                    Text('Charge Name: ${tappedEv.cpNm}'),
+                    // SizedBox(height: 8.0),
+                    // Text('Charge Type: $chargeTypeText'),
+                    // SizedBox(height: 8.0),
+                    // Text('Status: $chargeStatusText'),
+                    SizedBox(height: 20.0),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Your favorite icon button action
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Add to Favorites',
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Your favorite icon button action
+                              Navigator.pop(context);
+                            },
+                            child:
+                            Text('Close'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      }
+    }
+  }
+
+  Future<void> _onCycleMarkerTapped(MarkerId markerId) async {
+    // print('Current BuildContext hashCode: ${context.hashCode}');
+
+    if (markerId.value.startsWith('bike')) {
+      String rentId = markerId.value.substring(4);
+      // print('Trying to get details for csId: $rentId');
+      Cycle? tappedCycle;
+      List<Cycle?> cycles = await CycleRepository().getEvDetails(rentId);
+      // print('Cycle details: $cycles');
+
+      if (cycles.isNotEmpty) {
+        tappedCycle = cycles.first;
+      }
+      if (tappedCycle != null) {
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            // print('Modal Bottom Sheet BuildContext hashCode: ${context.hashCode}');
+            return Container(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        tappedCycle!.rentNm,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                        textAlign: TextAlign.center
+                    ),
+                    SizedBox(height: 10.0),
+                    Text('Address: ${tappedCycle.staAdd1}'),
+                    SizedBox(height: 8.0),
+                    Text('         ${tappedCycle.staAdd2}'),
+                    SizedBox(height: 8.0),
+                    Text('Number of bike hold: ${tappedCycle.holdNum}'),
+                    SizedBox(height: 20.0),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Your favorite icon button action
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'Add to Favorites',
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              // Your favorite icon button action
+                              Navigator.pop(context);
+                            },
+                            child:
+                            Text('Close'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top:16),
+    return
+      Padding(
+      padding: const EdgeInsets.all(16.0),
       // child: Center(
       child: Column(
         //crossAxisAlignment: CrossAxisAlignment.end,
@@ -524,7 +743,7 @@ class _MapPageState extends State<MapPage> {
                 Center(
                   child: SizedBox(
                     height: 405.0,
-                    width: MediaQuery.of(context).size.width - 50,
+                    width: MediaQuery.of(context).size.width - 10,
                     child: GoogleMap(
                         initialCameraPosition: _kGooglePlex,
                         //initialCameraPosition: CameraPosition(target:LatLng(latitude, longitude)),

@@ -1,22 +1,30 @@
 class Ev {
-  String addr; // 충전소 주소
-  String chargeTp; // 충전기 타입
-  String cpNm; // 충전기 명칭
-  String cpStat; // 충전기 상태 코드
-  String cpTp; // 충전 방식
+  int csId;
   String csNm; // 충전소 명칭
+  String addr; // 충전소 주소
   String lat; // 위도
   String longi; // 경도
+  int cpId;
+  String cpNm; // 충전기 명칭
+  String chargeTp; // 충전기 타입
+  String cpTp; // 충전 방식
+  String statUpdatetime;
+  String cpStat; // 충전기 상태 코드
+
 
   Ev({
-    required this.addr,
-    required this.chargeTp,
-    required this.cpNm,
-    required this.cpStat,
-    required this.cpTp,
+    required this.csId,
     required this.csNm,
+    required this.addr,
     required this.lat,
     required this.longi,
+    required this.cpId,
+    required this.cpNm,
+    required this.chargeTp,
+    required this.cpTp,
+    required this.statUpdatetime,
+    required this.cpStat,
+
   });
 
   factory Ev.fromJson(Map<String, dynamic> json) {
@@ -63,15 +71,21 @@ class Ev {
       json["cpTp"] = "충전 방식 : DC차데모+DC콤보+AC3상";
     }
 
+
+
     return Ev(
-      addr: json["addr"] != null ? json["addr"] as String : "",
-      chargeTp: json["chargeTp"] as String ?? "",
-      cpNm: json["cpNm"] as String ?? "",
-      cpStat: json["cpStat"] as String ?? "",
-      cpTp: json["cpTp"] as String ?? "",
+      csId: json["csId"] ?? 0,
       csNm: json["csNm"] as String ?? "",
+      addr: json["addr"] != null ? json["addr"] as String : "",
       lat: json["lat"] as String ?? "0.0",
       longi: json["longi"] as String ?? "0.0",
+      cpId: json["cpId"] ?? 0,
+      cpNm: json["cpNm"] as String ?? "",
+      chargeTp: json["chargeTp"] as String ?? "",
+      cpTp: json["cpTp"] as String ?? "",
+      statUpdatetime: json["statUpdatetime"] as String ?? "",
+      cpStat: json["cpStat"] as String ?? "",
+
     );
   }
 }
