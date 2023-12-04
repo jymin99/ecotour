@@ -51,6 +51,7 @@ class _PlanPageState extends State<PlanPage> {
     // });
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       floatingActionButton: FloatingActionButton(  // ➊ 새 일정 버튼
         backgroundColor: AppColor.yellowGreen,
         onPressed: () {
@@ -68,7 +69,7 @@ class _PlanPageState extends State<PlanPage> {
         ),
       ),
       body: SafeArea(   // 시스템 UI 피해서 UI 구현하기
-        child: Column(  // 달력과 리스트를 세로로 배치
+        child: ListView(  // 달력과 리스트를 세로로 배치
           children: [
             MainCalendar(
               selectedDate: selectedDate,  // 선택된 날짜 전달하기
@@ -107,64 +108,38 @@ class _PlanPageState extends State<PlanPage> {
                     // });
 
 
-                    return  ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index){
-                        final schedule = snapshot.data![index];
-                        return Dismissible(
-                          key: ObjectKey(schedule.id), //유니크한 키 값
-                          direction: DismissDirection.startToEnd,
-                          onDismissed: (DismissDirection direction){
-                            GetIt.I<LocalDatabase>().removeSchedule(schedule.id);
-                            // 화면 갱신
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
-                            child: ScheduleCard(
-                              startTimeH: schedule.startTimeH,
-                              startTimeM: schedule.startTimeM,
-                              endTimeH: schedule.endTimeH,
-                              endTimeM: schedule.endTimeM,
-                              title: schedule.title,
-                              place: schedule.place,
-                              memo: schedule.memo,
+                    return  Container(
+                      height: 300,
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index){
+                          final schedule = snapshot.data![index];
+                          return Dismissible(
+                            key: ObjectKey(schedule.id), //유니크한 키 값
+                            direction: DismissDirection.startToEnd,
+                            onDismissed: (DismissDirection direction){
+                              GetIt.I<LocalDatabase>().removeSchedule(schedule.id);
+                              // 화면 갱신
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
+                              child: ScheduleCard(
+                                startTimeH: schedule.startTimeH,
+                                startTimeM: schedule.startTimeM,
+                                endTimeH: schedule.endTimeH,
+                                endTimeM: schedule.endTimeM,
+                                title: schedule.title,
+                                place: schedule.place,
+                                memo: schedule.memo,
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     );
                   },
                 )
             ),
-
-            // SizedBox(
-            //   width: 390,
-            //   height: 35,
-            //   // width: double.infinity,
-            //   child: ElevatedButton(
-            //     onPressed: (){
-            //       showCupertinoModalPopup(  // ➋ BottomSheet 열기
-            //         context: context,
-            //         builder: (_) => dayPlanSheet(
-            //           selectedDate: selectedDate,
-            //         ),
-            //       );
-            //     },
-            //     style: ElevatedButton.styleFrom(
-            //       primary: AppColor.ashGreen,
-            //     ),
-            //     child: Text(
-            //       '+',
-            //       style: TextStyle(
-            //         color: AppColor.deepGreen,  // 텍스트 색상을 검정색으로 변경
-            //         fontSize: 20.0,       // 텍스트 크기를 조절
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            //
-            // SizedBox(height: 50.0),
-
           ],
         ),
       ),

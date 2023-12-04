@@ -29,7 +29,7 @@ class FeedPage extends StatelessWidget {
           elevation: 1,
           backgroundColor: Colors.white,
           title: Text(
-            '인증 피드',
+            '나의 기여',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: "Lotte", fontSize: 25,

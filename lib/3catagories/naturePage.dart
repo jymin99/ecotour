@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/nature/story.dart';
+import 'package:capstone/nature/nature_info.dart';
 import 'package:capstone/nature/donationPage.dart';
 
 import 'package:capstone/style.dart';
@@ -94,7 +94,7 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
           // physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
 
-            Story(),
+            nature_info(),
 
             Story2(),
             // EcoFriendlyItems(),

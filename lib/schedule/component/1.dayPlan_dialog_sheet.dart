@@ -92,12 +92,6 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                         onChanged: (String value) {
                           formData.title = value; // 입력된 제목을 변수에 저장
                         },
-                        // validator: (value) {
-                        //   if (value == null || value.isEmpty) {
-                        //     return 'Please enter some text';
-                        //   }
-                        //   return null;
-                        // },
 
                         decoration: InputDecoration(
                           labelText: '일정명',

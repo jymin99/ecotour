@@ -1,3 +1,4 @@
+import 'package:capstone/myAccount/certificationFeed.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/myAccount/setting.dart';
@@ -60,17 +61,28 @@ class _MainPage extends State<MainPage> {
             ),
           ),
           centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Setting(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings, color: Colors.black),
+          ),
           actions: [
             IconButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Setting(),
+                    builder: (context) => FeedPage(),
                   ),
                 );
               },
-              icon: const Icon(Icons.account_circle, color: Colors.black),
+              icon: const Icon(Icons.grid_view, color: Colors.black),
             ),
           ],
         ),
@@ -99,7 +111,7 @@ class _MainPage extends State<MainPage> {
                       });
                     },
                     child: Text(
-                      '관광지도',
+                      '친환경 지도',
                       style: TextStyle(
                         fontFamily: "Lotte",
                         fontSize: 15,
@@ -120,7 +132,7 @@ class _MainPage extends State<MainPage> {
                       });
                     },
                     child: Text(
-                      '환경스토리',
+                      '환경 스토리',
                       style: TextStyle(
                         fontFamily: "Lotte",
                         fontSize: 15,

@@ -22,11 +22,10 @@ class QuitPage extends StatelessWidget {
           elevation: 1,
           backgroundColor: Colors.white,
           title: const Text(
-            '회원탈퇴',
+            '회원 탈퇴',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: "Lotte", fontSize: 25,
-              color: AppColor.deepGreen,
+              color: Colors.black,
             ),
           ),
           centerTitle: true,
@@ -48,6 +47,6 @@ class QuitPageDetail extends StatefulWidget {
 class _QuitPageDetailState extends State<QuitPageDetail> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold();
   }
 }
