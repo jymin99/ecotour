@@ -1,7 +1,7 @@
+import 'package:capstone/myAccount/accountInfo.dart';
 import 'package:flutter/material.dart';
 import 'logoutPage.dart';
 import 'quitPage.dart';
-import 'certificationFeed.dart';
 
 class Setting extends StatelessWidget {
   Setting({Key? key}) : super(key:key);
@@ -33,9 +33,9 @@ class _SettingDetailState extends State<SettingDetail> {
       home: ListView(
         children: [
           ListTile(
-            title: Text('계정정보'),
+            title: Text('계정 정보'),
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QuitPage()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AccountInfo()));
             },
           ),
           ListTile(

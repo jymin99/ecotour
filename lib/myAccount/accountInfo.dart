@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/style.dart';
 
-class LogoutPage extends StatelessWidget {
-  const LogoutPage({super.key});
+class AccountInfo extends StatefulWidget {
+  const AccountInfo({super.key});
 
+  @override
+  State<AccountInfo> createState() => _AccountInfoState();
+}
+
+class _AccountInfoState extends State<AccountInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,27 +27,27 @@ class LogoutPage extends StatelessWidget {
           elevation: 1,
           backgroundColor: Colors.white,
           title: Text(
-            '로그아웃',
+            '계정 정보',
             style: TextStyle(
               color: Colors.black,
             ),
           ),
         ),
       ),
-      body: LogoutDetail(),
+      body: AccountDetail(),
     );
   }
 }
 
 
-class LogoutDetail extends StatefulWidget {
-  const LogoutDetail({super.key});
+class AccountDetail extends StatefulWidget {
+  const AccountDetail({super.key});
 
   @override
-  State<LogoutDetail> createState() => _LogoutDetailState();
+  State<AccountDetail> createState() => _AccountDetailState();
 }
 
-class _LogoutDetailState extends State<LogoutDetail> {
+class _AccountDetailState extends State<AccountDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
