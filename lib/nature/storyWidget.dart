@@ -102,7 +102,7 @@ class StoryModal extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(height: 10),
-                Image.asset(
+                Image.network(
                   assetPath,
                   width: 400,
                   height: 200,

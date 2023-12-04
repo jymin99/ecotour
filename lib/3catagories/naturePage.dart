@@ -94,7 +94,7 @@ class _NaturePage extends State<NaturePage> with SingleTickerProviderStateMixin 
           // physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
 
-            Story(),
+            nature_info(),
 
             Story2(),
             // EcoFriendlyItems(),
