@@ -23,13 +23,10 @@ class LogoutPage extends StatelessWidget {
           backgroundColor: Colors.white,
           title: Text(
             '로그아웃',
-            textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: "Lotte", fontSize: 25,
-              color: AppColor.deepGreen,
+              color: Colors.black,
             ),
           ),
-          centerTitle: true,
         ),
       ),
       body: LogoutDetail(),

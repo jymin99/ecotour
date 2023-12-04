@@ -29,8 +29,15 @@ class _SettingDetailState extends State<SettingDetail> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: ListView(
         children: [
+          ListTile(
+            title: Text('계정정보'),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QuitPage()));
+            },
+          ),
           ListTile(
             title: Text('로그아웃'),
             onTap: (){
@@ -38,15 +45,9 @@ class _SettingDetailState extends State<SettingDetail> {
               },
           ),
           ListTile(
-            title: Text('회원탈퇴'),
+            title: Text('회원 탈퇴'),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QuitPage()));
-            },
-          ),
-          ListTile(
-            title: Text('인증피드'),
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FeedPage()));
             },
           ),
         ],

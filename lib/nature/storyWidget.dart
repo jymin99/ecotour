@@ -25,41 +25,31 @@ Widget buildStoryContainer(BuildContext context, String assetPath, String title,
                 width: 2,
               ),
             ),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,  // 수평 스크롤을 위한 설정
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.network(
-                    assetPath,
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.network(
+                  assetPath,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(height: 10),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+
+                  ],
+                ),
+              ],
             ),
           ),
         ),
