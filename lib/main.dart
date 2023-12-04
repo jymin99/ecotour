@@ -2,6 +2,8 @@
 import 'package:capstone/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 // import 'package:kakao_map_plugin/kakao_map_plugin.dart';
 import 'mainPage.dart';
@@ -15,7 +17,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter/services.dart';
-
 
 void main()async{
   final String apiKey = "e5a748a8-d308-41d2-b844-a1608b770f39";

@@ -67,6 +67,7 @@ dependencies:
   kakao_map_plugin: ^0.2.2
   xml2json: ^6.2.1
   flutter_typeahead: ^5.0.0
+  flutter_dotenv: ^5.1.0
 
 dependency_overrides:
   path_provider: 2.0.1

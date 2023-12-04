@@ -13,6 +13,11 @@ class Cycle {
   int endIndex;
   String rnum;
 
+  @override
+  String toString() {
+    return 'Cycle{rentId: $rentId, rentNm: $rentNm, staLoc: $staLoc}';
+  }
+
   Cycle({
     required this.staLoc,
     required this.rentId,
