@@ -95,24 +95,6 @@ Widget buildStoryContainer(BuildContext context, imageUrl, String title, String 
           width: 2, // 테두리 두께
         ),
 
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.5), // 그림자 색상
-        //     spreadRadius: 2,
-        //     blurRadius: 15,
-        //     offset: Offset(0, 5), // 그림자 위치 조절
-        //   ),
-        // ],
-
-
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.5),
-        //     spreadRadius: 1,
-        //     blurRadius: 10,
-        //     offset: Offset(10, 10),
-        //   ),
-        // ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -229,11 +211,6 @@ class story1 extends StatelessWidget {
                   ),
                   child: Text('닫기', style: TextStyle(color:Colors.black, ),),
                 ),
-
-
-
-
-
               ],
             ),
           ),

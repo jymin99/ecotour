@@ -99,7 +99,7 @@ class _MainPage extends State<MainPage> {
                       });
                     },
                     child: Text(
-                      '관광지도',
+                      '친환경 지도',
                       style: TextStyle(
                         fontFamily: "Lotte",
                         fontSize: 15,
@@ -120,7 +120,7 @@ class _MainPage extends State<MainPage> {
                       });
                     },
                     child: Text(
-                      '환경스토리',
+                      '환경 스토리',
                       style: TextStyle(
                         fontFamily: "Lotte",
                         fontSize: 15,
