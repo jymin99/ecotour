@@ -42,7 +42,7 @@ Widget buildStoryContainer(BuildContext context, String assetPath, String title,
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
