@@ -54,14 +54,12 @@ class _MapPageState extends State<MapPage> {
     // });
     loadMarkers();
     loadEvMarkers();
-    //loadMarkersFromFirestore();
     loadCycleMarkers();
     loadAccMarkers();
     loadEcoShopMarkers();
     loadStoreMarkers();
     loadRefillMarkers();
   }
-
 
 
   Future<void> loadAccMarkers() async {
@@ -90,6 +88,25 @@ class _MapPageState extends State<MapPage> {
     } catch(e) {
       print('Error loading accommodation list: $e');
     }
+  }
+
+  Future<void> loadMarkers() async {
+    List<Map<String, dynamic>> cafes = await FireService().getFireModels();
+    Set<Marker> newMarkers = cafes.map((cafe) {
+      final BitmapDescriptor markerIcon = _getMarkerIcon();
+      return Marker(
+        markerId: MarkerId('cafe${cafe['shop'].toString()}'),
+        position: LatLng(
+            cafe['latitude'] as double, cafe['longitude'] as double),
+        infoWindow: InfoWindow(title: cafe['shop'].toString()),
+        icon: markerIcon,
+      );
+    }).toSet();
+
+    setState(() {
+      if (!areMarkersVisible) markers.clear();
+      markers.addAll(newMarkers);
+    });
   }
 
   Future<void> loadCycleMarkers() async {
@@ -121,24 +138,34 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<void> loadMarkers() async {
-    // loadMarkersFromFirestore() 내용을 여기로 옮김
-    List<Map<String, dynamic>> cafes = await FireService().getFireModels();
-    Set<Marker> newMarkers = cafes.map((cafe) {
-      final BitmapDescriptor markerIcon = _getMarkerIcon();
-      return Marker(
-        markerId: MarkerId('cafe${cafe['shop'].toString()}'),
-        position: LatLng(
-            cafe['latitude'] as double, cafe['longitude'] as double),
-        infoWindow: InfoWindow(title: cafe['shop'].toString()),
-        icon: markerIcon,
-      );
-    }).toSet();
+  Future<void> loadEvMarkers() async {
+    try {
+      List<Ev>? evs = await EvRepository().loadEvs();
+      // print('Ev details: $evs');
 
-    setState(() {
-      if (!areMarkersVisible) markers.clear();
-      markers.addAll(newMarkers);
-    });
+      if (evs != null && evs.isNotEmpty) {
+        Set<Marker> newMarkers = evs.map((ev) {
+          final BitmapDescriptor markerIcon = _getMarkerIconForEv();
+          return Marker(
+            markerId: MarkerId('ev${ev.cpId}'),
+            position:
+            LatLng(double.parse(ev.lat), double.parse(ev.longi)),
+            infoWindow: InfoWindow(title: ev.csNm),
+            icon: markerIcon,
+            onTap: () {
+              _onEvMarkerTapped(MarkerId('ev${ev.cpId}'));
+            },
+          );
+        }).toSet();
+
+        setState(() {
+          if(!areEvMarkerVisible) markers.clear();
+          markers.addAll(newMarkers);
+        });
+      }
+    } catch(e) {
+      print('Error loading ev list: $e');
+    }
   }
 
   Future<void> loadEcoShopMarkers() async {
@@ -213,7 +240,7 @@ class _MapPageState extends State<MapPage> {
   BitmapDescriptor _getMarkerIconForEcoShop() {
     // 적절한 조건에 따라 다른 색상의 아이콘을 반환
     if (areEcoShopMarkersVisible) {
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure);
     } else {
       return BitmapDescriptor.fromBytes(Uint8List(0));
     }
@@ -222,7 +249,7 @@ class _MapPageState extends State<MapPage> {
   BitmapDescriptor _getMarkerIconForRefill() {
     // 적절한 조건에 따라 다른 색상의 아이콘을 반환
     if (areRefillMarkersVisible) {
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose);
     } else {
       return BitmapDescriptor.fromBytes(Uint8List(0));
     }
@@ -231,7 +258,7 @@ class _MapPageState extends State<MapPage> {
   BitmapDescriptor _getMarkerIconForStore() {
     // 적절한 조건에 따라 다른 색상의 아이콘을 반환
     if (areStoreMarkersVisible) {
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet);
     } else {
       return BitmapDescriptor.fromBytes(Uint8List(0));
     }
@@ -243,8 +270,6 @@ class _MapPageState extends State<MapPage> {
       return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
     } else {
       return BitmapDescriptor.fromBytes(Uint8List(0));
-
-      //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
     }
   }
 
@@ -254,8 +279,15 @@ class _MapPageState extends State<MapPage> {
       return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
     } else {
       return BitmapDescriptor.fromBytes(Uint8List(0));
-      //return BitmapDescriptor.defaultMarker; // 수정 후 코드
-      //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    }
+  }
+
+  BitmapDescriptor _getMarkerIconForEv() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areEvMarkerVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+    } else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
     }
   }
 
@@ -314,44 +346,6 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  Future<void> loadEvMarkers() async {
-    try {
-      List<Ev>? evs = await EvRepository().loadEvs();
-      // print('Ev details: $evs');
-
-      if (evs != null && evs.isNotEmpty) {
-        Set<Marker> newMarkers = evs.map((ev) {
-          final BitmapDescriptor markerIcon = _getMarkerIconForEv();
-          return Marker(
-            markerId: MarkerId('ev${ev.cpId}'),
-            position:
-              LatLng(double.parse(ev.lat), double.parse(ev.longi)),
-            infoWindow: InfoWindow(title: ev.csNm),
-            icon: markerIcon,
-            onTap: () {
-              _onEvMarkerTapped(MarkerId('ev${ev.cpId}'));
-            },
-          );
-        }).toSet();
-
-        setState(() {
-         if(!areEvMarkerVisible) markers.clear();
-         markers.addAll(newMarkers);
-        });
-      }
-    } catch(e) {
-      print('Error loading ev list: $e');
-    }
-  }
-
-  BitmapDescriptor _getMarkerIconForEv() {
-    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
-    if (areEvMarkerVisible) {
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-    } else {
-      return BitmapDescriptor.fromBytes(Uint8List(0));
-    }
-  }
 
   Future<void> _toggleAccMarkers() async {
     setState(() {
@@ -384,7 +378,6 @@ class _MapPageState extends State<MapPage> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // 위치 서비스가 비활성화된 경우 처리
-      // 사용자에게 위치 서비스를 활성화하라는 메시지를 보여줄 수 있습니다.
       print("위치서비스가 비활성화되어있습니다.");
     }
 
@@ -395,7 +388,6 @@ class _MapPageState extends State<MapPage> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         // 사용자가 위치 권한을 거부한 경우 처리
-        // 사용자에게 메시지를 표시하거나 정보를 제공할 수 있습니다.
         print("위치 권한을 거부하였습니다.");
       }
     }
@@ -451,7 +443,6 @@ class _MapPageState extends State<MapPage> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       tappedAccommodation!.title!,
@@ -476,7 +467,6 @@ class _MapPageState extends State<MapPage> {
                               backgroundColor: Colors.white,
                             ),
                             onPressed: () {
-                              // Your favorite icon button action
                               Navigator.pop(context);
                             },
                             child: Text(
@@ -492,7 +482,6 @@ class _MapPageState extends State<MapPage> {
                               backgroundColor: Colors.white,
                             ),
                             onPressed: () {
-                              // Your favorite icon button action
                               Navigator.pop(context);
                             },
                             child:
@@ -507,78 +496,12 @@ class _MapPageState extends State<MapPage> {
             );
           },
         );
-
-        // showCupertinoModalPopup(
-        //   context: context,
-        //   builder: (BuildContext context) {
-        //     return CupertinoActionSheet(
-        //       title: Column(
-        //         children: [
-        //           Text(tappedAccommodation!.title!,
-        //             style: TextStyle(
-        //               fontSize: 20.0,
-        //               color: Colors.black,
-        //             )
-        //           ),
-        //           SizedBox(
-        //             height: 5,
-        //           )
-        //         ],
-        //       ),
-        //       message: Column(
-        //         children: [
-        //           Text('Address: ${tappedAccommodation.add1} ${tappedAccommodation.add2}',
-        //               style: TextStyle(
-        //                 fontSize: 15.0,
-        //                 color: Colors.black,
-        //               )),
-        //           SizedBox(
-        //             height: 20,
-        //           ),
-        //           Text('Tel: ${tappedAccommodation.tel}',
-        //               style: TextStyle(
-        //                 fontSize: 15.0,
-        //                 color: Colors.black,
-        //               )),
-        //         ],
-        //       ),
-        //       actions: [
-        //         CupertinoActionSheetAction(
-        //           onPressed: () {
-        //             // 즐겨찾기 기능 추가
-        //           },
-        //           child: Row(
-        //             mainAxisAlignment: MainAxisAlignment.center,
-        //             children: [
-        //               //Icon(Icons.star),
-        //               //SizedBox(width: 8),
-        //               Text('Add to Favorites'),
-        //             ],
-        //           ),
-        //         ),
-        //         // CupertinoActionSheetAction(
-        //         //   onPressed: () {
-        //         //     Navigator.pop(context); // 팝업 닫기
-        //         //   },
-        //         //   child: Text('Close'),
-        //         // ),
-        //         // CupertinoActionSheetAction(
-        //         //   onPressed: () {
-        //         //     Navigator.pop(context);
-        //         //   },
-        //         //   child: Text('Close'),
-        //         // ),
-        //       ],
-        //     );
-        //   },
-        // );
       }
     }
   }
 
   Future<void> _onEvMarkerTapped(MarkerId markerId) async {
     // print('Current BuildContext hashCode: ${context.hashCode}');
-
     if (markerId.value.startsWith('ev')) {
       String cpId = markerId.value.substring(2);
       // print('Trying to get details for csId: $cpId');
@@ -673,8 +596,6 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> _onCycleMarkerTapped(MarkerId markerId) async {
-    // print('Current BuildContext hashCode: ${context.hashCode}');
-
     if (markerId.value.startsWith('bike')) {
       String rentId = markerId.value.substring(4);
       // print('Trying to get details for csId: $rentId');
@@ -767,26 +688,12 @@ class _MapPageState extends State<MapPage> {
     return
       Padding(
       padding: const EdgeInsets.all(16.0),
-      // child: Center(
       child: Column(
         //crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Center(
             child: Column(
               children: [
-                // TextField(
-                //   controller: _controller,
-                //   decoration: InputDecoration(
-                //     hintText: 'Search...',
-                //     suffixIcon: IconButton(
-                //       icon: Icon(Icons.search),
-                //       onPressed: () {
-                //         // Perform search based on _controller.text
-                //         // You can call a search function here
-                //       },
-                //     ),
-                //   ),
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -819,7 +726,6 @@ class _MapPageState extends State<MapPage> {
                         //       !areMarkersVisible; // Toggle visibility state
                         // });
                         // loadMarkers();
-                        //loadMarkersFromFirestore(); // Load markers based on the new visibility state
                       },
                       child: Image(
                         image: AssetImage('assets/food.png'),
@@ -848,10 +754,6 @@ class _MapPageState extends State<MapPage> {
                       ),
                       onPressed: () {
                          _toggleEvMarkers();
-                        // setState(() {
-                        //   areEvMarkerVisible = !areEvMarkerVisible;
-                        // });
-                        // loadEvMarkers();
                       },
                       child: Image(
                         image: AssetImage('assets/electriccar.png'),
@@ -904,7 +806,9 @@ class _MapPageState extends State<MapPage> {
                 ),
                 Center(
                   child: SizedBox(
-                    height: 405.0,
+                    height:
+                    // MediaQuery.of(context).size.height - 20,
+                      405.0,
                     width: MediaQuery.of(context).size.width - 10,
                     child: GoogleMap(
                         initialCameraPosition: _kGooglePlex,
@@ -927,31 +831,6 @@ class _MapPageState extends State<MapPage> {
               ],
             ),
           ),
-          // Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          //   FloatingActionButton.small(
-          //     onPressed: () async {
-          //       var gps = await getCurrentLocation();
-          //
-          //       mapController.moveCamera(CameraUpdate.newLatLng(
-          //           LatLng(gps.latitude, gps.longitude)));
-          //
-          //       // print("FloatingActionButton pressed");
-          //       print("Current Location: $gps");
-          //       // mapController.moveCamera(
-          //       //     CameraUpdate.newLatLng(LatLng(currentLocation.latitude, currentLocation.longitude)));
-          //     },
-          //     child: Icon(
-          //       Icons.my_location,
-          //       color: Colors.black,
-          //     ),
-          //     shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(30)),
-          //     backgroundColor: Colors.white,
-          //   ),
-          //   SizedBox(
-          //     width: 15,
-          //   )
-          // ])
         ],
       ),
     );
