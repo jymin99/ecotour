@@ -20,7 +20,7 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
           child: Container(
             width: 390,
             height: 120,
-            padding: EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 20, right: 20),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -40,15 +40,15 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
                     height: 150,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         title,
-                        style: TextStyle(
-                          fontSize: 10,
+                        style: const TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -59,7 +59,7 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
             ),
           ),
         ),
-        SizedBox(height: 20)
+        const SizedBox(height: 20)
       ],
     ),
   );
@@ -85,7 +85,7 @@ class StoryModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 80),
+        const SizedBox(height: 80),
         Container(
           height: 580,
           width: 380,
@@ -97,49 +97,49 @@ class StoryModal extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 15,
-                offset: Offset(0, 0),
+                offset: const Offset(0, 0),
               ),
             ],
           ),
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Image.network(
                   assetPath,
                   width: 400,
                   height: 200,
                   fit: BoxFit.cover,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 17,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   subtitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 15,
                     color: Colors.grey,
                     decoration: TextDecoration.none,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
                     _launchURL(url);
                   },
                   child: Text(
                     url,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                       color: AppColor.deepGreen,
                       decoration: TextDecoration.underline,
@@ -147,25 +147,25 @@ class StoryModal extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AppColor.lightYellowGreen,
-                    minimumSize: Size(350, 30),
+                    minimumSize: const Size(350, 30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                  child: Text('닫기', style: TextStyle(color: Colors.black)),
+                  child: const Text('닫기', style: TextStyle(color: Colors.black)),
                 ),
               ],
             ),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
   }
