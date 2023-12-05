@@ -42,9 +42,10 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
                   ),
                   const SizedBox(width: 20),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
+                      // const SizedBox(height: 20),
                       Text(
                         title,
                         style: const TextStyle(
@@ -59,7 +60,7 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
             ),
           ),
         ),
-        const SizedBox(height: 20)
+        const SizedBox(height: 5)
       ],
     ),
   );
