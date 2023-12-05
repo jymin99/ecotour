@@ -180,7 +180,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> loadStoreMarkers() async {
-    List<Map<String, dynamic>> store = await FireService().getRefill();
+    List<Map<String, dynamic>> store = await FireService().getStore();
     Set<Marker> newMarkers = store.map((store) {
       final BitmapDescriptor markerIcon = _getMarkerIconForStore();
       return Marker(
