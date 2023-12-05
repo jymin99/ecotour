@@ -18,7 +18,6 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
             );
           },
           child: Container(
-            width: 390,
             height: 120,
             padding: const EdgeInsets.only(left: 20, right: 20),
             decoration: BoxDecoration(

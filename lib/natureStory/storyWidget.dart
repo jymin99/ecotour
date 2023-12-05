@@ -14,7 +14,7 @@ Widget buildStoryContainer(BuildContext context, String assetPath, String title,
             );
           },
           child: Container(
-            width: 390,
+            // width: 390,
             height: 120,
             padding: const EdgeInsets.only(left: 20, right: 20),
             decoration: BoxDecoration(
