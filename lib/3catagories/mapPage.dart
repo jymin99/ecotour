@@ -39,6 +39,9 @@ class _MapPageState extends State<MapPage> {
   bool areBikeMarkersVisible = false; // 새로 추가된 부분
   bool areEvMarkerVisible = false;
   bool areAccMarkersVisible = false;
+  bool areEcoShopMarkersVisible = false;
+  bool areRefillMarkersVisible = false;
+  bool areStoreMarkersVisible = false;
 
   @override
   void initState() {
@@ -54,6 +57,9 @@ class _MapPageState extends State<MapPage> {
     //loadMarkersFromFirestore();
     loadCycleMarkers();
     loadAccMarkers();
+    loadEcoShopMarkers();
+    loadStoreMarkers();
+    loadRefillMarkers();
   }
 
 
@@ -135,6 +141,63 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
+  Future<void> loadEcoShopMarkers() async {
+    List<Map<String, dynamic>> eco_shop = await FireService().getEcoShop();
+    Set<Marker> newMarkers = eco_shop.map((eco_shop) {
+      final BitmapDescriptor markerIcon = _getMarkerIconForEcoShop();
+      return Marker(
+        markerId: MarkerId('eco_shop${eco_shop['name'].toString()}'),
+        position: LatLng(
+            eco_shop['latitude'] as double, eco_shop['longitude'] as double),
+        infoWindow: InfoWindow(title: eco_shop['name'].toString()),
+        icon: markerIcon,
+      );
+    }).toSet();
+
+    setState(() {
+      if (!areEcoShopMarkersVisible) markers.clear();
+      markers.addAll(newMarkers);
+    });
+  }
+
+  Future<void> loadRefillMarkers() async {
+    List<Map<String, dynamic>> refill = await FireService().getRefill();
+    Set<Marker> newMarkers = refill.map((refill) {
+      final BitmapDescriptor markerIcon = _getMarkerIconForRefill();
+      return Marker(
+        markerId: MarkerId('refill${refill['name'].toString()}'),
+        position: LatLng(
+            refill['latitude'] as double, refill['longitude'] as double),
+        infoWindow: InfoWindow(title: refill['name'].toString()),
+        icon: markerIcon,
+      );
+    }).toSet();
+
+    setState(() {
+      if (!areRefillMarkersVisible) markers.clear();
+      markers.addAll(newMarkers);
+    });
+  }
+
+  Future<void> loadStoreMarkers() async {
+    List<Map<String, dynamic>> store = await FireService().getRefill();
+    Set<Marker> newMarkers = store.map((store) {
+      final BitmapDescriptor markerIcon = _getMarkerIconForStore();
+      return Marker(
+        markerId: MarkerId('store${store['name'].toString()}'),
+        position: LatLng(
+            store['latitude'] as double, store['longitude'] as double),
+        infoWindow: InfoWindow(title: store['name'].toString()),
+        icon: markerIcon,
+      );
+    }).toSet();
+
+    setState(() {
+      if (!areStoreMarkersVisible) markers.clear();
+      markers.addAll(newMarkers);
+    });
+  }
+
   BitmapDescriptor _getMarkerIcon() {
     // 적절한 조건에 따라 다른 색상의 아이콘을 반환
     if (areMarkersVisible) {
@@ -144,6 +207,33 @@ class _MapPageState extends State<MapPage> {
       return BitmapDescriptor.fromBytes(Uint8List(0));
       //return BitmapDescriptor.defaultMarker; // 수정 후 코드
       //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    }
+  }
+
+  BitmapDescriptor _getMarkerIconForEcoShop() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areEcoShopMarkersVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    } else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
+    }
+  }
+
+  BitmapDescriptor _getMarkerIconForRefill() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areRefillMarkersVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    } else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
+    }
+  }
+
+  BitmapDescriptor _getMarkerIconForStore() {
+    // 적절한 조건에 따라 다른 색상의 아이콘을 반환
+    if (areStoreMarkersVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
+    } else {
+      return BitmapDescriptor.fromBytes(Uint8List(0));
     }
   }
 
@@ -167,6 +257,39 @@ class _MapPageState extends State<MapPage> {
       //return BitmapDescriptor.defaultMarker; // 수정 후 코드
       //return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
     }
+  }
+
+  Future<void> _toggleEcoShopMarkers() async {
+    setState(() {
+      areEcoShopMarkersVisible = !areEcoShopMarkersVisible;
+      if (areEcoShopMarkersVisible == false) {
+        markers.removeWhere((marker) => marker.markerId.value.startsWith("eco_shop"));
+      } else {
+        loadEcoShopMarkers();
+      }
+    });
+  }
+
+  Future<void> _toggleStoreMarkers() async {
+    setState(() {
+      areStoreMarkersVisible = !areStoreMarkersVisible;
+      if (areStoreMarkersVisible == false) {
+        markers.removeWhere((marker) => marker.markerId.value.startsWith("store"));
+      } else {
+        loadStoreMarkers();
+      }
+    });
+  }
+
+  Future<void> _toggleRefillMarkers() async {
+    setState(() {
+      areRefillMarkersVisible = !areRefillMarkersVisible;
+      if (areRefillMarkersVisible == false) {
+        markers.removeWhere((marker) => marker.markerId.value.startsWith("refill"));
+      } else {
+        loadRefillMarkers();
+      }
+    });
   }
 
   Future<void> _toggleMarkers() async {
@@ -729,6 +852,45 @@ class _MapPageState extends State<MapPage> {
                         //   areEvMarkerVisible = !areEvMarkerVisible;
                         // });
                         // loadEvMarkers();
+                      },
+                      child: Image(
+                        image: AssetImage('assets/electriccar.png'),
+                        width: 40.0,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.white),
+                      ),
+                      onPressed: () {
+                        _toggleEcoShopMarkers();
+                      },
+                      child: Image(
+                        image: AssetImage('assets/electriccar.png'),
+                        width: 40.0,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.white),
+                      ),
+                      onPressed: () {
+                        _toggleRefillMarkers();
+                      },
+                      child: Image(
+                        image: AssetImage('assets/electriccar.png'),
+                        width: 40.0,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.white),
+                      ),
+                      onPressed: () {
+                        _toggleStoreMarkers();
                       },
                       child: Image(
                         image: AssetImage('assets/electriccar.png'),
