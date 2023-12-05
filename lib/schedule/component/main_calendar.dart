@@ -1,4 +1,4 @@
-// component/main_calendar.dart
+// main_calendar.dart
 
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -26,20 +26,49 @@ class MainCalendar extends StatefulWidget {
 }
 
 class _MainCalendarState extends State<MainCalendar> {
-  late DateTime _focusedDay;
-  List<DateTime> allDates=[]; // ➊ Set 추가\
 
+  Map<DateTime, List<Event>> events = {
+    DateTime.utc(20233,12,13) : [ Event('title'), Event('title2') ],
+    DateTime.utc(2023,12,14) : [ Event('title3') ],
+  };
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return events[day] ?? [];
+  }
+
+  late DateTime _focusedDay;
+  late List<DateTime> allDates; // ➊ Set 추가\
+  var _allDates = [DateTime(2023, 12, 6)];
+  DateTime markerDate = DateTime.utc(2023, 12, 6);
 
   @override
   void initState() {
     super.initState();
     _focusedDay = DateTime.now();
+    allDates = [];
 
     GetIt.I<LocalDatabase>().getAllScheduleDates().listen((dates) {
       dates = dates.toSet().toList();
-      allDates=dates;
+      setState(() {
+        allDates = dates;
+        DateTime markerDate = DateTime(2023, 12, 6);
+        if (!allDates.contains(markerDate)) {
+          allDates.add(markerDate);
+        }
+      });
     });
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _focusedDay = DateTime.now();
+  //
+  //   GetIt.I<LocalDatabase>().getAllScheduleDates().listen((dates) {
+  //     dates = dates.toSet().toList();
+  //     allDates=dates;
+  //   });
+  // }
 
   DateTime focusedDay = DateTime.now();
   DateTime selectedDate = DateTime.utc(
@@ -62,6 +91,7 @@ class _MainCalendarState extends State<MainCalendar> {
         children: [
 
           TableCalendar(
+            eventLoader: _getEventsForDay,
             formatAnimationDuration: Duration(milliseconds: 220),
             locale: 'ko_KR',
             // onDaySelected: widget.onDaySelected,
@@ -102,71 +132,73 @@ class _MainCalendarState extends State<MainCalendar> {
             },
 
 
-            calendarBuilders: CalendarBuilders(
-              // markerBuilder: (BuildContext context, date, allDates) {
-              //   if (widget.dates.length > 0 && date == widget.dates[0]) {
-              //     return Positioned(
-              //       top: 20.0, // 원하는 위치로 조절
-              //       child: Container(
-              //         width: 5,
-              //         decoration: BoxDecoration(
-              //           shape: BoxShape.circle,
-              //           color: Colors.red,
-              //         ),
-              //       ),
-              //     );
-              //   }
-              //   return SizedBox(); // dates 목록에 있는 경우에만 마커를 표시합니다.
-              // },
-
-
-              markerBuilder: (BuildContext context, date, allDates) {
-                if (allDates.contains(date)) {
-                  return Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    padding: const EdgeInsets.all(1),
-                    child: Container(
-                      width: 5,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                    ),
-                  );
-                }
-                return SizedBox(); // No markers for this date.
-              },
-
-
-              // markerBuilder: (BuildContext context, date, dates) {
-              //   if (dates.isEmpty) return SizedBox(); // No markers for this date.
-              //
-              //   // Check if the date is in the markedDates set.
-              //   if (dates.contains(date)) {
-              //     return ListView.builder(
-              //       shrinkWrap: true,
-              //       scrollDirection: Axis.horizontal,
-              //       itemCount: dates.length,
-              //       itemBuilder: (context, index) {
-              //         return Container(
-              //           margin: const EdgeInsets.only(top: 20),
-              //           padding: const EdgeInsets.all(1),
-              //           child: Container(
-              //             width: 5,
-              //             decoration: BoxDecoration(
-              //               shape: BoxShape.circle,
-              //               color: Colors.red,
-              //             ),
-              //           ),
-              //         );
-              //       },
-              //     );
-              //   }
-              //   return SizedBox(); // No markers for this date.
-              // },
-              //
-
-            ),
+            // calendarBuilders: CalendarBuilders(
+            //   // markerBuilder: (BuildContext context, date, allDates) {
+            //   //   if (widget.dates.length > 0 && date == widget.dates[0]) {
+            //   //     return Positioned(
+            //   //       top: 20.0, // 원하는 위치로 조절
+            //   //       child: Container(
+            //   //         width: 5,
+            //   //         decoration: BoxDecoration(
+            //   //           shape: BoxShape.circle,
+            //   //           color: Colors.red,
+            //   //         ),
+            //   //       ),
+            //   //     );
+            //   //   }
+            //   //   return SizedBox(); // dates 목록에 있는 경우에만 마커를 표시합니다.
+            //   // },
+            //
+            //
+            //   markerBuilder: (BuildContext context, date, _) {
+            //     print('Checking Marker for: $allDates'); // Add this line to check if markerBuilder is called
+            //     print('Checking Marker for selectedDate: ${widget.selectedDate}'); // Add this line to check if markerBuilder is called
+            //
+            //     // Use _allDates instead of widget.allDates
+            //     if (allDates.contains(date)) {
+            //       return Positioned(
+            //         top: 15.0, // 조절이 필요한 위치로 설정
+            //         child: Container(
+            //           width: 5,
+            //           decoration: BoxDecoration(
+            //             shape: BoxShape.circle,
+            //             color: Colors.red,
+            //           ),
+            //         ),
+            //       );
+            //     }
+            //     return SizedBox(height: 20); // 해당 날짜에 마커가 없음
+            //   },
+            //
+            //   // markerBuilder: (BuildContext context, date, dates) {
+            //   //   if (dates.isEmpty) return SizedBox(); // No markers for this date.
+            //   //
+            //   //   // Check if the date is in the markedDates set.
+            //   //   if (dates.contains(date)) {
+            //   //     return ListView.builder(
+            //   //       shrinkWrap: true,
+            //   //       scrollDirection: Axis.horizontal,
+            //   //       itemCount: dates.length,
+            //   //       itemBuilder: (context, index) {
+            //   //         return Container(
+            //   //           margin: const EdgeInsets.only(top: 20),
+            //   //           padding: const EdgeInsets.all(1),
+            //   //           child: Container(
+            //   //             width: 5,
+            //   //             decoration: BoxDecoration(
+            //   //               shape: BoxShape.circle,
+            //   //               color: Colors.red,
+            //   //             ),
+            //   //           ),
+            //   //         );
+            //   //       },
+            //   //     );
+            //   //   }
+            //   //   return SizedBox(); // No markers for this date.
+            //   // },
+            //   //
+            //
+            // ),
 
             calendarStyle: CalendarStyle(
 
@@ -228,3 +260,8 @@ class _MainCalendarState extends State<MainCalendar> {
 
 
 
+class Event {
+  String title;
+
+  Event(this.title);
+}

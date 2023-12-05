@@ -1,4 +1,4 @@
-// home_screen.dart
+// planPage.dart
 import 'package:get_it/get_it.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
 
