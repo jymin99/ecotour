@@ -1,4 +1,4 @@
-import 'package:capstone/nature/donationWidget.dart';
+import 'package:capstone/natureStory/donationWidget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:capstone/style.dart';

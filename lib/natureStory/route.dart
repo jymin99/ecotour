@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:capstone/nature/storyWidget.dart';
+import 'package:capstone/natureStory/storyWidget.dart';
 
 import 'package:capstone/style.dart';
 

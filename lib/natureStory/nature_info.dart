@@ -1,4 +1,4 @@
-import 'package:capstone/nature/storyWidget.dart';
+import 'package:capstone/natureStory/storyWidget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:capstone/style.dart';
@@ -19,7 +19,7 @@ class _nature_info extends State<nature_info> {
           child: Column(
             children: [
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               buildStoryContainer(
                 context,

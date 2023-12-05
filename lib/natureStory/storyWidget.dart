@@ -53,7 +53,7 @@ Widget buildStoryContainer(BuildContext context, String assetPath, String title,
             ),
           ),
         ),
-        const SizedBox(height: 20)
+        const SizedBox(height: 5)
       ],
     ),
   );

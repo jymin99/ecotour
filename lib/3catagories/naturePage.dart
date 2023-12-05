@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:capstone/nature/nature_info.dart';
-import 'package:capstone/nature/donationPage.dart';
+import 'package:capstone/natureStory/nature_info.dart';
+import 'package:capstone/natureStory/donationPage.dart';
 
 import 'package:capstone/style.dart';
 
-import '../nature/route.dart';
+import '../natureStory/route.dart';
 
 class NaturePage extends StatefulWidget{
   @override
