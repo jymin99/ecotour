@@ -132,7 +132,6 @@ class _MainCalendarState extends State<MainCalendar> {
             },
             calendarStyle: CalendarStyle(
 
-
               // 오늘 날짜의 스타일 설정
               // todayTextStyle: TextStyle(fontSize: 15, color: Colors.white),
 
@@ -163,7 +162,11 @@ class _MainCalendarState extends State<MainCalendar> {
               cellMargin : const EdgeInsets.all(5.5),
               cellPadding : const EdgeInsets.all(0.0),
 
+
             ),
+
+
+
 
           ),
         ],
