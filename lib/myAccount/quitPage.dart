@@ -51,25 +51,40 @@ class QuitPageDetail extends StatefulWidget {
   State<QuitPageDetail> createState() => _QuitPageDetailState();
 }
 
-
 class _QuitPageDetailState extends State<QuitPageDetail> {
 
+  // Add this method to show a confirmation dialog
+  Future<void> _showConfirmationDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(child: Text('회원 탈퇴 확인')),
+          content: Text('정말 탈퇴하시겠습니까?\n탈퇴시 모든 정보는 사라집니다.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('취소'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Clear all schedules from the Drift database
+                await GetIt.I<LocalDatabase>().deleteAllScheduleIds();
 
+                // Update the UI of the PlanPage (assuming PlanPage is the calendar page)
+                setState(() {});
 
-  // Add this method to handle quitting
-  void _handleQuit() async {
-    // Clear all schedules from the Drift database
-    await GetIt.I<LocalDatabase>().deleteAllScheduleIds();
-
-    // Update the UI of the PlanPage (assuming PlanPage is the calendar page)
-    setState(() {});
-
-    // Navigate back to the previous screen or any desired screen
-    Navigator.of(context).pop();
-
-
-    // Navigate to LoginPage
-    Get.offAll(() => LoginPage());
+                // Navigate to LoginPage
+                Get.offAll(() => LoginPage());
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -77,7 +92,7 @@ class _QuitPageDetailState extends State<QuitPageDetail> {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: _handleQuit,
+          onPressed: _showConfirmationDialog, // Call the confirmation dialog
           child: Text('회원 탈퇴'),
         ),
       ),
