@@ -95,7 +95,7 @@ class StoryModal extends StatelessWidget {
                 Image.network(
                   assetPath,
                   width: 400,
-                  height: 300,
+                  height: 500,
                   fit: BoxFit.cover,
                 ),
                 const SizedBox(height: 10),

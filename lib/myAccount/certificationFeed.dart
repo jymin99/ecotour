@@ -1,10 +1,6 @@
 import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:capstone/models/post.dart';
 import 'package:capstone/style.dart';
 
@@ -18,7 +14,7 @@ class FeedPage extends StatelessWidget {
         preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
               color: AppColor.deepGreen,
             ),
@@ -28,7 +24,7 @@ class FeedPage extends StatelessWidget {
           ),
           elevation: 1,
           backgroundColor: Colors.white,
-          title: Text(
+          title: const Text(
             '나의 기여',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -39,7 +35,7 @@ class FeedPage extends StatelessWidget {
       centerTitle: true,
         ),
       ),
-      body: CertificationFeed(),
+      body: const CertificationFeed(),
     );
   }
 }
@@ -47,16 +43,6 @@ class FeedPage extends StatelessWidget {
 
 
 final List<Feed> feeds=[
-  Feed(
-    id: "0",
-    title:"test",
-    link:"assets/images/",
-  ),
-  Feed(
-    id: "1",
-    title:"test",
-    link:"assets/images/",
-  )
 ];
 
 class CertificationFeed extends StatefulWidget {
@@ -78,7 +64,7 @@ class _CertificationFeedState extends State<CertificationFeed> {
           );
         },
         backgroundColor: AppColor.deepGreen,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.only(
@@ -86,7 +72,7 @@ class _CertificationFeedState extends State<CertificationFeed> {
           left: 10.0,
           right: 10.0,
         ),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount:3,
           mainAxisSpacing:10,
           crossAxisSpacing:10,
@@ -232,7 +218,7 @@ class _ImageUploadState extends State<ImageUpload> {
                         child: imagePath!=null
                           ? Image.file(File(imagePath!),
                         width: 200,height: 200)
-                            :Column(
+                            :const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
