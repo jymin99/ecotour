@@ -72,8 +72,8 @@ class StoryModal extends StatelessWidget {
       children: [
         const SizedBox(height: 80),
         Container(
-          height: 580,
-          width: 380,
+          height: 1000,
+          width: 700,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -95,7 +95,7 @@ class StoryModal extends StatelessWidget {
                 Image.network(
                   assetPath,
                   width: 400,
-                  height: 200,
+                  height: 300,
                   fit: BoxFit.cover,
                 ),
                 const SizedBox(height: 10),
