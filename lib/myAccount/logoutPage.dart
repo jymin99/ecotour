@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/style.dart';
+import 'package:get/get.dart';
+import '../login.dart';
 
 class LogoutPage extends StatelessWidget {
   const LogoutPage({super.key});
@@ -34,7 +36,6 @@ class LogoutPage extends StatelessWidget {
   }
 }
 
-
 class LogoutDetail extends StatefulWidget {
   const LogoutDetail({super.key});
 
@@ -43,10 +44,23 @@ class LogoutDetail extends StatefulWidget {
 }
 
 class _LogoutDetailState extends State<LogoutDetail> {
+  // Add this method to handle logout
+  void _handleLogout() async {
+    // Perform any additional logout logic if needed
+
+    // Navigate to LoginPage
+    Get.offAll(() => LoginPage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      body: Center(
+        child: ElevatedButton(
+          onPressed: _handleLogout,
+          child: Text('로그아웃'),
+        ),
+      ),
     );
   }
 }

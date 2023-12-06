@@ -51,13 +51,11 @@ final List<Feed> feeds=[
     id: "0",
     title:"test",
     link:"assets/images/",
-    likeCount:0,
   ),
   Feed(
     id: "1",
     title:"test",
     link:"assets/images/",
-    likeCount:0,
   )
 ];
 
@@ -146,25 +144,6 @@ class _FeedDetailState extends State<FeedDetail> {
                 fit: BoxFit.cover,
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  icon: Icon(
-                    isLiked?Icons.thumb_up:Icons.thumb_up_outlined,
-                  ),
-                  onPressed: (){
-                    setState(() {
-                      isLiked=!isLiked;
-                    });
-                  },
-                ),
-                Text(
-                  widget.feed.likeCount.toString(),
-                ),
-              ],
-            ),
-
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+// drift_database.dart
+
 import 'dart:ffi';
 
 import 'package:capstone/schedule/model/schedule.dart';
@@ -39,6 +41,24 @@ class LocalDatabase extends _$LocalDatabase{
 
   Future<int> removeSchedule(int id) =>
       (delete(schedules)..where((tbl)=>tbl.id.equals(id))).go();
+
+  // // 모든 schedule.id를 삭제하는 메서드
+  // Future<void> deleteAllScheduleIds() async {
+  //   // 데이터베이스에서 모든 schedule.id를 가져옵니다.
+  //   List<int?> scheduleIds = await (select(schedules)
+  //     ..addColumns([schedules.id])
+  //   ).get().then((rows) => rows.map((row) => row.id).toList());
+  //
+  //   // 가져온 schedule.id를 반복하여 각각 삭제합니다.
+  //   for (int? id in scheduleIds) {
+  //     await removeSchedule(id!);
+  //   }
+  // }
+
+  // 추가: 모든 schedule.id를 삭제하는 메서드
+  Future<void> deleteAllScheduleIds() async {
+    await (delete(schedules)).go();
+  }
 
 
   @override
