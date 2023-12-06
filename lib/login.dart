@@ -1,5 +1,3 @@
-// login.dart
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +8,10 @@ import 'package:capstone/style.dart';
 // import 'path_to_auth_service/auth_service.dart'; // Adjust the path accordingly
 void main() {
   runApp(MyApp());
+
 }
+
+String? loginMethod;
 
 class MyApp extends StatelessWidget {
   final AuthService authController = Get.put(AuthService());
@@ -30,6 +31,15 @@ class AuthService extends GetxController {
 
   Rx<User?> user = Rx<User?>(null);
 
+  // // Add a variable to track the login method
+  // RxString loginMethod = RxString('');
+
+  // Add this method to update the login method
+  void updateLoginMethod(String method) {
+    loginMethod = method;
+  }
+
+
   @override
   void onInit() {
     super.onInit();
@@ -40,6 +50,8 @@ class AuthService extends GetxController {
   Future<void> signInAnonymously() async {
     try {
       await _auth.signInAnonymously();
+      // Set the login method when anonymous login is successful
+      loginMethod= 'Anonymous';
     } catch (e) {
       print('Anonymous login failed: $e');
     }
@@ -59,6 +71,9 @@ class AuthService extends GetxController {
       );
 
       await _auth.signInWithCredential(googleAuthCredential);
+
+      // Set the login method when Google login is successful
+      loginMethod = 'Google';
 
       // 로그인 성공 후 사용자 정보를 Firestore에 저장
       User? user = _auth.currentUser;
@@ -85,6 +100,8 @@ class AuthService extends GetxController {
 
   Future<void> signOut() async {
     await _auth.signOut();
+    // Reset the login method when signing out
+    loginMethod = '';
   }
 }
 
@@ -126,6 +143,11 @@ class LoginPage extends StatelessWidget {
                     onPressed: () async {
                       await authController.signInWithGoogle();
                       // 구글 로그인 성공 후 MainPage로 이동
+
+                      // loginMethod를 'Google'로 업데이트
+                      authController.updateLoginMethod('Google');
+
+
                       Get.to(() => MainPage());
                     },
                     child: Row(

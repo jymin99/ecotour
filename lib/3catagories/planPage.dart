@@ -1,6 +1,7 @@
 // planPage.dart
 import 'package:get_it/get_it.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
+import 'package:capstone/login.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,6 +50,7 @@ class _PlanPageState extends State<PlanPage> {
     //   dates = dates.toSet().toList();
     //   print('All schedule dates: $dates');
     // });
+    print('login type: ${loginMethod}');
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

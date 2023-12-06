@@ -16,6 +16,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:capstone/schedule/database/drift_database.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter/services.dart';
+import 'package:capstone/myAccount/accountInfo.dart';
 
 void main()async{
   final String apiKey = "e5a748a8-d308-41d2-b844-a1608b770f39";

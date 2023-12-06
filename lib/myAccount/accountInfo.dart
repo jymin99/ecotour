@@ -43,7 +43,6 @@ class _AccountInfoState extends State<AccountInfo> {
   }
 }
 
-
 class AccountDetail extends StatefulWidget {
   const AccountDetail({super.key});
 
@@ -78,34 +77,23 @@ class _AccountDetailState extends State<AccountDetail> {
                 }
 
                 // 사용자가 익명 로그인한 경우
-                if (authController.user.value!.isAnonymous) {
-                  return Text(
-                    '계정: 익명 로그인',
-                    style: TextStyle(fontSize: 16),
+                if (loginMethod=='Anonymous') {
+                  return Column(
+                    children: [
+                      Text(
+                        '계정: 익명 로그인',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
                   );
                 }
 
                 // 사용자가 Google 로그인한 경우
-                if (authController.user.value!.providerData[0].providerId == 'google.com') {
+                if (loginMethod=='Google') {
                   return Column(
                     children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(authController.user.value!.photoURL ?? ''),
-                      ),
-                      SizedBox(height: 10),
                       Text(
                         '계정: Google 로그인',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        '이름: ${authController.user.value!.displayName}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        '이메일: ${authController.user.value!.email}',
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
