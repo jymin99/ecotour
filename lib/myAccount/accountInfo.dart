@@ -58,14 +58,6 @@ class _AccountDetailState extends State<AccountDetail> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              '계정 정보',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
             GetBuilder<AuthService>(
               builder: (authController) {
                 // 사용자가 로그인하지 않았을 때
@@ -81,8 +73,8 @@ class _AccountDetailState extends State<AccountDetail> {
                   return Column(
                     children: [
                       Text(
-                        '계정: 익명 로그인',
-                        style: TextStyle(fontSize: 16),
+                        '\'익명 로그인\' 상태입니다.',
+                        style: TextStyle(fontSize: 18),
                       ),
                     ],
                   );
