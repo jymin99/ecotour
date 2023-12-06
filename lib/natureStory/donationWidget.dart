@@ -19,6 +19,7 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
           },
           child: Container(
             height: 120,
+            width: MediaQuery.of(context).size.width-20,
             padding: const EdgeInsets.only(left: 20, right: 20),
             decoration: BoxDecoration(
               color: Colors.white,
