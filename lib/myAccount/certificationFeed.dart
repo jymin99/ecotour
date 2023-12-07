@@ -1,135 +1,179 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:capstone/models/post.dart';
+import 'package:flutter/material.dart';
 import 'package:capstone/style.dart';
 
-class FeedPage extends StatelessWidget {
-  const FeedPage({super.key});
+void main() {
+  runApp(MaterialApp(
+    home: FeedPage(),
+  ));
+}
+
+class FeedData {
+  final String title;
+  final File image;
+  final String content;
+
+  FeedData(this.title, this.image, this.content);
+}
+
+class FeedPage extends StatefulWidget {
+  const FeedPage({Key? key}) : super(key: key);
+
+  @override
+  State<FeedPage> createState() => _FeedPageState();
+}
+
+class _FeedPageState extends State<FeedPage> {
+  List<FeedData> feedList = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: AppColor.deepGreen,
-            ),
-            onPressed: (){
-              Navigator.of(context).pop();
-            },
-          ),
-          elevation: 1,
-          backgroundColor: Colors.white,
-          title: const Text(
-            '나의 기여',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "Lotte", fontSize: 25,
-              color: AppColor.deepGreen,
-          ),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-      centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColor.deepGreen,
+        title: const Text(
+          "나의 기여",
+          style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'lotte',
+              fontSize: 20,
+              fontWeight: FontWeight.normal),
         ),
       ),
-      body: const CertificationFeed(),
-    );
-  }
-}
-
-
-
-final List<Feed> feeds=[
-];
-
-class CertificationFeed extends StatefulWidget {
-  const CertificationFeed({super.key});
-
-  @override
-  State<CertificationFeed> createState() => _CertificationFeedState();
-}
-
-class _CertificationFeedState extends State<CertificationFeed> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton.small(
-        onPressed: (){
-          showDialog(
-              context: context,
-              builder: (_)=>const ImageUpload(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const FeedUpload()),
           );
+
+          if (result != null && result is FeedData) {
+            setState(() {
+              feedList.add(result);
+            });
+          }
         },
         backgroundColor: AppColor.deepGreen,
         child: const Icon(Icons.add),
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.only(
-          top:10.0,
-          left: 10.0,
-          right: 10.0,
-        ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount:3,
-          mainAxisSpacing:10,
-          crossAxisSpacing:10,
-          childAspectRatio:1,
-        ),
-        itemCount: feeds.length,
-        itemBuilder: (_,int index)=>GestureDetector(
-          //상세화면으로 이동
-        onTap:(){
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context)=>FeedDetail(
-                feed:feeds[index],
+      body: ListView.builder(
+        itemCount: feedList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              _showFeedDetail(context, feedList[index]);
+            },
+            child: Container(
+              margin: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                    child: Image.file(
+                      feedList[index].image,
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          feedList[index].title,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           );
         },
-      child: Image.asset(
-        feeds[index].link,
-        fit:BoxFit.cover,
       ),
-      ),
-      ),
+    );
+  }
 
+  void _showFeedDetail(BuildContext context, FeedData feedData) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FeedDetailPage(feedData: feedData),
+      ),
     );
   }
 }
 
-class FeedDetail extends StatefulWidget {
-  const FeedDetail({super.key,required this.feed,});
-  final Feed feed;
+class FeedDetailPage extends StatelessWidget {
+  final FeedData feedData;
 
-  @override
-  State<FeedDetail> createState() => _FeedDetailState();
-}
+  const FeedDetailPage({Key? key, required this.feedData}) : super(key: key);
 
-class _FeedDetailState extends State<FeedDetail> {
-  bool isLiked=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.only(
-            top: 10.0,
-            left: 10.0,
-            right: 10.0,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColor.deepGreen,
+        title: Text(
+          feedData.title,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'lotte',
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
           ),
-          physics: const ClampingScrollPhysics(),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.asset(
-                widget.feed.link,
-                fit: BoxFit.cover,
-              ),
-            ),
+            Image.file(feedData.image),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(feedData.content),
+            )
           ],
         ),
       ),
@@ -137,107 +181,145 @@ class _FeedDetailState extends State<FeedDetail> {
   }
 }
 
-
-
-class ImageUpload extends StatefulWidget {
-  const ImageUpload({super.key});
+class FeedUpload extends StatefulWidget {
+  const FeedUpload({Key? key}) : super(key: key);
 
   @override
-  State<ImageUpload> createState() => _ImageUploadState();
+  State<FeedUpload> createState() => _FeedUploadState();
 }
 
-class _ImageUploadState extends State<ImageUpload> {
-  String? imagePath;
+class _FeedUploadState extends State<FeedUpload> {
+  File? _image;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
 
-  Future<String?>selectImage() async{
-    final picker=ImagePicker();
-    XFile? pickImage=await picker.pickImage(
-      source: ImageSource.gallery,
-    );
-    if(pickImage==null) return null;
-    return pickImage.path;
+  Future _getImage() async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.only(
-        top:100
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('인증피드 업로드', textAlign: TextAlign.center,),
-            backgroundColor: AppColor.deepGreen,
-            leading: IconButton(
-              icon: const Text('취소'),
-              padding: EdgeInsets.zero,
-              onPressed: (){
-                Navigator.of(context).pop();
-              },
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: const Text('저장'),
-                padding: EdgeInsets.zero,
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          ),
-          body:Container(
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColor.deepGreen,
+        title: const Text(
+          "기록 올리기",
+          style: TextStyle(
             color: Colors.white,
-            child: Center(
-              child: SingleChildScrollView(
-                child: GestureDetector(
-                  onTap:(){
-                    selectImage().then((String? path){
-                      if(path==null) return;
-                      setState(() {
-                        imagePath=path;
-                      });
-                });
-                },
-                  behavior: HitTestBehavior.translucent,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 300,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          border: Border.all(
-                            width: 0.5,
-                            color: const Color(0xFFAAAAAA),
-                          ),
-                        ),
-                        child: imagePath!=null
-                          ? Image.file(File(imagePath!),
-                        width: 200,height: 200)
-                            :const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.upload,
-                              size: 50,
-                            ),
-                            Text('인증피드 업로드')
-                          ],
-                        )
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            fontFamily: 'lotte',
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
           ),
         ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    labelStyle: TextStyle(color: AppColor.deepGreen),
+                    hintText: 'Enter a title',
+                    hintStyle: TextStyle(color: AppColor.deepGreen),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColor.deepGreen), // 활성 상태의 테두리 색상 지정
+                    ),// hintText 색상 지정// labelText 색상 지정
+                  ),
+
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(AppColor.deepGreen),
+                  ),
+                  onPressed: _getImage,
+                  child: Text('Pick Image'),
+                ),
+
+                SizedBox(height: 16),
+                _image != null
+                    ? Image.file(
+                  _image!,
+                  height: 150,
+                )
+                    : Container(),
+                SizedBox(height: 16),
+                TextField(
+                  controller: _contentController,
+                  decoration: InputDecoration(
+                    labelText: 'Content',
+                    labelStyle: TextStyle(color: AppColor.deepGreen),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: AppColor.deepGreen,width: 10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: AppColor.deepGreen, width: 2.0), // 초점이 맞춰진 상태에서의 테두리 스타일 설정
+                    ),
+                  ),
+                  maxLines: null,
+                ),
+                SizedBox(height: 16),
+                Container(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_image != null &&
+                          _titleController.text.isNotEmpty &&
+                          _contentController.text.isNotEmpty) {
+                        FeedData newFeed = FeedData(
+                          _titleController.text,
+                          _image!,
+                          _contentController.text,
+                        );
+                        Navigator.pop(context, newFeed);
+                      } else {
+                        // Handle case when image, title, or content is not provided
+                        print('Please fill in all fields.');
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(AppColor.deepGreen),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0),),
+                      ),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+                    ),
+                    child: const Text(
+                      'Upload Feed',
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
