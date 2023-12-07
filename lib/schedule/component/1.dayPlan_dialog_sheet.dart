@@ -150,26 +150,46 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Text('No favorites available.');
+                    return Text('저장된 즐겨찾기 장소가 없습니다.');
                   } else {
                     List<String> favorites = snapshot.data!;
                     return ListView.builder(
                       shrinkWrap: true,
                       itemCount: favorites.length,
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(favorites[index]),
-                          onTap: () {
-                            // Update formData.place when a favorite is tapped
+                        return Dismissible(
+                          key: Key(favorites[index]),
+                          onDismissed: (direction) {
+                            // Implement the logic to remove the item from the favorites list
                             setState(() {
-                              formData.place = favorites[index];
-                              _locationController.text = favorites[index];
+                              favorites.removeAt(index);
+                              GetIt.I<LocalDatabase>().updateFavorites(favorites);
                             });
-                            Navigator.pop(context); // Close the bottom sheet
                           },
+                          background: Container(
+                            color: Colors.red, // Set the background color when swiping
+                            alignment: Alignment.centerRight,
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: ListTile(
+                            title: Text(favorites[index]),
+                            onTap: () {
+                              // Update formData.place when a favorite is tapped
+                              setState(() {
+                                formData.place = favorites[index];
+                                _locationController.text = favorites[index];
+                              });
+                              Navigator.pop(context); // Close the bottom sheet
+                            },
+                          ),
                         );
                       },
                     );
+
                   }
                 },
               ),

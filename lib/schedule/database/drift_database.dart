@@ -81,6 +81,10 @@ class LocalDatabase extends _$LocalDatabase{
     return 1; // 무엇이든 상관 없는 값을 반환합니다.
   }
 
+  Future<void> deleteAllFavorites() async {
+    await (delete(favorites)).go();
+  }
+
   @override
   int get schemaVersion => 3;
   //1부터 시작. 테이블 변화가 있을 시 1씩 올려줘서 구조 변경사항 인지시킴.

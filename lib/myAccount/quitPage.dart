@@ -73,6 +73,8 @@ class _QuitPageDetailState extends State<QuitPageDetail> {
                 // Clear all schedules from the Drift database
                 await GetIt.I<LocalDatabase>().deleteAllScheduleIds();
 
+                await GetIt.I<LocalDatabase>().deleteAllFavorites();
+
                 // Update the UI of the PlanPage (assuming PlanPage is the calendar page)
                 setState(() {});
 
