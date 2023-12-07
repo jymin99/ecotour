@@ -30,10 +30,11 @@ Widget buildStoryContainer(BuildContext context, String assetPath, String title,
               children: [
                 Image.network(
                   assetPath,
-                  width: 150,
-                  height: 150,
+                  width: 100,
+                  height: 100,
                   fit: BoxFit.cover,
                 ),
+                SizedBox(width: 10,),
 
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +43,7 @@ Widget buildStoryContainer(BuildContext context, String assetPath, String title,
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 15,
+                        fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -72,8 +73,8 @@ class StoryModal extends StatelessWidget {
       children: [
         const SizedBox(height: 80),
         Container(
-          height: 700,
-          width: 450,
+          height: 500,
+          width: 350,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),

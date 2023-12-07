@@ -119,7 +119,7 @@ class _FeedPageState extends State<FeedPage> {
           }
         },
         backgroundColor: AppColor.deepGreen,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,color: Colors.white,),
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -313,10 +313,10 @@ class _FeedUploadState extends State<FeedUpload> {
                     backgroundColor: MaterialStateProperty.all<Color>(AppColor.deepGreen),
                   ),
                   onPressed: _getImage,
-                  child: const Text('Pick Image'),
+                  child: const Text('Pick Image',style: TextStyle(color: Colors.white),),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 5),
                 _image != null
                     ? Image.file(
                   _image!,
@@ -366,11 +366,11 @@ class _FeedUploadState extends State<FeedUpload> {
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0),),
                       ),
-                      minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(200, 40)),
                     ),
                     child: const Text(
                       'Upload Feed',
-                      style: TextStyle(fontSize: 18.0),
+                      style: TextStyle(fontSize: 15.0,color: Colors.white),
                     ),
                   ),
                 ),

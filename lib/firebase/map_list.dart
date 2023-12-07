@@ -86,7 +86,7 @@ class FireService {
     CollectionReference<Map<String, dynamic>> collectionReference =
     FirebaseFirestore.instance.collection("cafe");
     QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await collectionReference.orderBy("shop").get();
+    await collectionReference.orderBy("name").get();
 
     List<Map<String, dynamic>> cafe = [];
     for (var doc in querySnapshot.docs) {

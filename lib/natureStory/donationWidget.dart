@@ -88,8 +88,8 @@ class StoryModal extends StatelessWidget {
       children: [
         const SizedBox(height: 80),
         Container(
-          height: 700,
-          width: 450,
+          height: 500,
+          width: 350,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),

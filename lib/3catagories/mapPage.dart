@@ -17,12 +17,10 @@ import 'package:capstone/evcar/ev.dart';
 import 'package:capstone/evcar/ev_repository.dart';
 import 'package:capstone/accommodation/accommodation.dart';
 import 'package:capstone/accommodation/accommodation_repository.dart';
-
 import '../schedule/database/drift_database.dart';
 import '../style.dart';
 
 List<String> favorites=[];
-
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -34,13 +32,12 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   // Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController mapController;
-  TextEditingController _controller = TextEditingController();
-  // TextField에 입력된 값을 가져오거나 TextField에 입력된 값이 변경될 때 사용
 
   double latitude = 37.553836;
   double longitude = 126.969652;
 
   Set<Marker> markers = {};
+  Set<Marker> newMarkerSet = {};
 
   bool areMarkersVisible = false;
   bool areBikeMarkersVisible = false; // 새로 추가된 부분
@@ -49,6 +46,7 @@ class _MapPageState extends State<MapPage> {
   bool areEcoShopMarkersVisible = false;
   bool areRefillMarkersVisible = false;
   bool areStoreMarkersVisible = false;
+  bool areFavoriteMarkerVisible = false;
 
   @override
   void initState() {
@@ -93,7 +91,7 @@ class _MapPageState extends State<MapPage> {
         });
       }
     } catch(e) {
-      print('Error loading accommodation list: $e');
+      //print('Error loading accommodation list: $e');
     }
   }
 
@@ -102,13 +100,13 @@ class _MapPageState extends State<MapPage> {
     Set<Marker> newMarkers = cafes.map((cafe) {
       final BitmapDescriptor markerIcon = _getMarkerIcon();
       return Marker(
-          markerId: MarkerId('cafe${cafe['shop'].toString()}'),
+          markerId: MarkerId('cafe${cafe['name'].toString()}'),
           position: LatLng(
               cafe['latitude'] as double, cafe['longitude'] as double),
-          infoWindow: InfoWindow(title: cafe['shop'].toString()),
+          infoWindow: InfoWindow(title: cafe['name'].toString()),
           icon: markerIcon,
           onTap:(){
-            _onCafeMarkerTapped(MarkerId('cafe${cafe['shop']}'));
+            _onCafeMarkerTapped(MarkerId('cafe${cafe['name']}'));
           }
       );
     }).toSet();
@@ -142,8 +140,9 @@ class _MapPageState extends State<MapPage> {
           markers.addAll(newMarkers);
         });
       }
-    } catch (e) {
-      print('Error loading bike stations: $e');
+    }
+    catch (e) {
+      //print('Error loading bike stations: $e');
       // 적절한 오류 처리 추가
     }
   }
@@ -174,7 +173,7 @@ class _MapPageState extends State<MapPage> {
         });
       }
     } catch(e) {
-      print('Error loading ev list: $e');
+      //print('Error loading ev list: $e');
     }
   }
 
@@ -222,6 +221,15 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
+  // Future<void> _showNewMarkers() async {
+  //   final BitmapDescriptor markerIcon = _getMarkerForFavorite();
+  //   final Marker newMarker = Marker(
+  //     markerId: MarkerId('new${newMarkerSet.length + 1}'),
+  //     position: LatLng('new${newMarkerSet}'),
+  //     icon: markerIcon,
+  //   );
+  // }
+
   Future<void> loadStoreMarkers() async {
     List<Map<String, dynamic>> store = await FireService().getStore();
     Set<Marker> newMarkers = store.map((store) {
@@ -242,6 +250,14 @@ class _MapPageState extends State<MapPage> {
       if (!areStoreMarkersVisible) markers.clear();
       markers.addAll(newMarkers);
     });
+  }
+
+  BitmapDescriptor _getMarkerForFavorite() {
+    if(areFavoriteMarkerVisible) {
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+    }else{
+      return BitmapDescriptor.fromBytes(Uint8List(0));
+    }
   }
 
   BitmapDescriptor _getMarkerIcon() {
@@ -413,7 +429,7 @@ class _MapPageState extends State<MapPage> {
 
     Position position = await Geolocator.getCurrentPosition();
 
-    print("Received location: ${position.latitude}, ${position.longitude}");
+    //print("Received location: ${position.latitude}, ${position.longitude}");
 
     setState(() {
       // markers.clear();
@@ -426,7 +442,7 @@ class _MapPageState extends State<MapPage> {
       // );
     });
 
-    print("Set new location: $latitude, $longitude");
+    //print("Set new location: $latitude, $longitude");
 
     mapController.moveCamera(
       CameraUpdate.newLatLng(LatLng(latitude, longitude)),
@@ -497,10 +513,21 @@ class _MapPageState extends State<MapPage> {
                               // Update the Favorites table in the database
                               await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
 
+
                               // Retrieve and print the list of favorites
                               List<String> favoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
 
                               print('Favorites List: $favoritesList');
+
+                              newMarkerSet.add(
+                                Marker(
+                                  markerId: MarkerId(tappedAccommodation.title),
+                                  //'new${newMarkerSet.length + 1}'
+                                  position: LatLng(tappedAccommodation.mapx as double, tappedAccommodation.mapy as double),
+                                  // Customize other properties if needed
+                                ),
+
+                              );
 
                               Navigator.pop(context);
                             },
@@ -607,6 +634,15 @@ class _MapPageState extends State<MapPage> {
                               // 데이터베이스에 업데이트된 favorites 리스트 반영
                               await GetIt.I<LocalDatabase>().updateFavorites(favorites);
 
+                              newMarkerSet.add(
+                                Marker(
+                                  markerId: MarkerId(tappedEv.csNm),
+                                  //'new${newMarkerSet.length + 1}'
+                                  position: LatLng(tappedEv.lat as double, tappedEv.longi as double),
+                                  // Customize other properties if needed
+                                ),
+                              );
+
                               Navigator.pop(context);
                             },
                             child: Text(
@@ -658,6 +694,7 @@ class _MapPageState extends State<MapPage> {
           builder: (BuildContext context) {
             // print('Modal Bottom Sheet BuildContext hashCode: ${context.hashCode}');
             return Container(
+              //height: MediaQuery.of(context).size.height,
               height: 250,
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
@@ -680,7 +717,7 @@ class _MapPageState extends State<MapPage> {
                     SizedBox(height: 10.0),
                     Text('Address: ${tappedCycle.staAdd1}'),
                     SizedBox(height: 8.0),
-                    Text('         ${tappedCycle.staAdd2}'),
+                    Text('Location: ${tappedCycle.staAdd2}'),
                     SizedBox(height: 8.0),
                     Text('Number of bike hold: ${tappedCycle.holdNum}'),
                     SizedBox(height: 20.0),
@@ -705,6 +742,15 @@ class _MapPageState extends State<MapPage> {
                               }
                               // Update the Favorites table in the database
                               await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
+
+                              newMarkerSet.add(
+                                Marker(
+                                  markerId: MarkerId(tappedCycle.rentNm),
+                                  //'new${newMarkerSet.length + 1}'
+                                  position: LatLng(tappedCycle.staLat as double, tappedCycle.staLong as double),
+                                  // Customize other properties if needed
+                                ),
+                              );
 
                               Navigator.pop(context);
                             },
@@ -749,7 +795,7 @@ class _MapPageState extends State<MapPage> {
     // 탭한 마커에 대한 카페 데이터 찾기
     Map<String, dynamic>? tappedCafe;
     for (var cafe in cafeData) {
-      if ("cafe${cafe['shop'].toString()}" == cafeId) {
+      if ("cafe${cafe['name'].toString()}" == cafeId) {
         tappedCafe = cafe;
         break;
       }
@@ -773,7 +819,7 @@ class _MapPageState extends State<MapPage> {
               child: Column(
                 children: [
                   Text(
-                    tappedCafe?['shop'],
+                    tappedCafe?['name'],
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20.0,
@@ -781,11 +827,9 @@ class _MapPageState extends State<MapPage> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 10.0),
-                  Text('Name: ${tappedCafe?['shop']}'),
+                  Text('Address: ${tappedCafe?['address']}'),
                   SizedBox(height: 8.0),
-                  Text('latitude: ${tappedCafe?['latitude']}'),
-                  SizedBox(height: 8.0),
-                  Text('longitude: ${tappedCafe?['longitude']}'),
+                  Text('tel: ${tappedCafe?['tel']}'),
                   SizedBox(height: 20.0),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -800,14 +844,23 @@ class _MapPageState extends State<MapPage> {
                             // Your favorite icon button action
                             List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
 
-                            if (currentFavoritesList.contains('${tappedCafe?['shop']}')) {
-                              currentFavoritesList.remove('${tappedCafe?['shop']}');
-                              currentFavoritesList.insert(0, '${tappedCafe?['shop']}');
+                            if (currentFavoritesList.contains('${tappedCafe?['name']}')) {
+                              currentFavoritesList.remove('${tappedCafe?['name']}');
+                              currentFavoritesList.insert(0, '${tappedCafe?['name']}');
                             } else {
-                              currentFavoritesList.insert(0, '${tappedCafe?['shop']}');
+                              currentFavoritesList.insert(0, '${tappedCafe?['name']}');
                             }
                             // Update the Favorites table in the database
                             await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
+
+                            newMarkerSet.add(
+                              Marker(
+                                markerId: MarkerId(tappedCafe?['name'] ?? ''),
+                                //'new${newMarkerSet.length + 1}'
+                                position: LatLng(tappedCafe?['latitude'] as double ?? 0.0, tappedCafe?['longitude'] as double ?? 0.0),
+                                // Customize other properties if needed
+                              ),
+                            );
 
                             Navigator.pop(context);
                           },
@@ -894,7 +947,6 @@ class _MapPageState extends State<MapPage> {
                             backgroundColor: Colors.white,
                           ),
                           onPressed: () async {
-                            addToPlan(tappedEcoShop);
                             // Your favorite icon button action
                             List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
 
@@ -907,7 +959,14 @@ class _MapPageState extends State<MapPage> {
                             // Update the Favorites table in the database
                             await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
 
-
+                            newMarkerSet.add(
+                              Marker(
+                                markerId: MarkerId(tappedEcoShop?['title'] ?? ''),
+                                //'new${newMarkerSet.length + 1}'
+                                position: LatLng(tappedEcoShop?['latitude'] as double ?? 0.0, tappedEcoShop?['longitude'] as double ?? 0.0),
+                                // Customize other properties if needed
+                              ),
+                            );
 
                             Navigator.pop(context);
                           },
@@ -994,7 +1053,6 @@ class _MapPageState extends State<MapPage> {
                             backgroundColor: Colors.white,
                           ),
                           onPressed: () async {
-                            addToPlan(tappedRefill);
                             // Your favorite icon button action
 
                             List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
@@ -1008,6 +1066,14 @@ class _MapPageState extends State<MapPage> {
                             // Update the Favorites table in the database
                             await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
 
+                            newMarkerSet.add(
+                              Marker(
+                                markerId: MarkerId(tappedRefill?['title'] ?? ''),
+                                //'new${newMarkerSet.length + 1}'
+                                position: LatLng(tappedRefill?['latitude'] as double ?? 0.0, tappedRefill?['longitude'] as double ?? 0.0),
+                                // Customize other properties if needed
+                              ),
+                            );
 
                             Navigator.pop(context);
                           },
@@ -1094,7 +1160,6 @@ class _MapPageState extends State<MapPage> {
                             backgroundColor: Colors.white,
                           ),
                           onPressed: () async {
-                            addToPlan(tappedStore);
                             // Your favorite icon button action
                             List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
 
@@ -1107,6 +1172,14 @@ class _MapPageState extends State<MapPage> {
                             // Update the Favorites table in the database
                             await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
 
+                            newMarkerSet.add(
+                              Marker(
+                                markerId: MarkerId(tappedStore?['title'] ?? ''),
+                                //'new${newMarkerSet.length + 1}'
+                                position: LatLng(tappedStore?['latitude'] as double ?? 0.0, tappedStore?['longitude'] as double ?? 0.0),
+                                // Customize other properties if needed
+                              ),
+                            );
 
                             Navigator.pop(context);
                           },
@@ -1138,23 +1211,18 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  // Add to Plan 기능을 수행하는 함수
-  void addToPlan(Map<String, dynamic>? store) {
-    // 여기서 store를 즐겨찾기에 추가하는 작업을 수행
-    if (store != null) {
-      print('Added to Plan: ${store['name']}');
-      // 여기에 실제로 즐겨찾기에 추가하는 로직을 구현
-      // 예: 로컬 상태 업데이트 또는 데이터베이스에 추가
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return
       Scaffold(
         floatingActionButton: FloatingActionButton(  // ➊ 새 일정 버튼
           backgroundColor: AppColor.yellowGreen,
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              markers.clear();
+              markers.addAll(newMarkerSet);
+            });
+          },
           child: Icon(
             Icons.star,
             color: Colors.black,
@@ -1162,7 +1230,7 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             //crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -1173,8 +1241,8 @@ class _MapPageState extends State<MapPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 50.0,
-                          height: 70.0,
+                          width: 45.0,
+                          height: 56.0,
                           child: TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -1198,7 +1266,7 @@ class _MapPageState extends State<MapPage> {
                                   '숙소',
                                   style: TextStyle(
                                     fontFamily: "Gy",
-                                    fontSize: 9.0,
+                                    fontSize: 7.0,
                                     color: Colors.black,
                                     // Add any additional text style properties here
                                   ),
@@ -1232,8 +1300,8 @@ class _MapPageState extends State<MapPage> {
                         //   ),
                         // ),
                         Container(
-                          width: 50.0,
-                          height: 70.0,
+                          width: 45.0,
+                          height: 56.0,
                           child: TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
@@ -1265,7 +1333,7 @@ class _MapPageState extends State<MapPage> {
                                   '음식점',
                                   style: TextStyle(
                                     fontFamily: "Gy",
-                                    fontSize: 9.0,
+                                    fontSize: 7.0,
                                     color: Colors.black,
                                     // Add any additional text style properties here
                                   ),
@@ -1298,8 +1366,8 @@ class _MapPageState extends State<MapPage> {
                         //   ),
                         // ),
                         Container(
-                          width: 50.0,
-                          height: 70.0,
+                          width: 45.0,
+                          height: 56.0,
                           child:TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
@@ -1326,7 +1394,7 @@ class _MapPageState extends State<MapPage> {
                                   '자전거',
                                   style: TextStyle(
                                     fontFamily: "Gy",
-                                    fontSize: 9.0,
+                                    fontSize: 7.0,
                                     color: Colors.black,
                                     // Add any additional text style properties here
                                   ),
@@ -1355,8 +1423,8 @@ class _MapPageState extends State<MapPage> {
                         //   ),
                         // ),
                         Container(
-                          width: 50.0,
-                          height: 70.0,
+                          width: 45.0,
+                          height: 56.0,
                           child:TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
@@ -1381,7 +1449,7 @@ class _MapPageState extends State<MapPage> {
                                   '전기차',
                                   style: TextStyle(
                                     fontFamily: "Gy",
-                                    fontSize: 9.0,
+                                    fontSize: 7.0,
                                     color: Colors.black,
                                     // Add any additional text style properties here
                                   ),
@@ -1408,8 +1476,8 @@ class _MapPageState extends State<MapPage> {
                         //   ),
                         // ),
                         Container(
-                          width: 50.0,
-                          height: 70.0,
+                          width: 45.0,
+                          height: 56.0,
                           child:TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
@@ -1434,7 +1502,7 @@ class _MapPageState extends State<MapPage> {
                                   '친환경',
                                   style: TextStyle(
                                     fontFamily: "Gy",
-                                    fontSize: 9.0,
+                                    fontSize: 7.0,
                                     color: Colors.black,
                                     // Add any additional text style properties here
                                   ),
@@ -1461,8 +1529,8 @@ class _MapPageState extends State<MapPage> {
                         //   ),
                         // ),
                         Container(
-                          width: 50.0,
-                          height: 70.0,
+                          width: 45.0,
+                          height: 56.0,
                           child:TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
@@ -1487,7 +1555,7 @@ class _MapPageState extends State<MapPage> {
                                   '리필샵',
                                   style: TextStyle(
                                     fontFamily: "Gy",
-                                    fontSize: 9.0,
+                                    fontSize: 7.0,
                                     color: Colors.black,
                                     // Add any additional text style properties here
                                   ),
@@ -1514,8 +1582,8 @@ class _MapPageState extends State<MapPage> {
                         //   ),
                         // ),
                         Container(
-                          width: 50.0,
-                          height: 70.0,
+                          width: 45.0,
+                          height: 56.0,
                           child:TextButton(
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
@@ -1540,7 +1608,7 @@ class _MapPageState extends State<MapPage> {
                                   '스토어',
                                   style: TextStyle(
                                     fontFamily: "Gy",
-                                    fontSize: 9.0,
+                                    fontSize: 7.0,
                                     color: Colors.black,
                                     // Add any additional text style properties here
                                   ),
@@ -1575,8 +1643,8 @@ class _MapPageState extends State<MapPage> {
                       child: SizedBox(
                         height:
                         // MediaQuery.of(context).size.height - 20,
-                        405.0,
-                        width: MediaQuery.of(context).size.width - 10,
+                        300.0,
+                        width: MediaQuery.of(context).size.width - 5,
                         child: GoogleMap(
                             initialCameraPosition: _kGooglePlex,
                             //initialCameraPosition: CameraPosition(target:LatLng(latitude, longitude)),
