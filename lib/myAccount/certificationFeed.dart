@@ -2,20 +2,41 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/style.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
+class FeedData {
+  final String title;
+  final String imagePath; // Store the image file path
+  final String content;
+
+  FeedData(this.title, this.imagePath, this.content);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'imagePath': imagePath,
+      'content': content,
+    };
+  }
+
+  factory FeedData.fromJson(Map<String, dynamic> json) {
+    return FeedData(
+      json['title'] as String,
+      json['imagePath'] as String,
+      json['content'] as String,
+    );
+  }
+}
+
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: FeedPage(),
   ));
 }
 
-class FeedData {
-  final String title;
-  final File image;
-  final String content;
-
-  FeedData(this.title, this.image, this.content);
-}
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
@@ -26,6 +47,39 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   List<FeedData> feedList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFeedData();
+  }
+
+  _loadFeedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedFeedData = prefs.getString('feedData');
+    if (savedFeedData != null) {
+      // Decode the JSON string into a list of maps
+      List<dynamic> decoded = jsonDecode(savedFeedData);
+
+      // Convert each map into a FeedData object
+      List<FeedData> loadedFeedList = List<FeedData>.from(decoded.map((json) => FeedData.fromJson(json)));
+
+      setState(() {
+        feedList = loadedFeedList;
+      });
+    }
+  }
+
+  _saveFeedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Convert feedList to a list of JSON objects
+    List<Map<String, dynamic>> feedListJson =
+    feedList.map((feed) => feed.toJson()).toList();
+    // Encode the list of JSON objects to a string
+    String feedListString = jsonEncode(feedListJson);
+
+    prefs.setString('feedData', feedListString);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +114,19 @@ class _FeedPageState extends State<FeedPage> {
           if (result != null && result is FeedData) {
             setState(() {
               feedList.add(result);
+              _saveFeedData();
             });
           }
         },
         backgroundColor: AppColor.deepGreen,
         child: const Icon(Icons.add),
       ),
-      body: ListView.builder(
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // 한 행에 3개의 열로 배열
+          crossAxisSpacing: 8.0, // 열 간격
+          mainAxisSpacing: 8.0, // 행 간격
+        ),
         itemCount: feedList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -74,9 +134,7 @@ class _FeedPageState extends State<FeedPage> {
               _showFeedDetail(context, feedList[index]);
             },
             child: Container(
-              margin: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0),
                 boxShadow: [
                   BoxShadow(
@@ -87,38 +145,14 @@ class _FeedPageState extends State<FeedPage> {
                   ),
                 ],
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    ),
-                    child: Image.file(
-                      feedList[index].image,
-                      height: 150,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          feedList[index].title,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                      ],
-                    ),
-                  ),
-                ],
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: Image.file(
+                  File(feedList[index].imagePath), // Use the file path to load the image
+                  height: 150,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           );
@@ -126,6 +160,7 @@ class _FeedPageState extends State<FeedPage> {
       ),
     );
   }
+
 
   void _showFeedDetail(BuildContext context, FeedData feedData) {
     Navigator.push(
@@ -158,7 +193,7 @@ class FeedDetailPage extends StatelessWidget {
         backgroundColor: AppColor.deepGreen,
         title: Text(
           feedData.title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontFamily: 'lotte',
             fontSize: 20,
@@ -169,7 +204,15 @@ class FeedDetailPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.file(feedData.image),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Image.file(
+                  File(feedData.imagePath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(feedData.content),
@@ -190,6 +233,7 @@ class FeedUpload extends StatefulWidget {
 
 class _FeedUploadState extends State<FeedUpload> {
   File? _image;
+  String? _imagePath; // Declare imagePath here
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
@@ -205,6 +249,19 @@ class _FeedUploadState extends State<FeedUpload> {
       }
     });
   }
+  Future<String> _saveImageToDirectory() async {
+    if (_image == null) {
+      return ''; // No image to save
+    }
+
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+    String imagePath = '${appDocumentsDirectory.path}/feed_image_${DateTime.now().millisecondsSinceEpoch}.png';
+
+    await _image!.copy(imagePath);
+
+    return imagePath;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +296,7 @@ class _FeedUploadState extends State<FeedUpload> {
               children: [
                 TextField(
                   controller: _titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Title',
                     labelStyle: TextStyle(color: AppColor.deepGreen),
                     hintText: 'Enter a title',
@@ -250,50 +307,52 @@ class _FeedUploadState extends State<FeedUpload> {
                   ),
 
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(AppColor.deepGreen),
                   ),
                   onPressed: _getImage,
-                  child: Text('Pick Image'),
+                  child: const Text('Pick Image'),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _image != null
                     ? Image.file(
                   _image!,
                   height: 150,
                 )
                     : Container(),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _contentController,
                   decoration: InputDecoration(
                     labelText: 'Content',
-                    labelStyle: TextStyle(color: AppColor.deepGreen),
+                    labelStyle: const TextStyle(color: AppColor.deepGreen),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: AppColor.deepGreen,width: 10.0),
+                      borderSide: const BorderSide(color: AppColor.deepGreen,width: 10.0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: AppColor.deepGreen, width: 2.0), // 초점이 맞춰진 상태에서의 테두리 스타일 설정
+                      borderSide: const BorderSide(color: AppColor.deepGreen, width: 2.0), // 초점이 맞춰진 상태에서의 테두리 스타일 설정
                     ),
                   ),
                   maxLines: null,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async{
+                      _imagePath = await _saveImageToDirectory();
                       if (_image != null &&
                           _titleController.text.isNotEmpty &&
-                          _contentController.text.isNotEmpty) {
+                          _contentController.text.isNotEmpty &&
+                          _imagePath != null) {
                         FeedData newFeed = FeedData(
                           _titleController.text,
-                          _image!,
+                          _imagePath!,
                           _contentController.text,
                         );
                         Navigator.pop(context, newFeed);
