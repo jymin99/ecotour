@@ -276,94 +276,96 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
 
                     SizedBox(height:10,),
 
-                    Row(
-                      children: [
-                        Column(
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              '시작 시간',
-                              // 'Selected Time: ${selectedTime.format(context)}',
-                              style: TextStyle(
+                    Center(
+                      child: Row(
+                        children: [
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                '시작 시간',
+                                // 'Selected Time: ${selectedTime.format(context)}',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+
+                              ),
+                              SizedBox(height: 5),
+                              InkWell(
+                                onTap: () => _selectStartTime(context),
+                                child: Container(
+                                  height: 45,
+                                  width: 137,
+                                  child: TextField(
+                                    enabled: false,
+                                    textAlign: TextAlign.center,
+                                    controller: TextEditingController(
+                                      text: formData.startTime.format(context),
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: '시작 시간',
+                                      labelStyle: TextStyle(fontSize: 14),
+                                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                                      filled: true,
+                                      fillColor: Colors.grey[200],
+                                      contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+
+                          SizedBox(width: 15,),
+
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                '종료 시간',
+                                // 'Selected Time: ${selectedTime.format(context)}',
+                                style: TextStyle(
                                   fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-
-                            ),
-                            SizedBox(height: 5),
-                            InkWell(
-                              onTap: () => _selectStartTime(context),
-                              child: Container(
-                                height: 45,
-                                width: 137,
-                                child: TextField(
-                                  enabled: false,
-                                  textAlign: TextAlign.center,
-                                  controller: TextEditingController(
-                                    text: formData.startTime.format(context),
-                                  ),
-                                  decoration: InputDecoration(
-                                    labelText: '시작 시간',
-                                    labelStyle: TextStyle(fontSize: 14),
-                                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                                    filled: true,
-                                    fillColor: Colors.grey[200],
-                                    contentPadding: EdgeInsets.symmetric(vertical: 5.0),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide.none,
+                              SizedBox(height: 5),
+                              InkWell(
+                                onTap: () => _selectEndTime(context),
+                                child: Container(
+                                  height: 45,
+                                  width: 137,
+                                  child: TextField(
+                                    enabled: false,
+                                    textAlign: TextAlign.center,
+                                    controller: TextEditingController(
+                                      text: formData.endTime.format(context),
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: '종료 시간',
+                                      labelStyle: TextStyle(fontSize: 14),
+                                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                                      filled: true,
+                                      fillColor: Colors.grey[200],
+                                      contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderSide: BorderSide.none,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-
-
-                        SizedBox(width: 15,),
-
-                        Column(
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              '종료 시간',
-                              // 'Selected Time: ${selectedTime.format(context)}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            InkWell(
-                              onTap: () => _selectEndTime(context),
-                              child: Container(
-                                height: 45,
-                                width: 137,
-                                child: TextField(
-                                  enabled: false,
-                                  textAlign: TextAlign.center,
-                                  controller: TextEditingController(
-                                    text: formData.endTime.format(context),
-                                  ),
-                                  decoration: InputDecoration(
-                                    labelText: '종료 시간',
-                                    labelStyle: TextStyle(fontSize: 14),
-                                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                                    filled: true,
-                                    fillColor: Colors.grey[200],
-                                    contentPadding: EdgeInsets.symmetric(vertical: 5.0),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
 
                     // Row(

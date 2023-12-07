@@ -1,5 +1,6 @@
 // quitPage.dart
 
+import 'package:capstone/3catagories/mapPage.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/style.dart';
 import 'package:get_it/get_it.dart';
@@ -74,6 +75,7 @@ class _QuitPageDetailState extends State<QuitPageDetail> {
                 await GetIt.I<LocalDatabase>().deleteAllScheduleIds();
 
                 await GetIt.I<LocalDatabase>().deleteAllFavorites();
+                print(favorites);
 
                 // Update the UI of the PlanPage (assuming PlanPage is the calendar page)
                 setState(() {});
