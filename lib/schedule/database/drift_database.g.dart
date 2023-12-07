@@ -443,12 +443,151 @@ class $SchedulesTable extends Schedules
   }
 }
 
+class Favorite extends DataClass implements Insertable<Favorite> {
+  final String favorites;
+  const Favorite({required this.favorites});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['favorites'] = Variable<String>(favorites);
+    return map;
+  }
+
+  FavoritesCompanion toCompanion(bool nullToAbsent) {
+    return FavoritesCompanion(
+      favorites: Value(favorites),
+    );
+  }
+
+  factory Favorite.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Favorite(
+      favorites: serializer.fromJson<String>(json['favorites']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'favorites': serializer.toJson<String>(favorites),
+    };
+  }
+
+  Favorite copyWith({String? favorites}) => Favorite(
+        favorites: favorites ?? this.favorites,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Favorite(')
+          ..write('favorites: $favorites')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => favorites.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Favorite && other.favorites == this.favorites);
+}
+
+class FavoritesCompanion extends UpdateCompanion<Favorite> {
+  final Value<String> favorites;
+  const FavoritesCompanion({
+    this.favorites = const Value.absent(),
+  });
+  FavoritesCompanion.insert({
+    required String favorites,
+  }) : favorites = Value(favorites);
+  static Insertable<Favorite> custom({
+    Expression<String>? favorites,
+  }) {
+    return RawValuesInsertable({
+      if (favorites != null) 'favorites': favorites,
+    });
+  }
+
+  FavoritesCompanion copyWith({Value<String>? favorites}) {
+    return FavoritesCompanion(
+      favorites: favorites ?? this.favorites,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (favorites.present) {
+      map['favorites'] = Variable<String>(favorites.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavoritesCompanion(')
+          ..write('favorites: $favorites')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FavoritesTable extends Favorites
+    with TableInfo<$FavoritesTable, Favorite> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FavoritesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _favoritesMeta = const VerificationMeta('favorites');
+  @override
+  late final GeneratedColumn<String> favorites = GeneratedColumn<String>(
+      'favorites', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [favorites];
+  @override
+  String get aliasedName => _alias ?? 'favorites';
+  @override
+  String get actualTableName => 'favorites';
+  @override
+  VerificationContext validateIntegrity(Insertable<Favorite> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('favorites')) {
+      context.handle(_favoritesMeta,
+          favorites.isAcceptableOrUnknown(data['favorites']!, _favoritesMeta));
+    } else if (isInserting) {
+      context.missing(_favoritesMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  Favorite map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Favorite(
+      favorites: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}favorites'])!,
+    );
+  }
+
+  @override
+  $FavoritesTable createAlias(String alias) {
+    return $FavoritesTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(e);
   late final $SchedulesTable schedules = $SchedulesTable(this);
+  late final $FavoritesTable favorites = $FavoritesTable(this);
   @override
   Iterable<TableInfo<Table, dynamic>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [schedules];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [schedules, favorites];
 }

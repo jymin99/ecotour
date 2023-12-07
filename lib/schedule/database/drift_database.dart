@@ -17,6 +17,7 @@ part 'drift_database.g.dart'; // part 파일 지정
 @DriftDatabase( // 사용할 테이블
   tables: [
     Schedules,
+    Favorites,
   ],
 )
 
@@ -42,27 +43,27 @@ class LocalDatabase extends _$LocalDatabase{
   Future<int> removeSchedule(int id) =>
       (delete(schedules)..where((tbl)=>tbl.id.equals(id))).go();
 
-  // // 모든 schedule.id를 삭제하는 메서드
-  // Future<void> deleteAllScheduleIds() async {
-  //   // 데이터베이스에서 모든 schedule.id를 가져옵니다.
-  //   List<int?> scheduleIds = await (select(schedules)
-  //     ..addColumns([schedules.id])
-  //   ).get().then((rows) => rows.map((row) => row.id).toList());
-  //
-  //   // 가져온 schedule.id를 반복하여 각각 삭제합니다.
-  //   for (int? id in scheduleIds) {
-  //     await removeSchedule(id!);
-  //   }
-  // }
-
   // 추가: 모든 schedule.id를 삭제하는 메서드
   Future<void> deleteAllScheduleIds() async {
     await (delete(schedules)).go();
   }
 
+  // favorite 저장,삭제,보기
+  Stream<List<String>> watchFavorites() =>
+      (select(favorites)).watch().map((favorites) {
+        return favorites.map((favorite) => favorite.favorites).toList();
+      });
+
+  Future<int> addFavorite(String favorite) =>
+      into(favorites).insert(FavoritesCompanion(favorites: Value(favorite)));
+
+  Future<int> removeFavorite(String favorite) =>
+      (delete(favorites)..where((tbl) => tbl.favorites.equals(favorite))).go();
+
+
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
   //1부터 시작. 테이블 변화가 있을 시 1씩 올려줘서 구조 변경사항 인지시킴.
 
 }
