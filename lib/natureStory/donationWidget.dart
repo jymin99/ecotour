@@ -36,9 +36,9 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
                 children: [
                   Image.network(
                     assetPath,
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(width: 20),
                   Column(
@@ -49,7 +49,7 @@ Widget buildDonationContainer(BuildContext context, String assetPath, String tit
                       Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 15,
+                          fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -110,8 +110,8 @@ class StoryModal extends StatelessWidget {
                 const SizedBox(height: 10),
                 Image.network(
                   assetPath,
-                  width: 400,
-                  height: 300,
+                  width: 350,
+                  height: 250,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 10),
