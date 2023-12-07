@@ -523,7 +523,7 @@ class _MapPageState extends State<MapPage> {
                                 Marker(
                                   markerId: MarkerId(tappedAccommodation.title),
                                   //'new${newMarkerSet.length + 1}'
-                                  position: LatLng(tappedAccommodation.mapx as double, tappedAccommodation.mapy as double),
+                                  position: LatLng(double.parse(tappedAccommodation.mapx), double.parse(tappedAccommodation.mapy)),
                                   // Customize other properties if needed
                                 ),
 
@@ -638,7 +638,7 @@ class _MapPageState extends State<MapPage> {
                                 Marker(
                                   markerId: MarkerId(tappedEv.csNm),
                                   //'new${newMarkerSet.length + 1}'
-                                  position: LatLng(tappedEv.lat as double, tappedEv.longi as double),
+                                  position: LatLng(double.parse(tappedEv.lat), double.parse(tappedEv.longi)),
                                   // Customize other properties if needed
                                 ),
                               );
@@ -747,7 +747,7 @@ class _MapPageState extends State<MapPage> {
                                 Marker(
                                   markerId: MarkerId(tappedCycle.rentNm),
                                   //'new${newMarkerSet.length + 1}'
-                                  position: LatLng(tappedCycle.staLat as double, tappedCycle.staLong as double),
+                                  position: LatLng(double.parse(tappedCycle.staLat), double.parse(tappedCycle.staLong)),
                                   // Customize other properties if needed
                                 ),
                               );
@@ -1215,8 +1215,9 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return
       Scaffold(
-        floatingActionButton: FloatingActionButton(  // ➊ 새 일정 버튼
+        floatingActionButton: FloatingActionButton.small(  // ➊ 새 일정 버튼
           backgroundColor: AppColor.yellowGreen,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           onPressed: () {
             setState(() {
               markers.clear();
@@ -1643,7 +1644,7 @@ class _MapPageState extends State<MapPage> {
                       child: SizedBox(
                         height:
                         // MediaQuery.of(context).size.height - 20,
-                        300.0,
+                        360.0,
                         width: MediaQuery.of(context).size.width - 5,
                         child: GoogleMap(
                             initialCameraPosition: _kGooglePlex,
