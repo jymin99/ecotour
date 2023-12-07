@@ -1231,7 +1231,7 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: Column(
             //crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -1637,15 +1637,16 @@ class _MapPageState extends State<MapPage> {
                         // ),
                       ],
                     ),
-                    // SizedBox(
-                    //   height: 13,
-                    // ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Center(
                       child: SizedBox(
                         height:
                         // MediaQuery.of(context).size.height - 20,
                         360.0,
-                        width: MediaQuery.of(context).size.width - 5,
+                        width: 340,
+                        // MediaQuery.of(context).size.width - 10,
                         child: GoogleMap(
                             initialCameraPosition: _kGooglePlex,
                             //initialCameraPosition: CameraPosition(target:LatLng(latitude, longitude)),
