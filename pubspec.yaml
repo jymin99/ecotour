@@ -122,10 +122,6 @@ flutter:
     - family: Montserrat
       fonts:
         - asset: assets/fonts/Montserrat-Black.ttf
-
-    - family: Gy
-      fonts:
-        - asset: assets/fonts/Gwangyang_Touching.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
