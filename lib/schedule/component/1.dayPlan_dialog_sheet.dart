@@ -129,32 +129,32 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Favorites',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Favorites',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-                SizedBox(height: 10),
-                FutureBuilder<List<String>>(
-                  future: GetIt.I<LocalDatabase>().getFavoritesList(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('저장된 즐겨찾기 장소가 없습니다.');
-                    } else {
-                      List<String> favorites = snapshot.data!;
-                      return ListView.builder(
+              ),
+              SizedBox(height: 10),
+              FutureBuilder<List<String>>(
+                future: GetIt.I<LocalDatabase>().getFavoritesList(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Text('저장된 즐겨찾기 장소가 없습니다.');
+                  } else {
+                    List<String> favorites = snapshot.data!;
+                    return Expanded(
+                      child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: favorites.length,
                         itemBuilder: (context, index) {
@@ -189,13 +189,13 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                             ),
                           );
                         },
-                      );
+                      ),
+                    );
 
-                    }
-                  },
-                ),
-              ],
-            ),
+                  }
+                },
+              ),
+            ],
           ),
         );
       },
