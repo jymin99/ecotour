@@ -34,7 +34,6 @@ dependencies:
   kakao_flutter_sdk_user: ^1.5.0
   date_time_picker: ^2.1.0
   url_launcher: ^6.0.9
-  shared_preferences: ^2.0.12
 
 
 #  table_calendar: ^3.0.6
@@ -59,7 +58,7 @@ dependencies:
   firebase_auth: ^4.13.0
   cloud_firestore: ^4.13.0
   firebase_storage: ^11.5.1
-  image_picker: ^0.8.4+4
+  image_picker: ^0.8.4
   firebase_database: ^10.3.3
   http: ^0.13.1
   google_maps_flutter: ^2.5.0

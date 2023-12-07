@@ -1,3 +1,5 @@
+// schedule.dart
+
 import 'package:drift/drift.dart';
 
 class Schedules extends Table{
@@ -10,5 +12,9 @@ class Schedules extends Table{
   IntColumn get startTimeM => integer()(); //시작 분
   IntColumn get endTimeH => integer()(); //종료 시
   IntColumn get endTimeM => integer()(); //종료 분
-  TextColumn get imagePath => text()(); // 내용, 글자열
+}
+
+class Favorites extends Table{
+  TextColumn get favorites => text()(); // 내용, 글자열
+
 }

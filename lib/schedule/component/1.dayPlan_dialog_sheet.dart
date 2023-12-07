@@ -39,6 +39,8 @@ class FormData {
 }
 
 class _dayPlanSheetState extends State<dayPlanSheet> {
+  TextEditingController _locationController = TextEditingController();
+
   final GlobalKey<FormState> formkey = GlobalKey();
   final FormData formData = FormData(startTime: TimeOfDay.now(),endTime:TimeOfDay.now()); // Create an instance of the FormData class
 
@@ -67,6 +69,121 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
         formData.endTime = picked;
       });
     }
+  }
+  //
+  // void _showFavoritesBottomSheet(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         padding: EdgeInsets.all(16),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               'Favorites',
+  //               style: TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             SizedBox(height: 10),
+  //             FutureBuilder<List<String>>(
+  //               future: GetIt.I<LocalDatabase>().getFavoritesList(),
+  //               builder: (context, snapshot) {
+  //                 if (snapshot.connectionState == ConnectionState.waiting) {
+  //                   return CircularProgressIndicator();
+  //                 } else if (snapshot.hasError) {
+  //                   return Text('Error: ${snapshot.error}');
+  //                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+  //                   return Text('No favorites available.');
+  //                 } else {
+  //                   List<String> favorites = snapshot.data!;
+  //                   return ListView.builder(
+  //                     shrinkWrap: true,
+  //                     itemCount: favorites.length,
+  //                     itemBuilder: (context, index) {
+  //                       return ListTile(
+  //                         title: Text(favorites[index]),
+  //                         onTap: () {
+  //                           // Update formData.place when a favorite is tapped
+  //                           setState(() {
+  //                             formData.place = favorites[index];
+  //                           });
+  //                           Navigator.pop(context); // Close the bottom sheet
+  //                         },
+  //                       );
+  //                     },
+  //                   );
+  //                 }
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  void _showFavoritesBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Favorites',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              FutureBuilder<List<String>>(
+                future: GetIt.I<LocalDatabase>().getFavoritesList(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Text('No favorites available.');
+                  } else {
+                    List<String> favorites = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: favorites.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(favorites[index]),
+                          onTap: () {
+                            // Update formData.place when a favorite is tapped
+                            setState(() {
+                              formData.place = favorites[index];
+                              _locationController.text = favorites[index];
+                            });
+                            Navigator.pop(context); // Close the bottom sheet
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _locationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -116,11 +233,15 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                         onChanged: (String value) {
                           formData.place = value; // 입력된 제목을 변수에 저장
                         },
+                        controller: _locationController,
                         decoration: InputDecoration(
                           labelText: '장소',
                           labelStyle: TextStyle(fontSize: 14),
                           floatingLabelBehavior: FloatingLabelBehavior.never, // Disable floating label
-                          suffixIcon: const Icon(Icons.location_on, color: Colors.black), // 돋보기 아이콘 추가 및 색상 설정
+                          suffixIcon:  IconButton(
+                            icon: Icon(Icons.location_on, color: Colors.black),
+                            onPressed: () => _showFavoritesBottomSheet(context),
+                          ),// 돋보기 아이콘 추가 및 색상 설정
                           filled: true, // 배경색 적용
                           fillColor: Colors.grey[200], // 배경색 설정
                           border: OutlineInputBorder( // 텍스트 필드의 테두리 스타일 설정
@@ -303,15 +424,15 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
   void onSavePressed() async {
     if(formkey.currentState!.validate()){ //폼 검증
       formkey.currentState!.save(); //폼 저장
-
-      print('title : ${formData.title}' );
-      print('place : ${formData.place}' );
-      print('startTimeH : ${formData.startTime.hour}' );
-      print('startTimeM : ${formData.startTime.minute}' );
-      print('endTimeH : ${formData.endTime.hour}' );
-      print('endTimeM : ${formData.endTime.minute}' );
-      print('memo : ${formData.memo}' );
-      print('selectedDate : ${widget.selectedDate}' );
+      //
+      // print('title : ${formData.title}' );
+      // print('place : ${formData.place}' );
+      // print('startTimeH : ${formData.startTime.hour}' );
+      // print('startTimeM : ${formData.startTime.minute}' );
+      // print('endTimeH : ${formData.endTime.hour}' );
+      // print('endTimeM : ${formData.endTime.minute}' );
+      // print('memo : ${formData.memo}' );
+      // print('selectedDate : ${widget.selectedDate}' );
 
       //데이터베이스에 저장.
       await GetIt.I<LocalDatabase>().createSchedule( //일정 생성하기
@@ -360,9 +481,51 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
   }
 
 }
-
-
-
-
-
-
+//
+// void _showFavoritesBottomSheet(BuildContext context) {
+//   showModalBottomSheet(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return Container(
+//         padding: EdgeInsets.all(16),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(
+//               'Favorites',
+//               style: TextStyle(
+//                 fontSize: 18,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//             SizedBox(height: 10),
+//             FutureBuilder<List<String>>(
+//               future: GetIt.I<LocalDatabase>().getFavoritesList(),
+//               builder: (context, snapshot) {
+//                 if (snapshot.connectionState == ConnectionState.waiting) {
+//                   return CircularProgressIndicator();
+//                 } else if (snapshot.hasError) {
+//                   return Text('Error: ${snapshot.error}');
+//                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//                   return Text('No favorites available.');
+//                 } else {
+//                   List<String> favorites = snapshot.data!;
+//                   return ListView.builder(
+//                     shrinkWrap: true,
+//                     itemCount: favorites.length,
+//                     itemBuilder: (context, index) {
+//                       return ListTile(
+//                         title: Text(favorites[index]),
+//                         // You can add more customization to the list tile if needed
+//                       );
+//                     },
+//                   );
+//                 }
+//               },
+//             ),
+//           ],
+//         ),
+//       );
+//     },
+//   );
+// }
