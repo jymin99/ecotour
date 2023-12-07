@@ -482,12 +482,13 @@ class _MapPageState extends State<MapPage> {
                               backgroundColor: Colors.white,
                             ),
                             onPressed: () {
-                              if (!favorites.contains(tappedAccommodation!.title!)) {
+                              if (favorites.contains(tappedAccommodation!.title!)) {
+                                favorites.add(tappedAccommodation!.title!);
+                                }
+                              else{
                                 favorites.remove(tappedAccommodation!.title!);
                                 favorites.insert(0, tappedAccommodation!.title!); // 리스트의 맨 앞에 추가
-                              }
-                              else{
-                                favorites.add(tappedAccommodation!.title!);
+
                               }
 
                               print(favorites);
@@ -585,12 +586,12 @@ class _MapPageState extends State<MapPage> {
                             ),
                             onPressed: () {
                               // Your favorite icon button action
-                              if (!favorites.contains(tappedEv!.csNm)) {
-                                favorites.remove(tappedEv!.csNm);
-                                favorites.insert(0, tappedEv!.csNm); // 리스트의 맨 앞에 추가
+                              if (favorites.contains(tappedEv!.csNm)) {
+                                favorites.add(tappedEv!.csNm); // 리스트의 맨 앞에 추가
                               }
                               else{
-                                favorites.add(tappedEv!.csNm);
+                                favorites.remove(tappedEv!.csNm);
+                                favorites.insert(0, tappedEv!.csNm);
                               }
                               Navigator.pop(context);
                             },
@@ -680,7 +681,7 @@ class _MapPageState extends State<MapPage> {
                             ),
                             onPressed: () {
                               // Your favorite icon button action
-                              if (!favorites.contains(tappedCycle!.rentNm)) {
+                              if (favorites.contains(tappedCycle!.rentNm)) {
                                 favorites.remove(tappedCycle!.rentNm);
                                 favorites.insert(0, tappedCycle!.rentNm); // 리스트의 맨 앞에 추가
                               }
@@ -780,7 +781,7 @@ class _MapPageState extends State<MapPage> {
                           ),
                           onPressed: () {
                             // Your favorite icon button action
-                            if (!favorites.contains('${tappedCafe?['shop']}')) {
+                            if (favorites.contains('${tappedCafe?['shop']}')) {
                               favorites.remove('${tappedCafe?['shop']}');
                               favorites.insert(0, '${tappedCafe?['shop']}'); // 리스트의 맨 앞에 추가
                             }
@@ -874,7 +875,7 @@ class _MapPageState extends State<MapPage> {
                           onPressed: () {
                             addToPlan(tappedEcoShop);
                             // Your favorite icon button action
-                            if (!favorites.contains('${tappedEcoShop?['address']}')) {
+                            if (favorites.contains('${tappedEcoShop?['address']}')) {
                               favorites.remove('${tappedEcoShop?['address']}');
                               favorites.insert(0, '${tappedEcoShop?['address']}'); // 리스트의 맨 앞에 추가
                             }
@@ -969,7 +970,7 @@ class _MapPageState extends State<MapPage> {
                           onPressed: () {
                             addToPlan(tappedRefill);
                             // Your favorite icon button action
-                            if (!favorites.contains(tappedRefill?['name'])) {
+                            if (favorites.contains(tappedRefill?['name'])) {
                               favorites.remove(tappedRefill?['name']);
                               favorites.insert(0, tappedRefill?['name']); // 리스트의 맨 앞에 추가
                             }
@@ -1063,7 +1064,7 @@ class _MapPageState extends State<MapPage> {
                           onPressed: () {
                             addToPlan(tappedStore);
                             // Your favorite icon button action
-                            if (!favorites.contains(tappedStore?['name'])) {
+                            if (favorites.contains(tappedStore?['name'])) {
                               favorites.remove(tappedStore?['name']);
                               favorites.insert(0, tappedStore?['name']); // 리스트의 맨 앞에 추가
                             }
