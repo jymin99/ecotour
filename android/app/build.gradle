@@ -60,7 +60,7 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('C:/Users/1kimc/StudioProjects/capstone1/keystore/debug.keystore')
+            storeFile file('../keystore/debug.keystore')
         }
     }
 

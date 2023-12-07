@@ -303,15 +303,15 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
   void onSavePressed() async {
     if(formkey.currentState!.validate()){ //폼 검증
       formkey.currentState!.save(); //폼 저장
-
-      print('title : ${formData.title}' );
-      print('place : ${formData.place}' );
-      print('startTimeH : ${formData.startTime.hour}' );
-      print('startTimeM : ${formData.startTime.minute}' );
-      print('endTimeH : ${formData.endTime.hour}' );
-      print('endTimeM : ${formData.endTime.minute}' );
-      print('memo : ${formData.memo}' );
-      print('selectedDate : ${widget.selectedDate}' );
+      //
+      // print('title : ${formData.title}' );
+      // print('place : ${formData.place}' );
+      // print('startTimeH : ${formData.startTime.hour}' );
+      // print('startTimeM : ${formData.startTime.minute}' );
+      // print('endTimeH : ${formData.endTime.hour}' );
+      // print('endTimeM : ${formData.endTime.minute}' );
+      // print('memo : ${formData.memo}' );
+      // print('selectedDate : ${widget.selectedDate}' );
 
       //데이터베이스에 저장.
       await GetIt.I<LocalDatabase>().createSchedule( //일정 생성하기

@@ -60,7 +60,26 @@ class LocalDatabase extends _$LocalDatabase{
   Future<int> removeFavorite(String favorite) =>
       (delete(favorites)..where((tbl) => tbl.favorites.equals(favorite))).go();
 
+  Future<List<String>> getFavoritesList() async {
+    final favoritesList =
+    await (select(favorites)).get().then((favorites) {
+      return favorites.map((favorite) => favorite.favorites).toList();
+    });
 
+    return favoritesList;
+  }
+
+  Future<int> updateFavorites(List<String> updatedFavorites) async {
+    // 데이터베이스에 저장된 모든 favorites 삭제
+    await (delete(favorites)).go();
+
+    // 업데이트된 favorites 리스트를 데이터베이스에 추가
+    for (var favorite in updatedFavorites) {
+      await addFavorite(favorite);
+    }
+
+    return 1; // 무엇이든 상관 없는 값을 반환합니다.
+  }
 
   @override
   int get schemaVersion => 3;

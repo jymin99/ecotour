@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,8 @@ import 'package:capstone/evcar/ev.dart';
 import 'package:capstone/evcar/ev_repository.dart';
 import 'package:capstone/accommodation/accommodation.dart';
 import 'package:capstone/accommodation/accommodation_repository.dart';
+
+import '../schedule/database/drift_database.dart';
 
 List<String> favorites=[];
 
@@ -481,17 +484,23 @@ class _MapPageState extends State<MapPage> {
                               foregroundColor: Colors.black,
                               backgroundColor: Colors.white,
                             ),
-                            onPressed: () {
-                              if (favorites.contains(tappedAccommodation!.title!)) {
-                                favorites.add(tappedAccommodation!.title!);
-                                }
-                              else{
-                                favorites.remove(tappedAccommodation!.title!);
-                                favorites.insert(0, tappedAccommodation!.title!); // 리스트의 맨 앞에 추가
+                            onPressed: () async {
+                              List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
 
+                              if (currentFavoritesList.contains(tappedAccommodation!.title!)) {
+                                currentFavoritesList.remove(tappedAccommodation!.title!);
+                                currentFavoritesList.insert(0, tappedAccommodation!.title!);
+                              } else {
+                                currentFavoritesList.insert(0, tappedAccommodation!.title!);
                               }
+                              // Update the Favorites table in the database
+                              await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
 
-                              print(favorites);
+                              // Retrieve and print the list of favorites
+                              List<String> favoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
+
+                              print('Favorites List: $favoritesList');
+
                               Navigator.pop(context);
                             },
                             child: Text(
@@ -584,7 +593,7 @@ class _MapPageState extends State<MapPage> {
                               foregroundColor: Colors.black,
                               backgroundColor: Colors.white,
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               // Your favorite icon button action
                               if (favorites.contains(tappedEv!.csNm)) {
                                 favorites.add(tappedEv!.csNm); // 리스트의 맨 앞에 추가
@@ -593,6 +602,10 @@ class _MapPageState extends State<MapPage> {
                                 favorites.remove(tappedEv!.csNm);
                                 favorites.insert(0, tappedEv!.csNm);
                               }
+
+                              // 데이터베이스에 업데이트된 favorites 리스트 반영
+                              await GetIt.I<LocalDatabase>().updateFavorites(favorites);
+
                               Navigator.pop(context);
                             },
                             child: Text(
@@ -679,15 +692,18 @@ class _MapPageState extends State<MapPage> {
                               foregroundColor: Colors.black,
                               backgroundColor: Colors.white,
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               // Your favorite icon button action
-                              if (favorites.contains(tappedCycle!.rentNm)) {
-                                favorites.remove(tappedCycle!.rentNm);
-                                favorites.insert(0, tappedCycle!.rentNm); // 리스트의 맨 앞에 추가
+                              List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
+
+                              if (currentFavoritesList.contains(tappedCycle!.rentNm)) {
+                                currentFavoritesList.remove(tappedCycle!.rentNm);
+                                currentFavoritesList.insert(0, tappedCycle!.rentNm);
+                              } else {
+                                currentFavoritesList.insert(0, tappedCycle!.rentNm);
                               }
-                              else{
-                                favorites.add(tappedCycle!.rentNm);
-                              }
+                              // Update the Favorites table in the database
+                              await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
 
                               Navigator.pop(context);
                             },
@@ -779,15 +795,19 @@ class _MapPageState extends State<MapPage> {
                             foregroundColor: Colors.black,
                             backgroundColor: Colors.white,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             // Your favorite icon button action
-                            if (favorites.contains('${tappedCafe?['shop']}')) {
-                              favorites.remove('${tappedCafe?['shop']}');
-                              favorites.insert(0, '${tappedCafe?['shop']}'); // 리스트의 맨 앞에 추가
+                            List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
+
+                            if (currentFavoritesList.contains('${tappedCafe?['shop']}')) {
+                              currentFavoritesList.remove('${tappedCafe?['shop']}');
+                              currentFavoritesList.insert(0, '${tappedCafe?['shop']}');
+                            } else {
+                              currentFavoritesList.insert(0, '${tappedCafe?['shop']}');
                             }
-                            else{
-                              favorites.add('${tappedCafe?['shop']}');
-                            }
+                            // Update the Favorites table in the database
+                            await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
+
                             Navigator.pop(context);
                           },
                           child: Text('Add to plan'),
@@ -872,16 +892,21 @@ class _MapPageState extends State<MapPage> {
                             foregroundColor: Colors.black,
                             backgroundColor: Colors.white,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             addToPlan(tappedEcoShop);
                             // Your favorite icon button action
-                            if (favorites.contains('${tappedEcoShop?['address']}')) {
-                              favorites.remove('${tappedEcoShop?['address']}');
-                              favorites.insert(0, '${tappedEcoShop?['address']}'); // 리스트의 맨 앞에 추가
+                            List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
+
+                            if (currentFavoritesList.contains('${tappedEcoShop?['address']}')) {
+                              currentFavoritesList.remove('${tappedEcoShop?['address']}');
+                              currentFavoritesList.insert(0,'${tappedEcoShop?['address']}' );
+                            } else {
+                              currentFavoritesList.insert(0,'${tappedEcoShop?['address']}' );
                             }
-                            else{
-                              favorites.add('${tappedEcoShop?['address']}');
-                            }
+                            // Update the Favorites table in the database
+                            await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
+
+
 
                             Navigator.pop(context);
                           },
@@ -967,16 +992,22 @@ class _MapPageState extends State<MapPage> {
                             foregroundColor: Colors.black,
                             backgroundColor: Colors.white,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             addToPlan(tappedRefill);
                             // Your favorite icon button action
-                            if (favorites.contains(tappedRefill?['name'])) {
-                              favorites.remove(tappedRefill?['name']);
-                              favorites.insert(0, tappedRefill?['name']); // 리스트의 맨 앞에 추가
+
+                            List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
+
+                            if (currentFavoritesList.contains(tappedRefill?['name'])) {
+                              currentFavoritesList.remove(tappedRefill?['name']);
+                              currentFavoritesList.insert(0, tappedRefill?['name']);
+                            } else {
+                              currentFavoritesList.insert(0, tappedRefill?['name']);
                             }
-                            else{
-                              favorites.add(tappedRefill?['name']);
-                            }
+                            // Update the Favorites table in the database
+                            await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
+
+
                             Navigator.pop(context);
                           },
                           child: Text('Add to Plan'),
@@ -1061,16 +1092,21 @@ class _MapPageState extends State<MapPage> {
                             foregroundColor: Colors.black,
                             backgroundColor: Colors.white,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             addToPlan(tappedStore);
                             // Your favorite icon button action
-                            if (favorites.contains(tappedStore?['name'])) {
-                              favorites.remove(tappedStore?['name']);
-                              favorites.insert(0, tappedStore?['name']); // 리스트의 맨 앞에 추가
+                            List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
+
+                            if (currentFavoritesList.contains(tappedStore?['name'])) {
+                              currentFavoritesList.remove(tappedStore?['name']);
+                              currentFavoritesList.insert(0, tappedStore?['name']);
+                            } else {
+                              currentFavoritesList.insert(0, tappedStore?['name']);
                             }
-                            else{
-                              favorites.add(tappedStore?['name']);
-                            }
+                            // Update the Favorites table in the database
+                            await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
+
+
                             Navigator.pop(context);
                           },
                           child: Text('Add to Plan'),
