@@ -898,11 +898,11 @@ class _MapPageState extends State<MapPage> {
                             // Your favorite icon button action
                             List<String> currentFavoritesList = await GetIt.I<LocalDatabase>().getFavoritesList();
 
-                            if (currentFavoritesList.contains('${tappedEcoShop?['address']}')) {
-                              currentFavoritesList.remove('${tappedEcoShop?['address']}');
-                              currentFavoritesList.insert(0,'${tappedEcoShop?['address']}' );
+                            if (currentFavoritesList.contains(tappedEcoShop?['name'])) {
+                              currentFavoritesList.remove(tappedEcoShop?['name']);
+                              currentFavoritesList.insert(0,tappedEcoShop?['name'] );
                             } else {
-                              currentFavoritesList.insert(0,'${tappedEcoShop?['address']}' );
+                              currentFavoritesList.insert(0,tappedEcoShop?['name']);
                             }
                             // Update the Favorites table in the database
                             await GetIt.I<LocalDatabase>().updateFavorites(currentFavoritesList);
