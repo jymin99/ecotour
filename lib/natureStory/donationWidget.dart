@@ -88,8 +88,8 @@ class StoryModal extends StatelessWidget {
       children: [
         const SizedBox(height: 80),
         Container(
-          height: 1000,
-          width: 700,
+          height: 700,
+          width: 450,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -112,7 +112,7 @@ class StoryModal extends StatelessWidget {
                   assetPath,
                   width: 400,
                   height: 300,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 10),
                 Text(
