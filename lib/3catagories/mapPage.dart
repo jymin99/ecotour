@@ -397,14 +397,14 @@ class _MapPageState extends State<MapPage> {
     print("Received location: ${position.latitude}, ${position.longitude}");
 
     setState(() {
-      // markers.clear();
-      // markers.add(
-      //   Marker(
-      //     markerId: MarkerId('userLocation'),
-      //     position: LatLng(position.latitude, position.longitude),
-      //     infoWindow: InfoWindow(title: 'Your Location'),
-      //   ),
-      // );
+      markers.clear();
+      markers.add(
+        Marker(
+          markerId: MarkerId('userLocation'),
+          position: LatLng(position.latitude, position.longitude),
+          infoWindow: InfoWindow(title: 'Your Location'),
+        ),
+      );
     });
 
     print("Set new location: $latitude, $longitude");
@@ -417,8 +417,7 @@ class _MapPageState extends State<MapPage> {
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     //target: LatLng(37.553836, 126.969652),
-    target: LatLng(37.5047, 126.9569),
-    //target: LatLng(37.503430, 126.957077),
+    target: LatLng(37.503430, 126.957077),
     zoom: 15,
   );
 
@@ -813,7 +812,7 @@ class _MapPageState extends State<MapPage> {
                     width: MediaQuery.of(context).size.width - 10,
                     child: GoogleMap(
                         initialCameraPosition: _kGooglePlex,
-                        //CameraPosition(target:LatLng(latitude, longitude)),
+                        //initialCameraPosition: CameraPosition(target:LatLng(latitude, longitude)),
                         mapType: MapType.normal,
                         markers: Set.from(markers),
                         myLocationEnabled: true,
@@ -821,10 +820,10 @@ class _MapPageState extends State<MapPage> {
                         onCameraMove: (_) {},
                         onMapCreated: ((controller) async {
                           mapController = controller;
-                          var currentLocation = await getCurrentLocation();
-                          mapController.moveCamera(CameraUpdate.newLatLng(
-                              LatLng(currentLocation.latitude,
-                                  currentLocation.longitude)));
+                          // var currentLocation = await getCurrentLocation();
+                          // mapController.moveCamera(CameraUpdate.newLatLng(
+                          //     LatLng(currentLocation.latitude,
+                          //         currentLocation.longitude)));
                           setState(() {});
                         })),
                   ),
