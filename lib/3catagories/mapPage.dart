@@ -19,6 +19,7 @@ import 'package:capstone/accommodation/accommodation.dart';
 import 'package:capstone/accommodation/accommodation_repository.dart';
 
 import '../schedule/database/drift_database.dart';
+import '../style.dart';
 
 List<String> favorites=[];
 
@@ -1150,444 +1151,455 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 50.0,
-                        height: 70.0,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+      Scaffold(
+        floatingActionButton: FloatingActionButton(  // ➊ 새 일정 버튼
+          backgroundColor: AppColor.yellowGreen,
+          onPressed: () {},
+          child: Icon(
+            Icons.star,
+            color: Colors.black,
+
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            //crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 50.0,
+                          height: 70.0,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () {
+                              print("Button Pressed");
+                              _toggleAccMarkers();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/accommodation_1.png'),
+                                  width: 30.0,
+                                  height: 30.0,
+                                ),
+                                //SizedBox(height: 5.0), // Adjust the spacing between image and text
+                                Text(
+                                  '숙소',
+                                  style: TextStyle(
+                                    fontFamily: "Gy",
+                                    fontSize: 9.0,
+                                    color: Colors.black,
+                                    // Add any additional text style properties here
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // child: Image(
+                            //   image: AssetImage('assets/accommodation_1.png'),
+                            //   width: 30.0,
+                            //   height: 30.0,
+                            // ),
+                          ),
+                        ),
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+                        //     minimumSize: Size(10, 10),
+                        //   ),
+                        //   // style: ButtonStyle(
+                        //   //   backgroundColor:
+                        //   //       MaterialStateProperty.all(Colors.white),
+                        //   // ),
+                        //   onPressed: () {
+                        //     print("Button Pressed");
+                        //
+                        //     _toggleAccMarkers();
+                        //   },
+                        //   child: Image(
+                        //     image: AssetImage('assets/accommodation_1.png'),
+                        //     width: 15.0,
+                        //   ),
+                        // ),
+                        Container(
+                          width: 50.0,
+                          height: 70.0,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+                            ),
+                            // style: ButtonStyle(
+                            //   backgroundColor:
+                            //       MaterialStateProperty.all(Colors.white),
+                            // ),
+                            onPressed: () {
+                              print("Button Pressed");
+
+                              _toggleMarkers();
+                              // setState(() {
+                              //   areMarkersVisible =
+                              //       !areMarkersVisible; // Toggle visibility state
+                              // });
+                              // loadMarkers();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/restaurant_1.png'),
+                                  width: 30.0,
+                                  height: 30.0,
+                                ),
+                                //SizedBox(height: 5.0), // Adjust the spacing between image and text
+                                Text(
+                                  '음식점',
+                                  style: TextStyle(
+                                    fontFamily: "Gy",
+                                    fontSize: 9.0,
+                                    color: Colors.black,
+                                    // Add any additional text style properties here
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          onPressed: () {
-                            print("Button Pressed");
-                            _toggleAccMarkers();
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/accommodation_1.png'),
-                                width: 30.0,
-                                height: 30.0,
-                              ),
-                              //SizedBox(height: 5.0), // Adjust the spacing between image and text
-                              Text(
-                                '숙소',
-                                style: TextStyle(
-                                  fontFamily: "Gy",
-                                  fontSize: 9.0,
-                                  color: Colors.black,
-                                  // Add any additional text style properties here
-                                ),
-                              ),
-                            ],
-                          ),
-                          // child: Image(
-                          //   image: AssetImage('assets/accommodation_1.png'),
-                          //   width: 30.0,
-                          //   height: 30.0,
-                          // ),
                         ),
-                      ),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-                      //     minimumSize: Size(10, 10),
-                      //   ),
-                      //   // style: ButtonStyle(
-                      //   //   backgroundColor:
-                      //   //       MaterialStateProperty.all(Colors.white),
-                      //   // ),
-                      //   onPressed: () {
-                      //     print("Button Pressed");
-                      //
-                      //     _toggleAccMarkers();
-                      //   },
-                      //   child: Image(
-                      //     image: AssetImage('assets/accommodation_1.png'),
-                      //     width: 15.0,
-                      //   ),
-                      // ),
-                      Container(
-                        width: 50.0,
-                        height: 70.0,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
-                          ),
-                          // style: ButtonStyle(
-                          //   backgroundColor:
-                          //       MaterialStateProperty.all(Colors.white),
-                          // ),
-                          onPressed: () {
-                            print("Button Pressed");
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+                        //   ),
+                        //   // style: ButtonStyle(
+                        //   //   backgroundColor:
+                        //   //       MaterialStateProperty.all(Colors.white),
+                        //   // ),
+                        //   onPressed: () {
+                        //     print("Button Pressed");
+                        //
+                        //     _toggleMarkers();
+                        //     // setState(() {
+                        //     //   areMarkersVisible =
+                        //     //       !areMarkersVisible; // Toggle visibility state
+                        //     // });
+                        //     // loadMarkers();
+                        //   },
+                        //   child: Image(
+                        //     image: AssetImage('assets/restaurant_1.png'),
+                        //     width: 15.0,
+                        //   ),
+                        // ),
+                        Container(
+                          width: 50.0,
+                          height: 70.0,
+                          child:TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+                            ),
+                            // style: ButtonStyle(
+                            //   backgroundColor:
+                            //       MaterialStateProperty.all(Colors.white),
+                            // ),
+                            onPressed: () {
+                              print("Button Pressed");
 
-                            _toggleMarkers();
-                            // setState(() {
-                            //   areMarkersVisible =
-                            //       !areMarkersVisible; // Toggle visibility state
-                            // });
-                            // loadMarkers();
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/restaurant_1.png'),
-                                width: 30.0,
-                                height: 30.0,
-                              ),
-                              //SizedBox(height: 5.0), // Adjust the spacing between image and text
-                              Text(
-                                '음식점',
-                                style: TextStyle(
-                                  fontFamily: "Gy",
-                                  fontSize: 9.0,
-                                  color: Colors.black,
-                                  // Add any additional text style properties here
+                              _toggleBikeMarkers();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/bicycle_1.png'),
+                                  width: 30.0,
+                                  height: 30.0,
                                 ),
-                              ),
-                            ],
+                                //SizedBox(height: 5.0), // Adjust the spacing between image and text
+                                Text(
+                                  '자전거',
+                                  style: TextStyle(
+                                    fontFamily: "Gy",
+                                    fontSize: 9.0,
+                                    color: Colors.black,
+                                    // Add any additional text style properties here
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
-                      //   ),
-                      //   // style: ButtonStyle(
-                      //   //   backgroundColor:
-                      //   //       MaterialStateProperty.all(Colors.white),
-                      //   // ),
-                      //   onPressed: () {
-                      //     print("Button Pressed");
-                      //
-                      //     _toggleMarkers();
-                      //     // setState(() {
-                      //     //   areMarkersVisible =
-                      //     //       !areMarkersVisible; // Toggle visibility state
-                      //     // });
-                      //     // loadMarkers();
-                      //   },
-                      //   child: Image(
-                      //     image: AssetImage('assets/restaurant_1.png'),
-                      //     width: 15.0,
-                      //   ),
-                      // ),
-                      Container(
-                        width: 50.0,
-                        height: 70.0,
-                        child:TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
-                          ),
-                          // style: ButtonStyle(
-                          //   backgroundColor:
-                          //       MaterialStateProperty.all(Colors.white),
-                          // ),
-                          onPressed: () {
-                            print("Button Pressed");
-
-                            _toggleBikeMarkers();
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/bicycle_1.png'),
-                                width: 30.0,
-                                height: 30.0,
-                              ),
-                              //SizedBox(height: 5.0), // Adjust the spacing between image and text
-                              Text(
-                                '자전거',
-                                style: TextStyle(
-                                  fontFamily: "Gy",
-                                  fontSize: 9.0,
-                                  color: Colors.black,
-                                  // Add any additional text style properties here
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+                        //     minimumSize: Size(15, 15),
+                        //   ),
+                        //   // style: ButtonStyle(
+                        //   //   backgroundColor:
+                        //   //       MaterialStateProperty.all(Colors.white),
+                        //   // ),
+                        //   onPressed: () {
+                        //     print("Button Pressed");
+                        //
+                        //     _toggleBikeMarkers();
+                        //   },
+                        //   child: Image(
+                        //     image: AssetImage('assets/bicycle_1.png'),
+                        //     width: 15.0,
+                        //   ),
+                        // ),
+                        Container(
+                          width: 50.0,
+                          height: 70.0,
+                          child:TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+                            ),
+                            // style: ButtonStyle(
+                            //   backgroundColor:
+                            //       MaterialStateProperty.all(Colors.white),
+                            // ),
+                            onPressed: () {
+                              _toggleEvMarkers();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/ev_car_1.png'),
+                                  width: 30.0,
+                                  height: 30.0,
                                 ),
-                              ),
-                            ],
+                                //SizedBox(height: 5.0), // Adjust the spacing between image and text
+                                Text(
+                                  '전기차',
+                                  style: TextStyle(
+                                    fontFamily: "Gy",
+                                    fontSize: 9.0,
+                                    color: Colors.black,
+                                    // Add any additional text style properties here
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-                      //     minimumSize: Size(15, 15),
-                      //   ),
-                      //   // style: ButtonStyle(
-                      //   //   backgroundColor:
-                      //   //       MaterialStateProperty.all(Colors.white),
-                      //   // ),
-                      //   onPressed: () {
-                      //     print("Button Pressed");
-                      //
-                      //     _toggleBikeMarkers();
-                      //   },
-                      //   child: Image(
-                      //     image: AssetImage('assets/bicycle_1.png'),
-                      //     width: 15.0,
-                      //   ),
-                      // ),
-                      Container(
-                        width: 50.0,
-                        height: 70.0,
-                        child:TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
-                          ),
-                          // style: ButtonStyle(
-                          //   backgroundColor:
-                          //       MaterialStateProperty.all(Colors.white),
-                          // ),
-                          onPressed: () {
-                            _toggleEvMarkers();
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/ev_car_1.png'),
-                                width: 30.0,
-                                height: 30.0,
-                              ),
-                              //SizedBox(height: 5.0), // Adjust the spacing between image and text
-                              Text(
-                                '전기차',
-                                style: TextStyle(
-                                  fontFamily: "Gy",
-                                  fontSize: 9.0,
-                                  color: Colors.black,
-                                  // Add any additional text style properties here
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+                        //     minimumSize: Size(15, 15),
+                        //   ),
+                        //   // style: ButtonStyle(
+                        //   //   backgroundColor:
+                        //   //       MaterialStateProperty.all(Colors.white),
+                        //   // ),
+                        //   onPressed: () {
+                        //      _toggleEvMarkers();
+                        //   },
+                        //   child: Image(
+                        //     image: AssetImage('assets/ev_car_1.png'),
+                        //     width: 15.0,
+                        //   ),
+                        // ),
+                        Container(
+                          width: 50.0,
+                          height: 70.0,
+                          child:TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+                            ),
+                            // style: ButtonStyle(
+                            //   backgroundColor:
+                            //   MaterialStateProperty.all(Colors.white),
+                            // ),
+                            onPressed: () {
+                              _toggleEcoShopMarkers();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/eco_cafe.png'),
+                                  width: 30.0,
+                                  height: 30.0,
                                 ),
-                              ),
-                            ],
+                                //SizedBox(height: 5.0), // Adjust the spacing between image and text
+                                Text(
+                                  '친환경',
+                                  style: TextStyle(
+                                    fontFamily: "Gy",
+                                    fontSize: 9.0,
+                                    color: Colors.black,
+                                    // Add any additional text style properties here
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-                      //     minimumSize: Size(15, 15),
-                      //   ),
-                      //   // style: ButtonStyle(
-                      //   //   backgroundColor:
-                      //   //       MaterialStateProperty.all(Colors.white),
-                      //   // ),
-                      //   onPressed: () {
-                      //      _toggleEvMarkers();
-                      //   },
-                      //   child: Image(
-                      //     image: AssetImage('assets/ev_car_1.png'),
-                      //     width: 15.0,
-                      //   ),
-                      // ),
-                      Container(
-                        width: 50.0,
-                        height: 70.0,
-                        child:TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
-                          ),
-                          // style: ButtonStyle(
-                          //   backgroundColor:
-                          //   MaterialStateProperty.all(Colors.white),
-                          // ),
-                          onPressed: () {
-                            _toggleEcoShopMarkers();
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/eco_cafe.png'),
-                                width: 30.0,
-                                height: 30.0,
-                              ),
-                              //SizedBox(height: 5.0), // Adjust the spacing between image and text
-                              Text(
-                                '친환경',
-                                style: TextStyle(
-                                  fontFamily: "Gy",
-                                  fontSize: 9.0,
-                                  color: Colors.black,
-                                  // Add any additional text style properties here
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+                        //     minimumSize: Size(15, 15),
+                        //   ),
+                        //   // style: ButtonStyle(
+                        //   //   backgroundColor:
+                        //   //   MaterialStateProperty.all(Colors.white),
+                        //   // ),
+                        //   onPressed: () {
+                        //     _toggleEcoShopMarkers();
+                        //   },
+                        //   child: Image(
+                        //     image: AssetImage('assets/eco_cafe.png'),
+                        //     width: 15.0,
+                        //   ),
+                        // ),
+                        Container(
+                          width: 50.0,
+                          height: 70.0,
+                          child:TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+                            ),
+                            // style: ButtonStyle(
+                            //   backgroundColor:
+                            //   MaterialStateProperty.all(Colors.white),
+                            // ),
+                            onPressed: () {
+                              _toggleRefillMarkers();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/refill.png'),
+                                  width: 30.0,
+                                  height: 30.0,
                                 ),
-                              ),
-                            ],
+                                //SizedBox(height: 5.0), // Adjust the spacing between image and text
+                                Text(
+                                  '리필샵',
+                                  style: TextStyle(
+                                    fontFamily: "Gy",
+                                    fontSize: 9.0,
+                                    color: Colors.black,
+                                    // Add any additional text style properties here
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-                      //     minimumSize: Size(15, 15),
-                      //   ),
-                      //   // style: ButtonStyle(
-                      //   //   backgroundColor:
-                      //   //   MaterialStateProperty.all(Colors.white),
-                      //   // ),
-                      //   onPressed: () {
-                      //     _toggleEcoShopMarkers();
-                      //   },
-                      //   child: Image(
-                      //     image: AssetImage('assets/eco_cafe.png'),
-                      //     width: 15.0,
-                      //   ),
-                      // ),
-                      Container(
-                        width: 50.0,
-                        height: 70.0,
-                        child:TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
-                          ),
-                          // style: ButtonStyle(
-                          //   backgroundColor:
-                          //   MaterialStateProperty.all(Colors.white),
-                          // ),
-                          onPressed: () {
-                            _toggleRefillMarkers();
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/refill.png'),
-                                width: 30.0,
-                                height: 30.0,
-                              ),
-                              //SizedBox(height: 5.0), // Adjust the spacing between image and text
-                              Text(
-                                '리필샵',
-                                style: TextStyle(
-                                  fontFamily: "Gy",
-                                  fontSize: 9.0,
-                                  color: Colors.black,
-                                  // Add any additional text style properties here
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+                        //     minimumSize: Size(15, 15),
+                        //   ),
+                        //   // style: ButtonStyle(
+                        //   //   backgroundColor:
+                        //   //   MaterialStateProperty.all(Colors.white),
+                        //   // ),
+                        //   onPressed: () {
+                        //     _toggleRefillMarkers();
+                        //   },
+                        //   child: Image(
+                        //     image: AssetImage('assets/refill.png'),
+                        //     width: 15.0,
+                        //   ),
+                        // ),
+                        Container(
+                          width: 50.0,
+                          height: 70.0,
+                          child:TextButton(
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
+                            ),
+                            // style: ButtonStyle(
+                            //   backgroundColor:
+                            //   MaterialStateProperty.all(Colors.white),
+                            // ),
+                            onPressed: () {
+                              _toggleStoreMarkers();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/eco_shop_2.png'),
+                                  width: 30.0,
+                                  height: 30.0,
                                 ),
-                              ),
-                            ],
+                                //SizedBox(height: 5.0), // Adjust the spacing between image and text
+                                Text(
+                                  '스토어',
+                                  style: TextStyle(
+                                    fontFamily: "Gy",
+                                    fontSize: 9.0,
+                                    color: Colors.black,
+                                    // Add any additional text style properties here
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-                      //     minimumSize: Size(15, 15),
-                      //   ),
-                      //   // style: ButtonStyle(
-                      //   //   backgroundColor:
-                      //   //   MaterialStateProperty.all(Colors.white),
-                      //   // ),
-                      //   onPressed: () {
-                      //     _toggleRefillMarkers();
-                      //   },
-                      //   child: Image(
-                      //     image: AssetImage('assets/refill.png'),
-                      //     width: 15.0,
-                      //   ),
-                      // ),
-                      Container(
-                        width: 50.0,
-                        height: 70.0,
-                        child:TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10)),
-                          ),
-                          // style: ButtonStyle(
-                          //   backgroundColor:
-                          //   MaterialStateProperty.all(Colors.white),
-                          // ),
-                          onPressed: () {
-                            _toggleStoreMarkers();
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/eco_shop_2.png'),
-                                width: 30.0,
-                                height: 30.0,
-                              ),
-                              //SizedBox(height: 5.0), // Adjust the spacing between image and text
-                              Text(
-                                '스토어',
-                                style: TextStyle(
-                                  fontFamily: "Gy",
-                                  fontSize: 9.0,
-                                  color: Colors.black,
-                                  // Add any additional text style properties here
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-                      //     minimumSize: Size(15, 15),
-                      //   ),
-                      //   // style: ButtonStyle(
-                      //   //   backgroundColor:
-                      //   //   MaterialStateProperty.all(Colors.white),
-                      //   // ),
-                      //   onPressed: () {
-                      //     _toggleStoreMarkers();
-                      //   },
-                      //   child: Image(
-                      //     image: AssetImage('assets/eco_shop_1.png'),
-                      //     width: 15.0,
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  // SizedBox(
-                  //   height: 13,
-                  // ),
-                  Center(
-                    child: SizedBox(
-                      height:
-                      // MediaQuery.of(context).size.height - 20,
-                      405.0,
-                      width: MediaQuery.of(context).size.width - 10,
-                      child: GoogleMap(
-                          initialCameraPosition: _kGooglePlex,
-                          //initialCameraPosition: CameraPosition(target:LatLng(latitude, longitude)),
-                          mapType: MapType.normal,
-                          markers: Set.from(markers),
-                          myLocationEnabled: true,
-                          myLocationButtonEnabled: true,
-                          onCameraMove: (_) {},
-                          onMapCreated: ((controller) async {
-                            mapController = controller;
-                            var currentLocation = await getCurrentLocation();
-                            mapController.moveCamera(CameraUpdate.newLatLng(
-                                LatLng(currentLocation.latitude,
-                                    currentLocation.longitude)));
-                            setState(() {});
-                          })),
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+                        //     minimumSize: Size(15, 15),
+                        //   ),
+                        //   // style: ButtonStyle(
+                        //   //   backgroundColor:
+                        //   //   MaterialStateProperty.all(Colors.white),
+                        //   // ),
+                        //   onPressed: () {
+                        //     _toggleStoreMarkers();
+                        //   },
+                        //   child: Image(
+                        //     image: AssetImage('assets/eco_shop_1.png'),
+                        //     width: 15.0,
+                        //   ),
+                        // ),
+                      ],
                     ),
-                  ),
-                ],
+                    // SizedBox(
+                    //   height: 13,
+                    // ),
+                    Center(
+                      child: SizedBox(
+                        height:
+                        // MediaQuery.of(context).size.height - 20,
+                        405.0,
+                        width: MediaQuery.of(context).size.width - 10,
+                        child: GoogleMap(
+                            initialCameraPosition: _kGooglePlex,
+                            //initialCameraPosition: CameraPosition(target:LatLng(latitude, longitude)),
+                            mapType: MapType.normal,
+                            markers: Set.from(markers),
+                            myLocationEnabled: true,
+                            myLocationButtonEnabled: true,
+                            onCameraMove: (_) {},
+                            onMapCreated: ((controller) async {
+                              mapController = controller;
+                              var currentLocation = await getCurrentLocation();
+                              mapController.moveCamera(CameraUpdate.newLatLng(
+                                  LatLng(currentLocation.latitude,
+                                      currentLocation.longitude)));
+                              setState(() {});
+                            })),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
   }
