@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,19 @@ class _FeedPageState extends State<FeedPage> {
     super.initState();
     _loadFeedData();
   }
+  void _removeFeedFromList(FeedData feedData) {
+    setState(() {
+      feedList.remove(feedData);
+      _saveFeedData(); // Make sure to save the updated list after removal
+    });
+  }
+  ////창 닫히게 수정////
+  void _deleteAndNavigate() {
+    _saveFeedData(); // Save the updated feed list
+    Navigator.pop(context); // Close FeedDetailPage
+  }
+
+
 
   _loadFeedData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -119,7 +133,7 @@ class _FeedPageState extends State<FeedPage> {
           }
         },
         backgroundColor: AppColor.deepGreen,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,color: Colors.white,),
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -161,12 +175,16 @@ class _FeedPageState extends State<FeedPage> {
     );
   }
 
-
+///창 닫히게 수정
   void _showFeedDetail(BuildContext context, FeedData feedData) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FeedDetailPage(feedData: feedData),
+        builder: (context) => FeedDetailPage(
+          feedData: feedData,
+          onDelete: _removeFeedFromList,
+          onNavigate: () => _deleteAndNavigate(),  // Pass the callback
+        ),
       ),
     );
   }
@@ -174,8 +192,12 @@ class _FeedPageState extends State<FeedPage> {
 
 class FeedDetailPage extends StatelessWidget {
   final FeedData feedData;
+  final Function(FeedData) onDelete;
+  final VoidCallback onNavigate; // Add onNavigate callback
 
-  const FeedDetailPage({Key? key, required this.feedData}) : super(key: key);
+
+  const FeedDetailPage({Key? key, required this.feedData, required this.onDelete,required this.onNavigate,}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +209,14 @@ class FeedDetailPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              _showDeleteConfirmationDialog(context);
+            },
+          ),
+        ],
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -222,7 +252,40 @@ class FeedDetailPage extends StatelessWidget {
       ),
     );
   }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Feed"),
+          content: const Text("Are you sure you want to delete this feed?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                _deleteAndNavigate();
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  void _deleteAndNavigate() {
+    onDelete(feedData);
+    onNavigate();
+  }
 }
+
 
 class FeedUpload extends StatefulWidget {
   const FeedUpload({Key? key}) : super(key: key);
@@ -313,10 +376,10 @@ class _FeedUploadState extends State<FeedUpload> {
                     backgroundColor: MaterialStateProperty.all<Color>(AppColor.deepGreen),
                   ),
                   onPressed: _getImage,
-                  child: const Text('Pick Image'),
+                  child: const Text('Pick Image',style: TextStyle(color: Colors.white),),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 5),
                 _image != null
                     ? Image.file(
                   _image!,
@@ -366,11 +429,11 @@ class _FeedUploadState extends State<FeedUpload> {
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0),),
                       ),
-                      minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(200, 40)),
                     ),
                     child: const Text(
                       'Upload Feed',
-                      style: TextStyle(fontSize: 18.0),
+                      style: TextStyle(fontSize: 15.0,color: Colors.white),
                     ),
                   ),
                 ),

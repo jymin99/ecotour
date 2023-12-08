@@ -8,10 +8,11 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
         android:label="capstone"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity">
             <intent-filter android:label="flutter_web_auth">
