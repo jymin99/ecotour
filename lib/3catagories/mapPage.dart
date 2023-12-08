@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi' as ffi;
 import 'dart:typed_data';
+import 'package:capstone/schedule/component/1.dayPlan_dialog_sheet.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -1138,6 +1139,7 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+
   // Add to Plan 기능을 수행하는 함수
   void addToPlan(Map<String, dynamic>? store) {
     // 여기서 store를 즐겨찾기에 추가하는 작업을 수행
@@ -1148,13 +1150,104 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+
+  TextEditingController _locationController = TextEditingController();
+
+  final GlobalKey<FormState> formkey = GlobalKey();
+  final FormData formData = FormData(startTime: TimeOfDay.now(),endTime:TimeOfDay.now()); // Create an instance of the FormData class
+
+
+  void _showFavoritesBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Favorites',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              FutureBuilder<List<String>>(
+                future: GetIt.I<LocalDatabase>().getFavoritesList(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Text('저장된 즐겨찾기 장소가 없습니다.');
+                  } else {
+                    List<String> favorites = snapshot.data!;
+                    return Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: favorites.length,
+                        itemBuilder: (context, index) {
+                          return Dismissible(
+                            key: Key(favorites[index]),
+                            onDismissed: (direction) {
+                              // Implement the logic to remove the item from the favorites list
+                              setState(() {
+                                favorites.removeAt(index);
+                                GetIt.I<LocalDatabase>().updateFavorites(favorites);
+                              });
+                            },
+                            background: Container(
+                              color: Colors.red, // Set the background color when swiping
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: ListTile(
+                              title: Text(favorites[index]),
+                              onTap: () {
+                                // Update formData.place when a favorite is tapped
+                                setState(() {
+                                  formData.place = favorites[index];
+                                  _locationController.text = favorites[index];
+                                });
+                                Navigator.pop(context); // Close the bottom sheet
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _locationController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return
       Scaffold(
         floatingActionButton: FloatingActionButton(  // ➊ 새 일정 버튼
           backgroundColor: AppColor.yellowGreen,
-          onPressed: () {},
+          onPressed: () => _showFavoritesBottomSheet(context),
           child: Icon(
             Icons.star,
             color: Colors.black,
