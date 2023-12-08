@@ -1248,6 +1248,7 @@ class _MapPageState extends State<MapPage> {
         floatingActionButton: FloatingActionButton(  // ➊ 새 일정 버튼
           backgroundColor: AppColor.yellowGreen,
           onPressed: () => _showFavoritesBottomSheet(context),
+
           child: Icon(
             Icons.star,
             color: Colors.black,
