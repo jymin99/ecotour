@@ -515,7 +515,7 @@ class _MapPageState extends State<MapPage> {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              'Add to Plan',
+                              'Add to Favorites',
                             ),
                           ),
                         ),
@@ -620,7 +620,7 @@ class _MapPageState extends State<MapPage> {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              'Add to Plan',
+                              'Add to Favorites',
                             ),
                           ),
                         ),
@@ -720,7 +720,7 @@ class _MapPageState extends State<MapPage> {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              'Add to Plan',
+                              'Add to Favorites',
                             ),
                           ),
                         ),
@@ -820,7 +820,7 @@ class _MapPageState extends State<MapPage> {
 
                             Navigator.pop(context);
                           },
-                          child: Text('Add to plan'),
+                          child: Text('Add to Favorites'),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -919,7 +919,7 @@ class _MapPageState extends State<MapPage> {
 
                             Navigator.pop(context);
                           },
-                          child: Text('Add to Plan'),
+                          child: Text('Add to Favorites'),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -1019,7 +1019,7 @@ class _MapPageState extends State<MapPage> {
 
                             Navigator.pop(context);
                           },
-                          child: Text('Add to Plan'),
+                          child: Text('Add to Favorites'),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -1118,7 +1118,7 @@ class _MapPageState extends State<MapPage> {
 
                             Navigator.pop(context);
                           },
-                          child: Text('Add to Plan'),
+                          child: Text('Add to Favorites'),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -1151,7 +1151,7 @@ class _MapPageState extends State<MapPage> {
   void addToPlan(Map<String, dynamic>? store) {
     // 여기서 store를 즐겨찾기에 추가하는 작업을 수행
     if (store != null) {
-      print('Added to Plan: ${store['name']}');
+      print('Added to Favorites: ${store['name']}');
       // 여기에 실제로 즐겨찾기에 추가하는 로직을 구현
       // 예: 로컬 상태 업데이트 또는 데이터베이스에 추가
     }
