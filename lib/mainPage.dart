@@ -155,6 +155,7 @@ class _MainPage extends State<MainPage> {
         width: 70.0,
         child: FittedBox(
           child: FloatingActionButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             backgroundColor: AppColor.lightGreen,
             onPressed: () {
               // _floatingButtonIcon = _selectedIndex == 1 ? Icons.edit_calendar : Icons.add;

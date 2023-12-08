@@ -297,7 +297,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                               onTap: () => _selectStartTime(context),
                               child: Container(
                                 height: 45,
-                                width: 137,
+                                width: 110,
                                 child: TextField(
                                   enabled: false,
                                   textAlign: TextAlign.center,
@@ -341,7 +341,7 @@ class _dayPlanSheetState extends State<dayPlanSheet> {
                               onTap: () => _selectEndTime(context),
                               child: Container(
                                 height: 45,
-                                width: 137,
+                                width: 110,
                                 child: TextField(
                                   enabled: false,
                                   textAlign: TextAlign.center,
